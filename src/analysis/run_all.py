@@ -16,6 +16,8 @@ STEPS = [
     "07_recovery_regression.py",
     "08_risk_score.py",
     "10_figures_for_talk.py",
+    "11_finalize_model.py",
+    "12_build_site.py",
     "09_build_report.py",
 ]
 

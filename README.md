@@ -62,7 +62,32 @@ estimators and is accompanied by a G1–G3-only sensitivity analysis.
 | `src/analysis/07_recovery_regression.py` | — | `Days_to_Resolution` regression (4 models) |
 | `src/analysis/08_risk_score.py` | — | Points-based admission risk score → risk class × protocol table |
 | `src/analysis/10_figures_for_talk.py` | — | Presentation-ready summary figures (`results/figures/talk_*.png`) |
+| `src/analysis/11_finalize_model.py` | — | Locks the deployable model → `models/final_model.json` (coefficients, risk bands, observed protocol rates — all computed) |
+| `src/analysis/12_build_site.py` | — | Injects that JSON into `site/template.html` → `site/index.html` |
 | `src/analysis/09_build_report.py` | — | Assembles `reports/findings.md` from the tables + figures |
+
+### New-case predictor
+
+`site/index.html` is a **self-contained web page** — the "Pyometra Outcome
+Predictor". A vet enters six admission values (BUN, creatinine, albumin, ALP,
+age, illness duration) and gets a printable case-report card: probability that
+medical management fails by day 14, a Low / Intermediate / High band, which
+values drove the estimate, the observed protocol success rates for that band,
+and a plain-English read-out. It runs entirely in the browser (no server, works
+offline) and every number is read from `models/final_model.json` at load time —
+nothing is hand-typed. `src/predict_case.py` is a CLI that produces the same
+numbers (regression test that the page and Python agree).
+
+```bash
+python src/analysis/11_finalize_model.py   # refit + export the model JSON
+python src/analysis/12_build_site.py        # rebuild site/index.html
+python src/predict_case.py --BUN 33 --Creatinine 1.5 --Albumin 2.2 \
+                           --ALP 430 --Age 8.5 --Illness 9
+```
+
+Pushing to `main` deploys `site/` to GitHub Pages
+(`.github/workflows/deploy-pages.yml`) — enable Pages → "GitHub Actions" once in
+the repo settings.
 
 Notebook mirrors of each script live in `notebooks/` (kept in sync with
 `jupytext`); the `.py` files under `src/analysis/` are the source of truth.
