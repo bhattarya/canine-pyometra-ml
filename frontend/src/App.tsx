@@ -4,6 +4,8 @@ import { TopBar } from "./components/TopBar";
 import { CaseForm } from "./components/CaseForm";
 import { ReportCard } from "./components/ReportCard";
 import { Method } from "./components/Method";
+import { ChatPanel } from "./components/chat/ChatPanel";
+import type { CaseContext } from "./lib/geminiClient";
 import { EXAMPLES, MODEL } from "./lib/model";
 import { predict } from "./lib/predict";
 
@@ -14,6 +16,18 @@ export function App() {
   const [activeExample, setActiveExample] = useState<"low" | "high" | null>("high");
 
   const prediction = useMemo(() => predict(values), [values]);
+
+  const caseContext = useMemo<CaseContext>(
+    () => ({
+      values,
+      probability: prediction.probability,
+      band: prediction.band,
+      drivers: prediction.drivers.map((d) => ({ label: d.label, direction: d.direction })),
+      modelAuc: MODEL.performance.roc_auc_cv,
+      disclaimer: MODEL.disclaimer,
+    }),
+    [values, prediction],
+  );
 
   const setField = (feature: string, value: number) => {
     setValues((v) => ({ ...v, [feature]: value }));
@@ -63,9 +77,19 @@ export function App() {
           </div>
         </section>
 
-        <section className={styles.section} aria-labelledby="method">
+        <section className={styles.section} aria-labelledby="ask">
           <div className={styles.sectionHead}>
             <span className={styles.marker}>&sect;2</span>
+            <h2 id="ask" className={styles.h2}>
+              Ask about this case
+            </h2>
+          </div>
+          <ChatPanel caseContext={caseContext} />
+        </section>
+
+        <section className={styles.section} aria-labelledby="method">
+          <div className={styles.sectionHead}>
+            <span className={styles.marker}>&sect;3</span>
             <h2 id="method" className={styles.h2}>
               How the tool works
             </h2>

@@ -1,0 +1,12 @@
+{
+  "name": "canine-pyometra-proxy",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Serverless proxy that keeps the Google Gemini API key server-side for the static canine-pyometra React app.",
+  "scripts": {
+    "dev:cf": "wrangler dev cloudflare/worker.js",
+    "deploy:cf": "wrangler deploy cloudflare/worker.js"
+  },
+  "license": "MIT"
+}

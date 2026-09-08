@@ -1,0 +1,18 @@
+# Cloudflare Workers config for the canine-pyometra Gemini proxy.
+#
+# Deploy:
+#   npm i -g wrangler
+#   cd proxy
+#   wrangler deploy cloudflare/worker.js
+#   wrangler secret put GEMINI_API_KEY      # paste the key at the prompt — do NOT put it in this file
+#
+# Your endpoint will be: https://<name>.<your-subdomain>.workers.dev/chat
+
+name = "canine-pyometra-proxy"
+main = "worker.js"
+compatibility_date = "2024-09-23"
+
+[vars]
+# Non-secret config only. The API key is a secret — set it with `wrangler secret put GEMINI_API_KEY`.
+GEMINI_MODEL = "gemini-2.0-flash"
+ALLOWED_ORIGIN = "https://bhattarya.github.io"

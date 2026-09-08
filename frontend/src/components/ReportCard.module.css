@@ -1,0 +1,109 @@
+.card {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-family: var(--font-ui);
+  color: var(--ink);
+}
+
+.rule {
+  width: 100%;
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: 0;
+}
+
+/* 1. verdict --------------------------------------------------------- */
+.verdict {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 16px;
+}
+
+.chip {
+  align-self: center;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.chipLow {
+  color: var(--r-low);
+  background: var(--r-low-wash);
+}
+.chipMid {
+  color: var(--r-mid);
+  background: var(--r-mid-wash);
+}
+.chipHigh {
+  color: var(--r-high);
+  background: var(--r-high-wash);
+}
+
+.big {
+  font-size: 3.1rem;
+  line-height: 1;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.vcaption {
+  max-width: 30ch;
+  font-size: 0.76rem;
+  line-height: 1.4;
+  color: var(--faint);
+}
+
+/* 5. read-out sentence -------------------------------------------------- */
+.readout {
+  margin: 0;
+  max-width: var(--measure);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+/* 6. actions --------------------------------------------------------- */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.print {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+
+.print:hover {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+.date {
+  font-size: 0.75rem;
+  color: var(--faint);
+}
+
+/* 7. card note ----------------------------------------------------------- */
+.note {
+  margin: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+  max-width: var(--measure);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: var(--faint);
+}

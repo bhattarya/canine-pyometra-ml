@@ -1,0 +1,46 @@
+.wrap {
+  display: block;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.caption {
+  caption-side: bottom;
+  margin-top: 8px;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: var(--faint);
+  text-align: left;
+}
+
+.th {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  text-align: left;
+  padding: 4px 8px 6px;
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-2);
+}
+
+.num {
+  text-align: right;
+}
+
+.strong .td {
+  color: var(--ink);
+  font-weight: 600;
+}

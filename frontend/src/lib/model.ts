@@ -37,7 +37,7 @@ export interface FinalModel {
 export type Band = "Low" | "Intermediate" | "High";
 export const BANDS: Band[] = ["Low", "Intermediate", "High"];
 
-export const MODEL = raw as FinalModel;
+export const MODEL = raw as unknown as FinalModel;
 
 /** Clinical reference intervals + input-widget hints. Presentation only. */
 export const FIELD_UI: Record<
