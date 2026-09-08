@@ -1,0 +1,457 @@
+<!--
+  Pyometra Outcome Predictor  -  GENERATED FILE, do not edit by hand.
+  Built by src/analysis/12_build_site.py, which injects models/final_model.json
+  into the model-data script slot below. Every number on the page comes from that
+  file (produced by 11_finalize_model.py from the fitted model + study data).
+  The prediction maths matches src/predict_case.py exactly.
+  Runs entirely in the browser: no network, no server, works offline.
+-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pyometra Outcome Predictor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+  :root{
+    --ground:#f8fafb; --surface:#ffffff; --surface-2:#f2f6f7;
+    --ink:#17242c; --ink-soft:#39505c; --muted:#61727d; --line:#e2e8ec;
+    --accent:#0e7c86; --accent-ink:#0a5c64; --accent-wash:#e4f2f3;
+    --low:#2f8a5b; --low-wash:#e6f2ea;
+    --mid:#b0791a; --mid-wash:#f7efdd;
+    --high:#bb4038; --high-wash:#f7e5e3;
+    --shadow:0 1px 2px rgba(20,40,50,.04), 0 8px 28px -12px rgba(20,40,50,.14);
+    --measure:64ch;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#0e1417; --surface:#161e22; --surface-2:#1c262b;
+      --ink:#e7edf0; --ink-soft:#b6c3ca; --muted:#8b9aa3; --line:#28333a;
+      --accent:#43b3bd; --accent-ink:#7fd0d7; --accent-wash:#153037;
+      --low:#5cbc8a; --low-wash:#15291f;
+      --mid:#d8a94e; --mid-wash:#2c2412;
+      --high:#df6a60; --high-wash:#2e1a18;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -14px rgba(0,0,0,.55);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0e1417; --surface:#161e22; --surface-2:#1c262b;
+    --ink:#e7edf0; --ink-soft:#b6c3ca; --muted:#8b9aa3; --line:#28333a;
+    --accent:#43b3bd; --accent-ink:#7fd0d7; --accent-wash:#153037;
+    --low:#5cbc8a; --low-wash:#15291f;
+    --mid:#d8a94e; --mid-wash:#2c2412;
+    --high:#df6a60; --high-wash:#2e1a18;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -14px rgba(0,0,0,.55);
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  body{
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    font-size:16px; line-height:1.62; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:960px; margin:0 auto; padding:0 24px}
+  h1,h2,h3{font-family:"Spectral",Georgia,"Times New Roman",serif; font-weight:600;
+    line-height:1.2; text-wrap:balance; color:var(--ink); margin:0}
+  h1{font-size:clamp(1.9rem,1.2rem+2.6vw,2.7rem); letter-spacing:-.01em}
+  h2{font-size:clamp(1.35rem,1.05rem+1.2vw,1.7rem); letter-spacing:-.005em}
+  h3{font-size:1.06rem; font-weight:700}
+  p{margin:0} a{color:var(--accent-ink); text-underline-offset:2px}
+  .eyebrow{font:500 .74rem/1.4 "IBM Plex Mono",monospace; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--accent-ink)}
+  .mono{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+
+  header{padding:56px 0 8px}
+  header .standfirst{max-width:var(--measure); color:var(--ink-soft); margin-top:14px; font-size:1.06rem}
+  .notice{
+    display:flex; gap:12px; align-items:flex-start; margin-top:24px; padding:13px 16px;
+    background:var(--mid-wash); border:1px solid color-mix(in srgb,var(--mid) 34%,transparent);
+    border-radius:9px; font-size:.9rem; color:var(--ink-soft); max-width:var(--measure)}
+  .notice svg{flex:none; margin-top:2px; color:var(--mid)}
+  .notice b{color:var(--ink)}
+
+  section{padding:40px 0}
+  .sec-head{display:flex; align-items:baseline; gap:14px; margin-bottom:22px}
+  .sec-head .n{font:500 .8rem/1 "IBM Plex Mono",monospace; color:var(--muted); padding-top:2px}
+  .panel{
+    display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); gap:2px;
+    background:var(--line); border:1px solid var(--line); border-radius:14px;
+    overflow:hidden; box-shadow:var(--shadow)}
+  @media (max-width:780px){.panel{grid-template-columns:1fr}}
+  .panel > div{background:var(--surface); padding:24px}
+  .panel-form{display:flex; flex-direction:column; gap:2px}
+  .field{display:grid; grid-template-columns:1fr auto; gap:4px 12px; align-items:baseline;
+    padding:12px 0; border-bottom:1px dashed var(--line)}
+  .field:first-of-type{padding-top:0} .field:last-of-type{border-bottom:0; padding-bottom:0}
+  .field label{font-weight:500}
+  .field .ref{grid-column:1; font-size:.78rem; color:var(--muted)}
+  .field .val{grid-column:2; grid-row:1/3; display:flex; flex-direction:column; align-items:flex-end; gap:6px}
+  .field input[type=number]{
+    width:92px; text-align:right; font-family:"IBM Plex Mono",monospace; font-size:.98rem;
+    padding:5px 8px; border:1px solid var(--line); border-radius:7px;
+    background:var(--surface-2); color:var(--ink)}
+  .field input[type=range]{width:150px; accent-color:var(--accent)}
+  .field input:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+  .presets{display:flex; gap:8px; margin-top:20px; flex-wrap:wrap; align-items:center}
+  .presets button, .actions button{
+    font:500 .82rem/1 "IBM Plex Sans",sans-serif; padding:8px 13px; border-radius:7px;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft); cursor:pointer}
+  .presets button:hover, .actions button:hover{border-color:var(--accent); color:var(--accent-ink)}
+
+  .card{display:flex; flex-direction:column; gap:20px}
+  .verdict{display:flex; align-items:flex-end; justify-content:space-between; gap:16px}
+  .verdict .big{font-family:"IBM Plex Mono",monospace; font-weight:600;
+    font-size:3.2rem; line-height:.95; letter-spacing:-.02em}
+  .verdict .sub{font-size:.82rem; color:var(--muted); text-align:right; line-height:1.4}
+  .band{display:inline-flex; align-items:center; gap:7px; padding:5px 11px; border-radius:999px;
+    font:600 .8rem/1 "IBM Plex Sans",sans-serif; letter-spacing:.02em}
+  .band::before{content:""; width:8px; height:8px; border-radius:50%; background:currentColor}
+  .band.Low{color:var(--low); background:var(--low-wash)}
+  .band.Intermediate{color:var(--mid); background:var(--mid-wash)}
+  .band.High{color:var(--high); background:var(--high-wash)}
+  .gauge{position:relative; height:10px; border-radius:999px; overflow:hidden}
+  .gauge .pin{position:absolute; top:-4px; width:3px; height:18px; border-radius:2px;
+    background:var(--ink); box-shadow:0 0 0 2px var(--surface); transition:left .35s cubic-bezier(.4,0,.2,1)}
+  .gauge-scale{display:flex; justify-content:space-between; font:.7rem/1 "IBM Plex Mono",monospace;
+    color:var(--muted); margin-top:6px}
+  .drivers h3{margin-bottom:8px}
+  .drow{display:grid; grid-template-columns:132px 1fr; gap:10px; align-items:center; padding:3px 0}
+  .drow .dl{font-size:.8rem; color:var(--ink-soft); text-align:right; white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis}
+  .dbar{position:relative; height:16px; background:var(--surface-2); border-radius:4px}
+  .dbar .axis{position:absolute; left:50%; top:-3px; bottom:-3px; width:1px; background:var(--line)}
+  .dbar .fill{position:absolute; top:2px; height:12px; border-radius:3px; transition:all .3s ease}
+  .dbar .fill.up{background:var(--high)} .dbar .fill.down{background:var(--low)}
+  .ctx{border-top:1px solid var(--line); padding-top:16px}
+  .ctx h3{margin-bottom:4px}
+  .ctx .cap{font-size:.8rem; color:var(--muted); margin-bottom:10px}
+  .ctx table{width:100%; border-collapse:collapse; font-size:.86rem}
+  .ctx td,.ctx th{padding:6px 4px; text-align:left; border-bottom:1px solid var(--line)}
+  .ctx th{font-weight:500; color:var(--muted); font-size:.76rem; text-transform:uppercase; letter-spacing:.06em}
+  .ctx td.r,.ctx th.r{text-align:right; font-family:"IBM Plex Mono",monospace}
+  .ctx tr.hi td{color:var(--ink); font-weight:600}
+  .readout{font-size:.92rem; color:var(--ink-soft)}
+  .readout strong{color:var(--ink)}
+  .actions{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+  .cardnote{font-size:.76rem; color:var(--muted); border-top:1px solid var(--line); padding-top:12px}
+
+  .prose{max-width:var(--measure)}
+  .prose p + p{margin-top:14px}
+  .prose h2{margin-bottom:10px}
+  .block{margin-top:36px}
+  .lede{font-size:1.04rem; color:var(--ink-soft)}
+  figure{margin:20px 0 0; padding:18px; background:var(--surface); border:1px solid var(--line); border-radius:12px}
+  figure figcaption{font-size:.82rem; color:var(--muted); margin-top:10px}
+  .bars{display:flex; flex-direction:column; gap:9px}
+  .bar{display:grid; grid-template-columns:150px 1fr 48px; gap:10px; align-items:center; font-size:.86rem}
+  .bar span:first-child{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .bar .track{height:22px; background:var(--surface-2); border-radius:5px; overflow:hidden}
+  .bar .grow{height:100%; background:var(--accent); border-radius:5px}
+  .bar .pct{font-family:"IBM Plex Mono",monospace; color:var(--ink-soft); text-align:right}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:var(--line);
+    border:1px solid var(--line); border-radius:10px; overflow:hidden; margin-top:18px}
+  @media (max-width:640px){.grid3{grid-template-columns:1fr}}
+  .grid3 > div{background:var(--surface); padding:16px}
+  .grid3 .bl{font:600 .78rem/1 "IBM Plex Sans"; letter-spacing:.03em; display:inline-flex; align-items:center; gap:6px}
+  .grid3 .bl::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+  .grid3 .Low .bl{color:var(--low)}.grid3 .Intermediate .bl{color:var(--mid)}.grid3 .High .bl{color:var(--high)}
+  .grid3 .k{font-family:"IBM Plex Mono",monospace; font-size:1.5rem; font-weight:600; margin:8px 0 2px}
+  .grid3 .d{font-size:.82rem; color:var(--muted)}
+  ul.lim{max-width:var(--measure); padding-left:0; list-style:none; display:flex; flex-direction:column; gap:10px; margin:14px 0 0}
+  ul.lim li{padding-left:22px; position:relative; color:var(--ink-soft); font-size:.94rem}
+  ul.lim li::before{content:"—"; position:absolute; left:0; color:var(--muted)}
+
+  footer{border-top:1px solid var(--line); padding:28px 0 60px; margin-top:20px;
+    font-size:.84rem; color:var(--muted); display:flex; gap:18px 28px; flex-wrap:wrap}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  @media print{
+    .panel-form,.presets,.actions,.study,header .notice,footer{display:none!important}
+    body{background:#fff; color:#000} .panel{box-shadow:none; border-color:#999}
+    section{padding:0} header{padding:0 0 12px}
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Veterinary decision support · research preview</div>
+    <h1>Pyometra Outcome Predictor</h1>
+    <p class="standfirst">Estimates the probability that <em>medical</em> management of canine
+      pyometra fails by day&nbsp;14 — from six routine admission values. Built on an 80-dog
+      four-arm cohort (G1&nbsp;supportive, G2&nbsp;PGF2α, G3&nbsp;aglepristone&nbsp;+&nbsp;PGF2α,
+      G4&nbsp;ovariohysterectomy).</p>
+    <div class="notice">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1.5 15 14H1L8 1.5Z"/><path d="M8 6.2v3.4M8 11.6h.01"/></svg>
+      <span><b>Not a validated clinical tool.</b> Trained on a single-centre teaching dataset
+        of 80 dogs with 14 failure events. Use as a teaching and discussion aid only; the
+        attending clinician's judgement takes precedence.</span>
+    </div>
+  </header>
+
+  <section class="tool">
+    <div class="sec-head"><span class="n">01</span><h2>Assess a case</h2></div>
+    <div class="panel">
+      <div class="panel-form" id="form"></div>
+      <div class="card" id="card"></div>
+    </div>
+  </section>
+
+  <section class="study">
+    <div class="sec-head"><span class="n">02</span><h2>How the tool works</h2></div>
+    <div class="prose">
+      <p class="lede">The workflow follows the canine-parvovirus prognosis study of Nafe Monfared
+        et&nbsp;al. (<em>Front. Vet. Sci.</em> 2025): screen admission variables, reduce them with
+        recursive feature elimination, then compare many algorithms under repeated stratified
+        cross-validation.</p>
+
+      <div class="block">
+        <h3>The data</h3>
+        <p>Eighty dogs presenting with pyometra were assigned across four protocols (20 each) and
+          followed to day&nbsp;14. Admission demographics, vital signs, haematology, serum
+          biochemistry and ultrasonographic uterine diameter were recorded. Baseline data are
+          complete; the cohort is balanced across arms on every measured variable.</p>
+      </div>
+
+      <div class="block">
+        <h3>The model behind this predictor</h3>
+        <p>An L2-penalised logistic regression for <strong>medical failure by day&nbsp;14</strong>
+          (death, rescue ovariohysterectomy, or non-response), fitted on the
+          <span id="cohortLine"></span> using six variables that survived selection: BUN,
+          creatinine, alkaline phosphatase, albumin, age and illness duration. Held-out
+          discrimination was <span class="mono" id="aucLine"></span> (repeated stratified 5-fold
+          CV). Random forest and naïve Bayes performed within cross-validation noise of this
+          model; logistic regression was kept because it is transparent and portable.</p>
+      </div>
+
+      <figure>
+        <h3>Observed success by protocol</h3>
+        <div class="bars" id="protoBars"></div>
+        <figcaption>Uncomplicated resolution by day&nbsp;14, all 80 dogs. G4 (surgery) was not
+          randomised — interpret the gradient, not the exact figures.</figcaption>
+      </figure>
+
+      <figure>
+        <h3>What separates failure from success at admission</h3>
+        <div class="bars" id="predBars"></div>
+        <figcaption>Single-variable discrimination (AUC) for medical failure. Renal and hepatic
+          markers and low albumin carry most of the signal.</figcaption>
+      </figure>
+
+      <div class="block">
+        <h3>Reading the risk bands</h3>
+        <p>The predicted probability is grouped into three bands with fixed cut-points at
+          <span id="cutLine"></span>. The tiles show what actually happened to the study dogs in
+          each band.</p>
+        <div class="grid3" id="bandGrid"></div>
+        <p id="bandNote" style="margin-top:14px; font-size:.9rem; color:var(--muted)"></p>
+      </div>
+
+      <div class="block">
+        <h3>Limitations</h3>
+        <ul class="lim">
+          <li>Single centre, 80 dogs, 14 failure events — confidence intervals are wide and
+            external validity is untested.</li>
+          <li>The surgical arm (G4) was not randomised and is perfectly separated on outcome, so
+            protocol comparisons are descriptive, not causal.</li>
+          <li>On this clean dataset the model is over-confident at the extremes; treat the output
+            as a band (low / intermediate / high), not a precise percentage.</li>
+          <li>No prospective or multi-centre validation. This is a methodology demonstration.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span id="genLine"></span>
+    <span>Code &amp; full results: <a href="https://github.com/bhattarya/canine-pyometra-ml">github.com/bhattarya/canine-pyometra-ml</a></span>
+    <span>Runs entirely in your browser — no data leaves this page.</span>
+  </footer>
+</div>
+
+<script id="model-data" type="application/json">__MODEL_JSON__</script>
+<script>
+const D = JSON.parse(document.getElementById("model-data").textContent);
+
+/* presentation-only hints (clinical reference intervals + input widget config) */
+const UI = {
+  BUN_mg_dL:{short:"Blood urea nitrogen",unit:"mg/dL",ref:"canine ref ≈ 7–27",step:1},
+  Creatinine_mg_dL:{short:"Creatinine",unit:"mg/dL",ref:"canine ref ≈ 0.5–1.5",step:0.1},
+  Albumin_g_dL:{short:"Albumin",unit:"g/dL",ref:"canine ref ≈ 2.6–4.0",step:0.1},
+  ALP_U_L:{short:"Alkaline phosphatase",unit:"U/L",ref:"canine ref ≈ 20–150",step:5},
+  Age_years:{short:"Age",unit:"yr",ref:"cohort 3–10",step:0.5},
+  Illness_Duration_days:{short:"Illness duration",unit:"d",ref:"cohort 2–11",step:1}
+};
+const F = D.features;
+const CUT = D.risk_bands.cutpoints_prob;
+const bandOf = p => p<CUT[0] ? "Low" : (p<CUT[1] ? "Intermediate" : "High");
+const gname = g => (D.display.group_labels && D.display.group_labels[g]) || g;
+const pctTxt = x => x < 0.01 ? "<1%" : x > 0.99 ? ">99%" : Math.round(x*100)+"%";
+const NICE = {  // display names for variables that can appear in the predictor chart
+  BUN_mg_dL:"Blood urea nitrogen", Creatinine_mg_dL:"Creatinine", Albumin_g_dL:"Albumin",
+  ALP_U_L:"Alkaline phosphatase", ALT_U_L:"Alanine aminotransferase (ALT)",
+  Age_years:"Age", Illness_Duration_days:"Illness duration",
+  Total_Protein_g_dL:"Total protein", Globulin_g_dL:"Globulin",
+  Uterine_Diameter_mm:"Uterine diameter", TLC_per_uL:"Total leukocyte count",
+  Neutrophils_per_uL:"Neutrophils", Clinical_VAS_0_10:"Clinical severity (VAS)",
+  Weight_kg:"Body weight", Heart_Rate_bpm:"Heart rate", Temperature_C:"Temperature",
+  Resp_Rate_bpm:"Respiratory rate", Vulvar_Discharge_VAS_0_3:"Vulvar discharge (VAS)",
+  Progesterone_ng_mL:"Progesterone"
+};
+
+/* two example cases, values inside the cohort ranges */
+const PRESETS = {
+  low:  {label:"Low-risk case",  v:{BUN_mg_dL:19, Creatinine_mg_dL:0.9, Albumin_g_dL:3.1, ALP_U_L:270, Age_years:4,   Illness_Duration_days:3}},
+  high: {label:"High-risk case", v:{BUN_mg_dL:33, Creatinine_mg_dL:1.5, Albumin_g_dL:2.2, ALP_U_L:430, Age_years:8.5, Illness_Duration_days:9}}
+};
+const state = {...PRESETS.high.v};
+
+function predict(v){
+  const mu=D.standardisation.mean, sd=D.standardisation.std, co=D.coef;
+  const parts = F.map((f,i)=>co[i]*((v[f]-mu[i])/sd[i]));
+  const logit = D.intercept + parts.reduce((a,b)=>a+b,0);
+  const p = 1/(1+Math.exp(-logit));
+  return {p, band:bandOf(p), parts};
+}
+
+/* ---------- form ---------- */
+const form = document.getElementById("form");
+F.forEach(f=>{
+  const u = UI[f] || {short:f,unit:"",ref:"",step:1};
+  const r = D.input_ranges[f];
+  const lo = Math.floor(Math.min(r.min, state[f])), hi = Math.ceil(Math.max(r.max, state[f]));
+  const row = document.createElement("div"); row.className="field";
+  row.innerHTML = `
+    <label for="in-${f}">${u.short} <span style="color:var(--muted);font-weight:400">(${u.unit})</span></label>
+    <span class="ref">${u.ref} · cohort ${(+r.min).toFixed(r.min<10?1:0)}–${(+r.max).toFixed(r.max<10?1:0)}</span>
+    <span class="val">
+      <input type="number" id="in-${f}" step="${u.step}" value="${state[f]}" aria-label="${u.short}">
+      <input type="range" id="rg-${f}" min="${lo}" max="${hi}" step="${u.step}" value="${state[f]}" aria-label="${u.short} slider">
+    </span>`;
+  form.appendChild(row);
+  const num=row.querySelector("#in-"+f), rg=row.querySelector("#rg-"+f);
+  const sync=(val,fromRange)=>{ const n=parseFloat(val); if(isNaN(n)) return;
+    state[f]=n; if(fromRange) num.value=n; else rg.value=Math.min(hi,Math.max(lo,n)); render(); };
+  num.addEventListener("input",e=>sync(e.target.value,false));
+  rg.addEventListener("input",e=>sync(e.target.value,true));
+});
+const pw=document.createElement("div"); pw.className="presets";
+pw.innerHTML = `<span style="font-size:.78rem;color:var(--muted)">Load example:</span>`;
+[PRESETS.low,PRESETS.high].forEach(p=>{
+  const b=document.createElement("button"); b.textContent=p.label;
+  b.onclick=()=>{ Object.assign(state,p.v); F.forEach(f=>{
+    document.getElementById("in-"+f).value=state[f];
+    const rg=document.getElementById("rg-"+f);
+    rg.value=Math.min(+rg.max,Math.max(+rg.min,state[f]));
+  }); render(); };
+  pw.appendChild(b);
+});
+form.appendChild(pw);
+
+/* ---------- result card ---------- */
+const card = document.getElementById("card");
+function render(){
+  const {p,band,parts} = predict(state);
+  const maxAbs = Math.max(1e-6, ...parts.map(Math.abs));
+  const drivers = F.map((f,i)=>({label:(UI[f]||{}).short||f, c:parts[i]}))
+      .sort((a,b)=>Math.abs(b.c)-Math.abs(a.c));
+  const pin = Math.min(98, Math.max(2, p*100));
+  const hint = D.protocol_hint[band] || {};
+  const bt = D.risk_bands.table[band] || {};
+
+  const order = Object.keys(hint).sort((a,b)=>(hint[b].success_rate)-(hint[a].success_rate));
+  const protoRows = order.map(g=>{
+    const s=hint[g];
+    const hi = band==="High" && s.success_rate>=0.5;
+    return `<tr class="${hi?'hi':''}"><td>${gname(g)}</td>
+      <td class="r">${(s.success_rate*100).toFixed(0)}%</td><td class="r">${s.n}</td></tr>`;
+  }).join("");
+
+  const obs = bt.observed_failure_rate;
+  const bandFact = band==="Low"
+    ? `In the study, ${bt.n} dogs fell in this band and ${obs===0?"none":Math.round(obs*bt.n)} failed medical management.`
+    : band==="Intermediate"
+    ? `Only ${bt.n} study dogs fell here (${obs===0?"none failed":pctTxt(obs)+" failed"}) — the band is small, so watch closely.`
+    : `${Math.round(obs*bt.n)} of ${bt.n} study dogs in this band failed medical management (${pctTxt(obs)}).`;
+
+  const advice = band==="High"
+    ? `Among high-risk study dogs, ${order.filter(g=>hint[g].success_rate>=0.5).map(gname).join(" and ")} did markedly better than the other protocols.`
+    : band==="Intermediate"
+    ? `An active medical protocol with close follow-up is reasonable; escalate early if the dog does not improve.`
+    : `Medical management is expected to succeed; protocol choice can follow clinician and owner preference.`;
+
+  card.innerHTML = `
+    <div class="verdict">
+      <div><span class="band ${band}">${band} risk</span><div class="big">${pctTxt(p)}</div></div>
+      <div class="sub">probability medical<br>management fails by day 14<br>
+        <span style="color:var(--ink-soft)">chance of success ≈ ${pctTxt(1-p)}</span></div>
+    </div>
+    <div>
+      <div class="gauge" style="background:linear-gradient(90deg,var(--low) 0 ${CUT[0]*100}%,var(--mid) ${CUT[0]*100}% ${CUT[1]*100}%,var(--high) ${CUT[1]*100}% 100%)">
+        <div class="pin" style="left:calc(${pin}% - 1.5px)"></div></div>
+      <div class="gauge-scale"><span>0%</span><span>${CUT[0]*100}%</span><span>${CUT[1]*100}%</span><span>100%</span></div>
+    </div>
+    <div class="drivers">
+      <h3>What is driving this estimate</h3>
+      ${drivers.map(d=>{
+        const w = Math.abs(d.c)/maxAbs*50, up = d.c>0;
+        return `<div class="drow"><div class="dl">${d.label}</div>
+          <div class="dbar"><div class="axis"></div>
+          <div class="fill ${up?'up':'down'}" style="${up?'left:50%':'right:50%'};width:${w}%"></div></div></div>`;
+      }).join("")}
+      <div style="display:flex;justify-content:space-between;font:.68rem/1 'IBM Plex Mono',monospace;color:var(--muted);margin-top:6px">
+        <span>← lowers risk</span><span>raises risk →</span></div>
+    </div>
+    <div class="ctx">
+      <h3>Observed success by protocol · ${band.toLowerCase()}-risk study dogs</h3>
+      <div class="cap">Uncomplicated resolution by day 14. Small numbers — directional only.</div>
+      <table><thead><tr><th>Protocol</th><th class="r">Success</th><th class="r">n</th></tr></thead>
+        <tbody>${protoRows}</tbody></table>
+    </div>
+    <p class="readout"><strong>${pctTxt(p)}</strong> estimated risk of medical-treatment failure —
+      <strong>${band.toLowerCase()}</strong>. ${bandFact} ${advice}</p>
+    <div class="actions">
+      <button onclick="window.print()">Print this card</button>
+      <span style="font-size:.76rem;color:var(--muted)">${new Date().toLocaleDateString()}</span>
+    </div>
+    <p class="cardnote">${D.disclaimer} Model discrimination ROC-AUC ≈ ${D.performance.roc_auc_cv}
+      (internal cross-validation).</p>`;
+}
+
+/* ---------- study section (all values from D) ---------- */
+document.getElementById("cohortLine").textContent = D.cohort.replace(/\.$/, "");
+document.getElementById("aucLine").textContent =
+  `ROC-AUC ${D.performance.roc_auc_cv} ± ${D.performance.roc_auc_cv_sd}`;
+document.getElementById("cutLine").textContent = `${CUT[0]*100}% and ${CUT[1]*100}%`;
+document.getElementById("genLine").textContent =
+  `Model generated ${D.generated} · logistic regression, ${F.length} predictors`;
+
+const sp = D.display.success_by_protocol;
+document.getElementById("protoBars").innerHTML = sp.map(r=>`
+  <div class="bar"><span>${gname(r.group)}</span>
+    <span class="track"><span class="grow" style="width:${r.success_rate*100}%;background:var(--accent)"></span></span>
+    <span class="pct">${(r.success_rate*100).toFixed(0)}%</span></div>`).join("");
+
+const tp = D.display.top_predictors;
+document.getElementById("predBars").innerHTML = tp.map(r=>{
+  const nice = NICE[r.variable] || r.variable.replace(/_/g," ");
+  return `<div class="bar"><span>${nice}</span>
+    <span class="track"><span class="grow" style="width:${(r.auc-0.5)/0.45*100}%"></span></span>
+    <span class="pct">${r.auc.toFixed(2)}</span></div>`;
+}).join("");
+
+const T = D.risk_bands.table;
+document.getElementById("bandGrid").innerHTML = ["Low","Intermediate","High"].map(b=>`
+  <div class="${b}"><span class="bl">${b}</span>
+    <div class="k">${(T[b].observed_failure_rate*100).toFixed(0)}%</div>
+    <div class="d">observed failure · n = ${T[b].n} study dogs</div></div>`).join("");
+
+const hi = D.protocol_hint.High;
+const best = Object.keys(hi).sort((a,b)=>hi[b].success_rate-hi[a].success_rate).slice(0,2).map(gname);
+document.getElementById("bandNote").textContent =
+  `In the study cohort, no medically managed dog below the ${CUT[1]*100}% mark failed; above it, `+
+  `${pctTxt(T.High.observed_failure_rate)} did — and among those, ${best.join(" and ")} clearly `+
+  `out-performed the other medical options.`;
+
+render();
+</script>
