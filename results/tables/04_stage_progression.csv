@@ -1,0 +1,4 @@
+stage,n_predictors,best_model,best_resampling,best_ROC_AUC,best_PR_AUC
+A_all,19,RandomForest,class_weight,0.946 ± 0.078,0.892 ± 0.142
+B_screened,13,RandomForest,class_weight,0.951 ± 0.069,0.899 ± 0.126
+C_rfecv,3,QDA,class_weight,0.953 ± 0.061,0.896 ± 0.130

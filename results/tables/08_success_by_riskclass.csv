@@ -1,0 +1,4 @@
+risk_class,n,success_rate,med_failure_rate
+Low,27,1.0,0.0
+Medium,26,0.962,0.038
+High,27,0.519,0.481

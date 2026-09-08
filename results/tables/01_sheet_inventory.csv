@@ -1,0 +1,8 @@
+frame,rows,cols
+baseline_with_outcomes,80,35
+primary_treatment_prediction,80,30
+prognostic_G1G3,60,26
+missing_practice_G1G3,60,21
+longitudinal_D0_D3_D7_D14,320,19
+recovery_time,74,27
+retro_240_casemix,240,5

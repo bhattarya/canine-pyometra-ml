@@ -1,0 +1,241 @@
+Case_ID,Breed,Age_years,Pyometra_Type,Management
+R001,Rottweiler,8.3,Open,OHE
+R002,Golden Retriever,7.7,Open,OHE
+R003,Cocker Spaniel,5.9,Open,OHE
+R004,Labrador Retriever,10.2,Open,OHE
+R005,Pug,5.9,Open,OHE
+R006,Labrador Retriever,4.3,Open,OHE
+R007,German Shepherd,7.1,Closed,OHE
+R008,Beagle,5.4,Closed,Medical
+R009,Indie/Mixed,8.9,Open,OHE
+R010,Beagle,3.1,Open,Medical
+R011,Labrador Retriever,9.3,Open,OHE
+R012,Indie/Mixed,7.4,Open,OHE
+R013,Beagle,9.1,Open,Medical
+R014,Labrador Retriever,8.1,Open,Medical
+R015,Pug,7.7,Closed,OHE
+R016,Pug,5.5,Open,OHE
+R017,Pug,6.1,Open,OHE
+R018,Golden Retriever,5.2,Open,Medical
+R019,Labrador Retriever,7.7,Open,OHE
+R020,Pug,7.2,Open,Medical
+R021,German Shepherd,10.5,Open,OHE
+R022,Labrador Retriever,9.3,Closed,OHE
+R023,Labrador Retriever,8.5,Open,OHE
+R024,Labrador Retriever,7.5,Open,OHE
+R025,Beagle,8.4,Closed,Medical
+R026,Labrador Retriever,7.9,Open,Medical
+R027,Cocker Spaniel,7.8,Open,Medical
+R028,Rottweiler,7.8,Open,Medical
+R029,Pug,4.6,Open,OHE
+R030,German Shepherd,5.6,Open,OHE
+R031,Cocker Spaniel,7.3,Closed,OHE
+R032,Golden Retriever,9.8,Open,Medical
+R033,Golden Retriever,6.3,Open,OHE
+R034,Labrador Retriever,7.9,Closed,OHE
+R035,Cocker Spaniel,4.5,Open,OHE
+R036,Pug,7.1,Open,OHE
+R037,Beagle,8.8,Closed,OHE
+R038,Indie/Mixed,6.3,Open,OHE
+R039,Cocker Spaniel,4.8,Open,OHE
+R040,Rottweiler,7.2,Open,OHE
+R041,Cocker Spaniel,7.6,Open,OHE
+R042,Indie/Mixed,5.2,Open,Medical
+R043,Cocker Spaniel,8.1,Open,Medical
+R044,Golden Retriever,3.8,Open,OHE
+R045,Pug,6.4,Open,OHE
+R046,Beagle,6.2,Open,OHE
+R047,Labrador Retriever,7.2,Open,OHE
+R048,Beagle,8.5,Open,OHE
+R049,Indie/Mixed,9.6,Open,Medical
+R050,Indie/Mixed,4.3,Open,OHE
+R051,Indie/Mixed,7.5,Open,OHE
+R052,Golden Retriever,6.0,Open,OHE
+R053,Labrador Retriever,4.4,Closed,OHE
+R054,Cocker Spaniel,5.3,Open,Medical
+R055,Indie/Mixed,7.9,Open,OHE
+R056,Rottweiler,7.5,Open,OHE
+R057,Labrador Retriever,3.7,Open,Medical
+R058,Indie/Mixed,3.7,Closed,OHE
+R059,Golden Retriever,6.1,Open,Medical
+R060,German Shepherd,7.5,Open,Medical
+R061,Pug,7.3,Closed,OHE
+R062,Indie/Mixed,7.4,Open,Medical
+R063,Indie/Mixed,4.8,Open,OHE
+R064,Golden Retriever,9.0,Closed,OHE
+R065,Pug,8.6,Open,OHE
+R066,Labrador Retriever,7.8,Closed,OHE
+R067,Golden Retriever,5.0,Open,Medical
+R068,Beagle,8.8,Open,OHE
+R069,German Shepherd,5.7,Open,Medical
+R070,Rottweiler,8.1,Open,OHE
+R071,Cocker Spaniel,5.7,Open,OHE
+R072,Labrador Retriever,6.1,Open,OHE
+R073,Rottweiler,4.9,Open,OHE
+R074,Cocker Spaniel,5.6,Open,Medical
+R075,Indie/Mixed,6.6,Open,OHE
+R076,Labrador Retriever,6.5,Closed,Medical
+R077,Pug,9.3,Open,Medical
+R078,German Shepherd,10.5,Open,OHE
+R079,German Shepherd,9.2,Open,OHE
+R080,German Shepherd,7.3,Open,Medical
+R081,Indie/Mixed,7.9,Open,OHE
+R082,Pug,7.7,Closed,Medical
+R083,Beagle,8.1,Open,Medical
+R084,Cocker Spaniel,4.3,Closed,Medical
+R085,Rottweiler,8.5,Closed,OHE
+R086,Pug,6.4,Open,OHE
+R087,Cocker Spaniel,7.3,Open,OHE
+R088,Cocker Spaniel,5.7,Closed,OHE
+R089,Labrador Retriever,6.1,Closed,OHE
+R090,Golden Retriever,8.8,Open,OHE
+R091,Cocker Spaniel,4.9,Open,OHE
+R092,Labrador Retriever,6.6,Open,OHE
+R093,Rottweiler,3.9,Open,Medical
+R094,German Shepherd,7.5,Closed,Medical
+R095,German Shepherd,7.8,Open,OHE
+R096,Pug,5.2,Closed,OHE
+R097,Pug,9.5,Open,OHE
+R098,Beagle,9.0,Open,OHE
+R099,Beagle,7.0,Open,OHE
+R100,Pug,5.5,Closed,OHE
+R101,Pug,5.1,Open,Medical
+R102,Rottweiler,9.1,Open,OHE
+R103,Rottweiler,6.8,Open,OHE
+R104,Beagle,7.5,Closed,OHE
+R105,Rottweiler,4.1,Closed,OHE
+R106,Golden Retriever,7.4,Closed,OHE
+R107,Cocker Spaniel,5.9,Closed,OHE
+R108,Beagle,7.7,Open,Medical
+R109,German Shepherd,5.6,Open,OHE
+R110,Cocker Spaniel,4.8,Open,Medical
+R111,Pug,6.0,Open,OHE
+R112,Beagle,6.0,Closed,Medical
+R113,Beagle,9.9,Open,OHE
+R114,Indie/Mixed,5.3,Closed,Medical
+R115,Labrador Retriever,6.4,Closed,Medical
+R116,Rottweiler,10.1,Closed,Medical
+R117,Beagle,6.4,Open,OHE
+R118,Indie/Mixed,7.6,Open,OHE
+R119,Labrador Retriever,7.6,Open,OHE
+R120,Labrador Retriever,6.6,Open,OHE
+R121,Indie/Mixed,5.6,Open,OHE
+R122,Golden Retriever,9.6,Open,OHE
+R123,Cocker Spaniel,8.4,Open,OHE
+R124,German Shepherd,6.3,Open,OHE
+R125,Labrador Retriever,9.4,Open,OHE
+R126,Cocker Spaniel,5.2,Open,Medical
+R127,Beagle,4.4,Closed,Medical
+R128,Pug,10.6,Open,OHE
+R129,German Shepherd,6.8,Open,OHE
+R130,Cocker Spaniel,8.8,Open,OHE
+R131,Labrador Retriever,8.1,Closed,OHE
+R132,Golden Retriever,8.1,Closed,Medical
+R133,Rottweiler,8.7,Open,OHE
+R134,Indie/Mixed,9.2,Open,OHE
+R135,Beagle,8.0,Closed,Medical
+R136,Cocker Spaniel,10.2,Open,Medical
+R137,Indie/Mixed,6.4,Closed,OHE
+R138,Golden Retriever,7.9,Open,Medical
+R139,Cocker Spaniel,8.3,Closed,OHE
+R140,Beagle,6.2,Open,Medical
+R141,Cocker Spaniel,3.0,Closed,OHE
+R142,Beagle,8.5,Closed,Medical
+R143,Rottweiler,7.5,Open,Medical
+R144,Cocker Spaniel,6.9,Open,Medical
+R145,Pug,6.9,Open,Medical
+R146,Beagle,9.0,Open,OHE
+R147,Rottweiler,8.1,Open,OHE
+R148,Cocker Spaniel,7.5,Open,OHE
+R149,Pug,7.2,Closed,Medical
+R150,Rottweiler,6.2,Open,OHE
+R151,Golden Retriever,3.8,Open,OHE
+R152,Labrador Retriever,7.6,Open,OHE
+R153,Rottweiler,9.8,Open,OHE
+R154,Indie/Mixed,6.8,Closed,OHE
+R155,Golden Retriever,4.7,Open,Medical
+R156,Labrador Retriever,9.8,Open,OHE
+R157,Labrador Retriever,6.6,Open,OHE
+R158,Labrador Retriever,7.6,Open,OHE
+R159,Beagle,7.3,Open,OHE
+R160,Indie/Mixed,9.0,Open,OHE
+R161,Cocker Spaniel,6.7,Open,OHE
+R162,Cocker Spaniel,6.2,Open,OHE
+R163,Beagle,7.4,Closed,OHE
+R164,Indie/Mixed,8.4,Open,OHE
+R165,German Shepherd,9.6,Closed,Medical
+R166,Pug,3.4,Closed,OHE
+R167,Indie/Mixed,5.5,Open,OHE
+R168,Pug,9.1,Open,Medical
+R169,Indie/Mixed,4.4,Closed,Medical
+R170,Pug,5.3,Open,OHE
+R171,Rottweiler,6.5,Open,OHE
+R172,Cocker Spaniel,5.9,Open,Medical
+R173,Labrador Retriever,5.2,Closed,OHE
+R174,Beagle,9.4,Open,OHE
+R175,Cocker Spaniel,5.5,Open,Medical
+R176,Pug,4.9,Open,OHE
+R177,Rottweiler,5.6,Closed,OHE
+R178,Golden Retriever,6.0,Closed,Medical
+R179,Beagle,7.0,Closed,OHE
+R180,Pug,8.0,Closed,Medical
+R181,Pug,4.6,Open,Medical
+R182,Labrador Retriever,5.2,Open,Medical
+R183,German Shepherd,7.5,Open,OHE
+R184,German Shepherd,6.5,Open,Medical
+R185,German Shepherd,2.9,Open,OHE
+R186,Pug,7.1,Closed,OHE
+R187,Cocker Spaniel,6.8,Open,OHE
+R188,German Shepherd,6.7,Open,Medical
+R189,Beagle,5.9,Closed,OHE
+R190,Indie/Mixed,9.9,Open,OHE
+R191,Labrador Retriever,8.9,Open,OHE
+R192,Rottweiler,5.3,Closed,OHE
+R193,Golden Retriever,6.9,Closed,OHE
+R194,Cocker Spaniel,8.2,Open,Medical
+R195,Golden Retriever,5.9,Closed,OHE
+R196,Rottweiler,9.9,Open,Medical
+R197,Rottweiler,5.4,Open,Medical
+R198,Pug,3.7,Open,Medical
+R199,Golden Retriever,6.2,Open,OHE
+R200,German Shepherd,5.1,Open,OHE
+R201,Golden Retriever,5.2,Closed,OHE
+R202,Indie/Mixed,6.8,Closed,OHE
+R203,Cocker Spaniel,2.5,Open,Medical
+R204,Labrador Retriever,6.5,Open,Medical
+R205,Beagle,8.8,Open,OHE
+R206,Golden Retriever,8.2,Open,OHE
+R207,Rottweiler,2.5,Open,OHE
+R208,Beagle,3.2,Open,OHE
+R209,Labrador Retriever,7.0,Open,OHE
+R210,Indie/Mixed,7.0,Open,OHE
+R211,Cocker Spaniel,5.7,Open,OHE
+R212,Indie/Mixed,3.3,Open,OHE
+R213,Pug,7.1,Closed,OHE
+R214,Golden Retriever,7.7,Open,OHE
+R215,Cocker Spaniel,6.7,Closed,OHE
+R216,Indie/Mixed,7.5,Open,OHE
+R217,Golden Retriever,5.3,Closed,OHE
+R218,Beagle,6.4,Open,OHE
+R219,Rottweiler,7.2,Closed,OHE
+R220,Golden Retriever,6.4,Open,Medical
+R221,Cocker Spaniel,7.7,Open,OHE
+R222,Rottweiler,9.3,Open,Medical
+R223,Golden Retriever,3.6,Open,Medical
+R224,Rottweiler,3.0,Open,OHE
+R225,Beagle,5.9,Open,OHE
+R226,Golden Retriever,8.5,Open,Medical
+R227,Labrador Retriever,4.4,Open,OHE
+R228,Rottweiler,5.5,Open,OHE
+R229,Indie/Mixed,7.5,Open,OHE
+R230,Cocker Spaniel,5.3,Open,OHE
+R231,Beagle,7.1,Open,OHE
+R232,German Shepherd,5.7,Closed,OHE
+R233,Pug,8.9,Open,OHE
+R234,Golden Retriever,8.8,Open,OHE
+R235,Cocker Spaniel,5.6,Closed,Medical
+R236,Cocker Spaniel,7.8,Closed,Medical
+R237,German Shepherd,8.9,Closed,OHE
+R238,German Shepherd,4.7,Open,OHE
+R239,Golden Retriever,4.2,Open,OHE
+R240,Golden Retriever,7.4,Open,OHE

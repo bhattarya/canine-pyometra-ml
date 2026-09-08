@@ -1,0 +1,13 @@
+imputer,model,ROC_AUC,PR_AUC
+median,RandomForest,0.932 ± 0.087,0.875 ± 0.128
+median,GradientBoosting,0.895 ± 0.123,0.825 ± 0.167
+median,LogReg_L1_LASSO,0.853 ± 0.173,0.753 ± 0.210
+mean,RandomForest,0.933 ± 0.087,0.873 ± 0.135
+mean,GradientBoosting,0.887 ± 0.129,0.808 ± 0.176
+mean,LogReg_L1_LASSO,0.853 ± 0.175,0.754 ± 0.210
+knn5,RandomForest,0.938 ± 0.079,0.880 ± 0.131
+knn5,GradientBoosting,0.898 ± 0.114,0.814 ± 0.189
+knn5,LogReg_L1_LASSO,0.850 ± 0.164,0.748 ± 0.200
+iterative,RandomForest,0.939 ± 0.082,0.883 ± 0.137
+iterative,GradientBoosting,0.897 ± 0.109,0.821 ± 0.170
+iterative,LogReg_L1_LASSO,0.846 ± 0.169,0.744 ± 0.208

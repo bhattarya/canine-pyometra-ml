@@ -1,0 +1,5 @@
+stage,n_predictors,best_model,best_resampling,best_ROC_AUC,best_PR_AUC
+A_all+Group,20,GaussianNB,class_weight,0.955 ± 0.088,0.988 ± 0.034
+B_screened+Group,11,GaussianNB,class_weight,0.960 ± 0.088,0.989 ± 0.034
+C_rfecv+Group,4,LinearSVM,class_weight,0.972 ± 0.037,0.994 ± 0.008
+Sens_G1G3_noGroup,10,GaussianNB,class_weight,0.947 ± 0.080,0.984 ± 0.027

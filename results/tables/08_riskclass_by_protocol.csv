@@ -1,0 +1,13 @@
+risk_class,Group,n,success,med_failure,rescue_OHE,success_rate
+Low,G1_Supportive,7,7,0,0,1.0
+Low,G2_PGF2a,7,7,0,0,1.0
+Low,G3_Aglepristone_PGF2a,7,7,0,0,1.0
+Low,G4_OHE,6,6,0,0,1.0
+Medium,G1_Supportive,5,4,1,0,0.8
+Medium,G2_PGF2a,7,7,0,0,1.0
+Medium,G3_Aglepristone_PGF2a,7,7,0,0,1.0
+Medium,G4_OHE,7,7,0,0,1.0
+High,G1_Supportive,8,2,6,4,0.25
+High,G2_PGF2a,6,1,5,3,0.17
+High,G3_Aglepristone_PGF2a,6,4,2,1,0.67
+High,G4_OHE,7,7,0,0,1.0

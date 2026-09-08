@@ -1,0 +1,109 @@
+# Canine Pyometra — Machine-Learning Models for Treatment Outcome
+
+Development of interpretable machine-learning models to predict **treatment
+outcome** and **recovery time** in dogs with pyometra, from admission-day
+clinical, haematological and biochemical parameters and the assigned treatment
+protocol (G1–G4).
+
+Methodology mirrors the workflow of the canine parvovirus prognosis study
+(Nafe Monfared *et al.*, *Front. Vet. Sci.* 2025) — a staged pipeline of
+univariate screening → recursive feature elimination → a multi-algorithm model
+comparison under stratified cross-validation — adapted to the pyometra cohort
+and the workbook's own `ML_Roadmap`.
+
+> **Scope note.** The 80-animal workbook is a *clean, randomised, balanced*
+> teaching/analysis dataset with no missingness. Results here are a
+> **methodology demonstration and hypothesis-generating analysis**, not a
+> validated clinical decision tool.
+
+---
+
+## Data
+
+`data/raw/canine_pyometra_80.xlsx` — 11 sheets:
+
+| Sheet | Content |
+|---|---|
+| `80_Animal_Baseline` | Day-0 vitals, CBC, biochemistry, imaging, endocrine + 5 derived risk flags (n = 80) |
+| `Treatment_Protocols` | G1 Supportive · G2 PGF2α · G3 Aglepristone + PGF2α · G4 OHE |
+| `Repeated_D0_D3_D7_D14` | Longitudinal measures, 80 × 4 timepoints |
+| `Treatment_Outcomes` | `Treatment_Success_D14`, `Medical_Failure_D14`, `Rescue_OHE`, `Death`, `Days_to_Resolution`, fertility outcomes |
+| `ML_Treatment_Prediction` | Curated table: Group + 11 predictors → `Treatment_Success_D14` |
+| `ML_Baseline_Risk_G1G3` | G1–G3 only, 19 predictors → `Medical_Failure_D14` |
+| `ML_missing_5pct` | Same, with 5 % MCAR cells blanked (imputation exercise) |
+| `Retro_6mo_240cases` | 240 retrospective cases — case-mix only (**no outcome column**) |
+| `Data_Dictionary`, `ML_Roadmap`, `Outcome_Summary` | Metadata |
+
+### Outcome distribution
+
+| Target | Cohort | Positive rate | Use |
+|---|---|---|---|
+| `Treatment_Success_D14` | 80 (G1–G4) | 66 success / 14 failure | Treatment-outcome model (Group retained) |
+| `Medical_Failure_D14` | 60 (G1–G3) | 14 / 60 | Prognostic model (admission variables only) |
+| `Days_to_Resolution` | 74 | continuous (mean ≈ 5 d) | Recovery-time regression |
+| `Death` (1/80), `Recurrence_6mo` (4/80) | — | too rare — reported descriptively only |
+
+Observed success gradient: **G1 65 % → G2 75 % → G3 90 % → G4 100 %**.
+G4 (OHE) is perfectly separated, so the treatment model uses penalised
+estimators and is accompanied by a G1–G3-only sensitivity analysis.
+
+---
+
+## Pipeline
+
+| Script | Roadmap step | Output |
+|---|---|---|
+| `src/analysis/01_data_audit.py` | 1 | N, duplicates, ranges, missingness, randomisation balance |
+| `src/analysis/02_descriptives.py` | 2 | Table 1 (by arm), Table 2 (by outcome), univariate AUC screen |
+| `src/analysis/03_longitudinal_mixed.py` | 3 | Mixed model `y ~ Group * Day + (1│ID)`, trajectory plots |
+| `src/analysis/04_prognostic_ml.py` | 5–8 | Prognostic model, 3 stages (all → screened → RFECV) |
+| `src/analysis/05_treatment_prediction.py` | 9 | Treatment-outcome model + G1–G3 sensitivity |
+| `src/analysis/06_missing_data.py` | 10 | median / mean / KNN / iterative imputation comparison |
+| `src/analysis/07_recovery_regression.py` | — | `Days_to_Resolution` regression (4 models) |
+| `src/analysis/08_risk_score.py` | — | Points-based admission risk score → risk class × protocol table |
+| `src/analysis/10_figures_for_talk.py` | — | Presentation-ready summary figures (`results/figures/talk_*.png`) |
+| `src/analysis/09_build_report.py` | — | Assembles `reports/findings.md` from the tables + figures |
+
+Notebook mirrors of each script live in `notebooks/` (kept in sync with
+`jupytext`); the `.py` files under `src/analysis/` are the source of truth.
+
+**Model zoo** (all inside CV-safe pipelines; imputation / scaling / SMOTE fitted
+per training fold): regularised logistic regression (L2 / L1-LASSO / ElasticNet),
+linear & RBF SVM, LDA, QDA, Gaussian NB, k-NN, decision tree, random forest,
+AdaBoost, gradient boosting, HistGB, XGBoost. Each run twice — cost-sensitive
+(`class_weight`) and SMOTE.
+
+**Evaluation**: repeated stratified 5-fold CV; ROC-AUC, PR-AUC, balanced
+accuracy, sensitivity, specificity, F1, Brier; out-of-fold ROC / PR /
+calibration curves; permutation importance + penalised logistic odds ratios.
+
+---
+
+## Reproduce
+
+```bash
+python3.14 -m venv .venv
+./.venv/bin/python -m pip install -r requirements.txt
+./.venv/bin/python src/analysis/run_all.py          # full pipeline
+# or a single step:
+./.venv/bin/python src/analysis/run_all.py 04
+```
+
+Outputs are written to `results/tables/`, `results/figures/` and
+`data/processed/`. Report: `reports/findings.md`.
+
+macOS note: XGBoost needs the OpenMP runtime — `brew install libomp`.
+
+---
+
+## Repository layout
+
+```
+data/raw/            the workbook (source of truth)
+data/processed/      assembled analysis CSVs (regenerated by the pipeline)
+src/pyo/             config · data loader · pipelines · evaluation · experiment
+src/analysis/        numbered analysis scripts + run_all.py
+results/tables/      metric tables, odds ratios, importance rankings
+results/figures/     ROC/PR/calibration/trajectory plots
+reports/findings.md  narrative results write-up
+```

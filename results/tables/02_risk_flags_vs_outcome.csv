@@ -1,0 +1,6 @@
+flag,n_flag_pos,fail_rate_flag1,fail_rate_flag0,risk_diff,chi2_p
+Azotemia_flag,24,0.5,0.036,0.464,0.0
+High_Clinical_Severity_flag,13,0.538,0.104,0.434,0.0008
+Leukocytosis_flag,18,0.389,0.113,0.276,0.0182
+Hypoalbuminemia_flag,18,0.333,0.129,0.204,0.0977
+Severe_Inflammation_flag,4,0.25,0.171,0.079,1.0

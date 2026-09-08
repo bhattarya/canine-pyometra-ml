@@ -1,0 +1,14 @@
+numpy>=2.1
+pandas>=2.2
+scipy>=1.14
+scikit-learn>=1.5
+statsmodels>=0.14
+imbalanced-learn>=0.13
+xgboost>=2.1
+matplotlib>=3.9
+seaborn>=0.13
+shap>=0.46
+openpyxl>=3.1
+jupyter>=1.1
+jupytext>=1.16
+tabulate>=0.9
