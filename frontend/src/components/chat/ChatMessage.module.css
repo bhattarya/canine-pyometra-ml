@@ -1,0 +1,82 @@
+.rowUser,
+.rowBot {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-width: 85%;
+}
+.rowUser {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+.rowBot {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.tag {
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+  padding: 0 2px;
+}
+
+.bubbleUser,
+.bubbleBot {
+  padding: 8px 11px;
+  border-radius: 3px;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  border: 1px solid var(--rule);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.bubbleUser {
+  background: var(--accent-wash);
+  color: var(--ink);
+  border-color: var(--rule-strong);
+}
+.bubbleBot {
+  background: var(--panel-2);
+  color: var(--ink);
+}
+
+.para + .para {
+  margin-top: 0.6em;
+}
+
+.dots {
+  display: inline-flex;
+  gap: 3px;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--faint);
+}
+.dots span {
+  animation: pulse 1.2s ease-in-out infinite;
+}
+.dots span:nth-child(2) {
+  animation-delay: 0.18s;
+}
+.dots span:nth-child(3) {
+  animation-delay: 0.36s;
+}
+
+@keyframes pulse {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dots span {
+    animation: none;
+    opacity: 0.55;
+  }
+}

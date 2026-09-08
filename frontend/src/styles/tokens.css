@@ -1,0 +1,84 @@
+/* ------------------------------------------------------------------ *
+ *  Design tokens — clinical "lab requisition" system.
+ *  Light palette on bare :root; dark redefines tokens only.
+ * ------------------------------------------------------------------ */
+:root {
+  --paper: #fcfcfd;
+  --panel: #ffffff;
+  --panel-2: #f4f6f8;
+  --ink: #1a1f26;
+  --ink-2: #47525d;
+  --faint: #6b7580;
+  --rule: #dee3e8;
+  --rule-strong: #c2ccd3;
+  --accent: #2b5f7e;
+  --accent-ink: #1f4a63;
+  --accent-wash: #e7eef2;
+
+  --r-low: #3f7d58;
+  --r-low-wash: #e7f1eb;
+  --r-mid: #a9761b;
+  --r-mid-wash: #f5ecda;
+  --r-high: #a03a30;
+  --r-high-wash: #f4e3e1;
+
+  --shadow: 0 1px 0 var(--rule), 0 12px 40px -22px rgba(20, 32, 42, 0.35);
+
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-ui: "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Spline Sans Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --measure: 66ch;
+  --pad: clamp(16px, 1rem + 1.4vw, 34px);
+  --grid-line: rgba(26, 31, 38, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #11151a;
+    --panel: #191f25;
+    --panel-2: #1f262d;
+    --ink: #e6eaef;
+    --ink-2: #a8b2bc;
+    --faint: #7a8590;
+    --rule: #2a333b;
+    --rule-strong: #3a454f;
+    --accent: #5ca0c4;
+    --accent-ink: #83bad7;
+    --accent-wash: #16262e;
+
+    --r-low: #57b07e;
+    --r-low-wash: #16271e;
+    --r-mid: #cf9f4e;
+    --r-mid-wash: #2b2411;
+    --r-high: #db6a5e;
+    --r-high-wash: #2c1a17;
+
+    --shadow: 0 1px 0 var(--rule), 0 14px 44px -24px rgba(0, 0, 0, 0.7);
+    --grid-line: rgba(230, 234, 239, 0.05);
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper: #11151a;
+  --panel: #191f25;
+  --panel-2: #1f262d;
+  --ink: #e6eaef;
+  --ink-2: #a8b2bc;
+  --faint: #7a8590;
+  --rule: #2a333b;
+  --rule-strong: #3a454f;
+  --accent: #5ca0c4;
+  --accent-ink: #83bad7;
+  --accent-wash: #16262e;
+
+  --r-low: #57b07e;
+  --r-low-wash: #16271e;
+  --r-mid: #cf9f4e;
+  --r-mid-wash: #2b2411;
+  --r-high: #db6a5e;
+  --r-high-wash: #2c1a17;
+
+  --shadow: 0 1px 0 var(--rule), 0 14px 44px -24px rgba(0, 0, 0, 0.7);
+  --grid-line: rgba(230, 234, 239, 0.05);
+}

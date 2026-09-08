@@ -1,9 +1,17 @@
 name: Deploy predictor to GitHub Pages
 
+# Builds the React app in frontend/ and publishes it to GitHub Pages.
+# `npm run build` runs the `prebuild` hook -> `sync-model`, which copies
+# ../models/final_model.json into the bundle, so that file must be committed
+# (it is).
+
 on:
   push:
     branches: [main]
-    paths: ["site/**", ".github/workflows/deploy-pages.yml"]
+    paths:
+      - "frontend/**"
+      - "models/final_model.json"
+      - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
 
 permissions:
@@ -16,16 +24,35 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+      - name: Build
+        working-directory: frontend
+        run: npm run build
+        env:
+          PAGES_BASE: /canine-pyometra-ml/
+          VITE_PROXY_URL: ${{ vars.VITE_PROXY_URL }}
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/dist
+
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
       - id: deployment
         uses: actions/deploy-pages@v4

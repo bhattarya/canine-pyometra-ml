@@ -1,0 +1,69 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.formHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--ink);
+}
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.tagNote {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--faint);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+}
+
+.examples {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+}
+.exLabel {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.ex,
+.exOn {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 6px 12px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+  background: var(--panel-2);
+  color: var(--ink-2);
+}
+.ex:hover {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.exOn {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+  color: var(--accent-ink);
+}

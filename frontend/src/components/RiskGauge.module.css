@@ -1,0 +1,41 @@
+.wrap {
+  display: block;
+}
+
+.bar {
+  position: relative;
+  height: 14px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    var(--r-low) 0 var(--cut0, 10%),
+    var(--r-mid) var(--cut0, 10%) var(--cut1, 40%),
+    var(--r-high) var(--cut1, 40%) 100%
+  );
+}
+
+.needle {
+  position: absolute;
+  top: -5px;
+  bottom: -5px;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--ink);
+  box-shadow: 0 0 0 2px var(--panel);
+  transition: left 0.35s ease;
+}
+
+.ticks {
+  position: relative;
+  height: 1.1em;
+  margin-top: 7px;
+}
+
+.tick {
+  position: absolute;
+  top: 0;
+  font-size: 0.7rem;
+  color: var(--faint);
+  white-space: nowrap;
+}
