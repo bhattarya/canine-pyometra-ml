@@ -73,14 +73,38 @@ proxy/
   vercel/
     api/chat.ts       edge function; delegates to shared/handler.js
     README.md
+  dev-server.mjs      plain Node http server wrapping shared/handler.js
+  test.mjs            one-shot real Gemini call -> streamed answer + PASS/FAIL
   .env.example
   .dev.vars.example
   package.json         type: module, zero dependencies
 ```
 
 Zero runtime dependencies — native `fetch`, `ReadableStream`, `TextEncoder`,
-`TextDecoder` only. `wrangler` is the only tool you install, and only for
-Cloudflare.
+`TextDecoder` only. `wrangler` is optional (Cloudflare deploy only); the local
+dev server and test need nothing but Node 20+.
+
+## Run it locally (no wrangler)
+
+```bash
+cd proxy
+cp .dev.vars.example .dev.vars      # then paste YOUR OWN fresh key into .dev.vars
+npm run dev                         # -> http://localhost:8787/chat
+```
+
+`.dev.vars` is git-ignored. In another terminal, `cd frontend && npm run dev` —
+`frontend/.env.development` already points `VITE_PROXY_URL` at
+`http://localhost:8787`, so the chat panel is live.
+
+One-shot end-to-end check against the real API (you run it, with your key):
+
+```bash
+cd proxy
+GEMINI_API_KEY=your_fresh_key npm test     # or: node test.mjs  (reads .dev.vars)
+```
+
+It sends a real high-risk case, streams Gemini's answer to your terminal, and
+prints `PASS` / `FAIL`.
 
 ---
 

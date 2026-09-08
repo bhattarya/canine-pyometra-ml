@@ -9,8 +9,16 @@ interface Props {
   caseContext: CaseContext;
 }
 
+const STARTERS = [
+  "Why is this case the risk it is?",
+  "Which admission value matters most here?",
+  "What does this risk band mean for management?",
+  "How much should I trust this number?",
+];
+
 export function ChatPanel({ caseContext }: Props) {
-  const { messages, send, stop, loading, error, configured } = useChat(caseContext);
+  const { messages, send, stop, reset, loading, error, configured, started } =
+    useChat(caseContext);
   const listRef = useRef<HTMLDivElement>(null);
 
   const lastContent = messages[messages.length - 1]?.content ?? "";
@@ -19,12 +27,24 @@ export function ChatPanel({ caseContext }: Props) {
     if (el) el.scrollTop = el.scrollHeight;
   }, [messages.length, lastContent]);
 
+  const pct = Math.round(caseContext.probability * 100);
+
   return (
     <section className={styles.panel} aria-label="Case assistant">
       <header className={styles.head}>
-        <h3 className={styles.title}>Ask about this case</h3>
+        <div className={styles.headTop}>
+          <h3 className={styles.title}>Ask about this case</h3>
+          {configured && started ? (
+            <button className={styles.clear} onClick={reset} type="button">
+              Clear
+            </button>
+          ) : null}
+        </div>
         <p className={`${styles.meta} mono`}>
-          powered by Gemini · proxied — case data goes to the proxy you configured
+          Gemini via your proxy · the assistant is told this case:{" "}
+          <span className={styles.badge} data-band={caseContext.band}>
+            {caseContext.band} · {pct < 1 ? "<1" : pct > 99 ? ">99" : pct}% risk
+          </span>
         </p>
       </header>
 
@@ -45,7 +65,25 @@ export function ChatPanel({ caseContext }: Props) {
               />
             ))}
           </div>
+
+          {!started ? (
+            <div className={styles.starters}>
+              {STARTERS.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  className={styles.starter}
+                  disabled={loading}
+                  onClick={() => send(s)}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          ) : null}
+
           {error ? <p className={styles.error}>{error}</p> : null}
+
           <div className="no-print">
             <ChatComposer onSend={send} loading={loading} onStop={stop} />
           </div>

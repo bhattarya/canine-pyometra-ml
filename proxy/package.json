@@ -5,6 +5,8 @@
   "type": "module",
   "description": "Serverless proxy that keeps the Google Gemini API key server-side for the static canine-pyometra React app.",
   "scripts": {
+    "dev": "node dev-server.mjs",
+    "test": "node test.mjs",
     "dev:cf": "wrangler dev cloudflare/worker.js",
     "deploy:cf": "wrangler deploy cloudflare/worker.js"
   },
