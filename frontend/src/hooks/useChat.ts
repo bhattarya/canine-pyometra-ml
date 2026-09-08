@@ -18,9 +18,12 @@ export interface UseChat {
   messages: ChatTurn[];
   send: (text: string) => void;
   stop: () => void;
+  reset: () => void;
   loading: boolean;
   error: string | null;
   configured: boolean;
+  /** true once the user has sent at least one message */
+  started: boolean;
 }
 
 export function useChat(caseContext: CaseContext): UseChat {
@@ -51,6 +54,14 @@ export function useChat(caseContext: CaseContext): UseChat {
     abortRef.current?.abort();
     abortRef.current = null;
     setLoading(false);
+  }, []);
+
+  const reset = useCallback(() => {
+    abortRef.current?.abort();
+    abortRef.current = null;
+    setLoading(false);
+    setError(null);
+    setMessages([SEED]);
   }, []);
 
   const send = useCallback((text: string) => {
@@ -120,8 +131,10 @@ export function useChat(caseContext: CaseContext): UseChat {
     messages,
     send,
     stop,
+    reset,
     loading,
     error,
     configured: proxyConfigured(),
+    started: messages.some((m) => m.role === "user"),
   };
 }
