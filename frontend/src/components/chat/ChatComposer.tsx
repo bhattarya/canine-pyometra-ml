@@ -51,7 +51,7 @@ export function ChatComposer({ onSend, loading, onStop }: Props) {
     <div className={styles.wrap}>
       <textarea
         ref={ref}
-        className={`${styles.input} mono`}
+        className={styles.input}
         rows={1}
         value={value}
         placeholder="Ask about this case…"
@@ -60,7 +60,11 @@ export function ChatComposer({ onSend, loading, onStop }: Props) {
         onKeyDown={onKeyDown}
       />
       {loading ? (
-        <button type="button" className={styles.btn} onClick={onStop}>
+        <button
+          type="button"
+          className={`${styles.btn} ${styles.btnStop}`}
+          onClick={onStop}
+        >
           Stop
         </button>
       ) : (

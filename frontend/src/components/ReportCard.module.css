@@ -1,16 +1,19 @@
 .card {
-  padding: 24px;
+  padding: clamp(20px, 3vw, 32px);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 26px;
   font-family: var(--font-ui);
-  color: var(--ink);
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
 }
 
 .rule {
   width: 100%;
   border: 0;
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--line);
   margin: 0;
 }
 
@@ -19,91 +22,79 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 8px 16px;
+  gap: 12px 20px;
 }
 
 .chip {
   align-self: center;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 3px 8px;
-  border-radius: 2px;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
   white-space: nowrap;
 }
-
 .chipLow {
-  color: var(--r-low);
-  background: var(--r-low-wash);
+  color: var(--low);
+  background: var(--low-dim);
 }
 .chipMid {
-  color: var(--r-mid);
-  background: var(--r-mid-wash);
+  color: var(--mid);
+  background: var(--mid-dim);
 }
 .chipHigh {
-  color: var(--r-high);
-  background: var(--r-high-wash);
+  color: var(--high);
+  background: var(--high-dim);
 }
 
 .big {
-  font-size: 3.1rem;
-  line-height: 1;
-  font-weight: 500;
-  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: clamp(3.4rem, 2.6rem + 3vw, 5rem);
+  line-height: 0.95;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--text);
 }
 
 .vcaption {
-  max-width: 30ch;
-  font-size: 0.76rem;
-  line-height: 1.4;
-  color: var(--faint);
+  max-width: 32ch;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--text-3);
 }
 
 /* 5. read-out sentence -------------------------------------------------- */
 .readout {
   margin: 0;
   max-width: var(--measure);
-  font-size: 0.9rem;
-  line-height: 1.55;
-  color: var(--ink-2);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+.readout strong {
+  color: var(--text);
+  font-weight: 600;
 }
 
 /* 6. actions --------------------------------------------------------- */
 .actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
-
-.print {
-  font-family: var(--font-ui);
-  font-size: 0.8rem;
-  padding: 6px 12px;
-  background: transparent;
-  border: 1px solid var(--rule-strong);
-  border-radius: 2px;
-  color: var(--ink-2);
-  cursor: pointer;
-}
-
-.print:hover {
-  border-color: var(--accent);
-  color: var(--ink);
-}
-
 .date {
-  font-size: 0.75rem;
-  color: var(--faint);
+  font-size: 0.78rem;
+  color: var(--text-3);
 }
 
 /* 7. card note ----------------------------------------------------------- */
 .note {
   margin: 0;
-  padding-top: 16px;
-  border-top: 1px solid var(--rule);
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
   max-width: var(--measure);
-  font-size: 0.72rem;
-  line-height: 1.5;
-  color: var(--faint);
+  font-size: 0.74rem;
+  line-height: 1.55;
+  color: var(--text-3);
 }

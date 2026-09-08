@@ -42,31 +42,36 @@ export function App() {
     <div className={styles.shell}>
       <TopBar />
 
-      <main className={styles.main}>
-        <header className={styles.masthead}>
+      <header className={styles.masthead}>
+        <div className={styles.inner}>
           <p className="eyebrow">Veterinary decision support · research preview</p>
-          <h1 className={styles.title}>Pyometra Outcome Predictor</h1>
+          <h1 className={styles.title}>
+            Will medical management
+            <br />
+            get this dog through?
+          </h1>
           <p className={styles.standfirst}>
-            Estimates the probability that <em>medical</em> management of canine pyometra fails by
-            day&nbsp;14 &mdash; from six routine admission values. Built on an 80-dog, four-arm
-            cohort (G1 supportive · G2 PGF2&alpha; · G3 aglepristone&nbsp;+&nbsp;PGF2&alpha; · G4
-            ovariohysterectomy).
+            An estimate of the probability that medical treatment of canine pyometra
+            fails by day&nbsp;14, from six routine admission values — built on an
+            80-dog, four-arm cohort.
           </p>
           <p className={styles.disclaimer}>
-            <strong>Not a validated clinical tool.</strong> Trained on a single-centre teaching
-            dataset of 80 dogs with 14 failure events. A teaching and discussion aid only &mdash;
-            the attending clinician&rsquo;s judgement takes precedence.
+            Not a validated clinical tool. Trained on a single-centre teaching dataset
+            of 80 dogs with 14 failure events — a teaching and discussion aid only. The
+            attending clinician&rsquo;s judgement takes precedence.
           </p>
-        </header>
+        </div>
+      </header>
 
+      <main className={styles.main}>
         <section className={styles.section} aria-labelledby="assess">
-          <div className={styles.sectionHead}>
-            <span className={styles.marker}>&sect;1</span>
+          <div className={styles.inner}>
+            <p className="eyebrow">01 — Assess a case</p>
             <h2 id="assess" className={styles.h2}>
-              Assess a case
+              Enter the admission bloods
             </h2>
           </div>
-          <div className={styles.workbench}>
+          <div className={`${styles.inner} ${styles.workbench}`}>
             <CaseForm
               values={values}
               activeExample={activeExample}
@@ -78,38 +83,46 @@ export function App() {
         </section>
 
         <section className={styles.section} aria-labelledby="ask">
-          <div className={styles.sectionHead}>
-            <span className={styles.marker}>&sect;2</span>
+          <div className={styles.inner}>
+            <p className="eyebrow">02 — Talk it through</p>
             <h2 id="ask" className={styles.h2}>
               Ask about this case
             </h2>
           </div>
-          <ChatPanel caseContext={caseContext} />
+          <div className={styles.inner}>
+            <ChatPanel caseContext={caseContext} />
+          </div>
         </section>
 
-        <section className={styles.section} aria-labelledby="method">
-          <div className={styles.sectionHead}>
-            <span className={styles.marker}>&sect;3</span>
+        <section
+          className={`${styles.section} ${styles.paper} paper-scope`}
+          aria-labelledby="method"
+        >
+          <div className={styles.inner}>
+            <p className="eyebrow">03 — Method</p>
             <h2 id="method" className={styles.h2}>
-              How the tool works
+              How the estimate is made
             </h2>
           </div>
-          <Method />
+          <div className={styles.inner}>
+            <Method />
+          </div>
         </section>
       </main>
 
       <footer className={styles.foot}>
-        <span>
-          Model generated {MODEL.generated} · logistic regression, {MODEL.features.length}{" "}
-          predictors · {MODEL.performance.cv}
-        </span>
-        <span>
-          Code &amp; full analysis:{" "}
-          <a href="https://github.com/bhattarya/canine-pyometra-ml">
-            github.com/bhattarya/canine-pyometra-ml
-          </a>
-        </span>
-        <span>Runs entirely in your browser — no data leaves this page.</span>
+        <div className={styles.inner}>
+          <span>
+            Model {MODEL.generated} · logistic regression, {MODEL.features.length}{" "}
+            predictors
+          </span>
+          <span>
+            <a href="https://github.com/bhattarya/canine-pyometra-ml">
+              github.com/bhattarya/canine-pyometra-ml
+            </a>
+          </span>
+          <span>Runs in your browser — no case data leaves this page.</span>
+        </div>
       </footer>
     </div>
   );

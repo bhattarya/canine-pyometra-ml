@@ -1,7 +1,10 @@
 .form {
   display: flex;
   flex-direction: column;
-  padding: 24px;
+  padding: clamp(20px, 3vw, 32px);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
 }
 
 .formHead {
@@ -9,21 +12,18 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid var(--ink);
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
 }
 .tag {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+  color: var(--text);
 }
 .tagNote {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--faint);
+  font-size: 0.78rem;
+  color: var(--text-3);
 }
 
 .fields {
@@ -36,34 +36,35 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 22px;
-  padding-top: 16px;
-  border-top: 1px solid var(--rule);
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
 }
 .exLabel {
-  font-family: var(--font-mono);
   font-size: 0.72rem;
-  letter-spacing: 0.06em;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--faint);
+  color: var(--text-3);
 }
 .ex,
 .exOn {
   font-family: var(--font-ui);
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   font-weight: 500;
-  padding: 6px 12px;
-  border: 1px solid var(--rule-strong);
-  border-radius: 2px;
-  background: var(--panel-2);
-  color: var(--ink-2);
+  padding: 7px 15px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-2);
+  transition: border-color 0.16s ease, color 0.16s ease, background 0.16s ease;
 }
 .ex:hover {
-  border-color: var(--accent);
-  color: var(--accent-ink);
+  border-color: var(--line-2);
+  color: var(--text);
 }
 .exOn {
-  border-color: var(--accent);
-  background: var(--accent-wash);
-  color: var(--accent-ink);
+  border-color: transparent;
+  background: var(--fill-hover);
+  color: var(--text);
 }

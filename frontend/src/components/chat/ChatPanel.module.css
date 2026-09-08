@@ -1,120 +1,122 @@
 .panel {
   display: flex;
   flex-direction: column;
-  background: var(--panel);
-  border: 1px solid var(--rule);
-  border-radius: 3px;
+  max-width: 720px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
 .head {
-  padding: 14px 14px 12px;
-  border-bottom: 1px solid var(--rule);
+  padding: 20px 22px 16px;
+  border-bottom: 1px solid var(--line);
 }
 .headTop {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 12px;
+  gap: 14px;
 }
 .title {
   font-family: var(--font-display);
-  font-size: 1.05rem;
+  font-size: 1.35rem;
+  letter-spacing: -0.015em;
 }
 .clear {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.7rem;
+  font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--faint);
+  color: var(--text-3);
   background: transparent;
-  border: 1px solid var(--rule-strong);
-  border-radius: 2px;
-  padding: 3px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  padding: 4px 12px;
 }
 .clear:hover {
-  color: var(--ink);
-  border-color: var(--accent);
+  color: var(--text);
+  border-color: var(--line-2);
 }
 .meta {
-  margin-top: 6px;
-  font-size: 0.68rem;
-  line-height: 1.5;
-  color: var(--faint);
+  margin-top: 8px;
+  font-size: 0.75rem;
+  line-height: 1.55;
+  color: var(--text-3);
 }
 .badge {
   display: inline-block;
   font-weight: 600;
-  padding: 1px 6px;
-  border-radius: 2px;
-  color: var(--ink);
-  background: var(--panel-2);
-  border: 1px solid var(--rule-strong);
+  padding: 2px 9px;
+  border-radius: var(--radius-pill);
+  color: var(--text);
+  background: var(--fill);
+  border: 1px solid var(--line);
 }
 .badge[data-band="Low"] {
-  color: var(--r-low);
+  color: var(--low);
 }
 .badge[data-band="Intermediate"] {
-  color: var(--r-mid);
+  color: var(--mid);
 }
 .badge[data-band="High"] {
-  color: var(--r-high);
-}
-
-.starters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 0 14px 12px;
-}
-.starter {
-  font-family: var(--font-ui);
-  font-size: 0.78rem;
-  text-align: left;
-  color: var(--ink-2);
-  background: var(--panel-2);
-  border: 1px solid var(--rule);
-  border-radius: 3px;
-  padding: 6px 10px;
-}
-.starter:hover:not(:disabled) {
-  border-color: var(--accent);
-  color: var(--accent-ink);
-}
-.starter:disabled {
-  opacity: 0.5;
+  color: var(--high);
 }
 
 .notice {
-  margin: 14px;
-  padding: 12px;
-  font-size: 0.82rem;
-  line-height: 1.55;
-  color: var(--ink-2);
-  background: var(--panel-2);
-  border: 1px solid var(--rule);
-  border-radius: 3px;
+  margin: 20px 22px;
+  padding: 18px;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
 }
 .notice code {
-  font-family: var(--font-mono);
-  font-size: 0.78em;
-  padding: 1px 4px;
-  background: var(--paper);
-  border: 1px solid var(--rule);
-  border-radius: 2px;
+  font-family: var(--font-num);
+  font-size: 0.85em;
+  padding: 1px 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 5px;
 }
 
 .list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 14px;
-  max-height: 420px;
+  gap: 16px;
+  padding: 20px 22px;
+  max-height: 440px;
   overflow-y: auto;
 }
 
+.starters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 22px 16px;
+}
+.starter {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  text-align: left;
+  color: var(--text-2);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  padding: 8px 15px;
+  transition: border-color 0.16s ease, color 0.16s ease;
+}
+.starter:hover:not(:disabled) {
+  border-color: var(--line-2);
+  color: var(--text);
+}
+.starter:disabled {
+  opacity: 0.4;
+}
+
 .error {
-  margin: 0 14px 4px;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: var(--r-high);
+  margin: 0 22px 6px;
+  font-size: 0.78rem;
+  color: var(--high);
 }

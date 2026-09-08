@@ -76,7 +76,7 @@ export function ReportCard({ prediction }: { prediction: Prediction }) {
       </p>
 
       <div className={`${styles.actions} no-print`}>
-        <button type="button" className={styles.print} onClick={() => window.print()}>
+        <button type="button" className="pill" onClick={() => window.print()}>
           Print case card
         </button>
         <span className={`${styles.date} mono`}>{new Date().toLocaleDateString()}</span>
