@@ -57,7 +57,12 @@ fig.colorbar(im, ax=ax, label="success rate")
 fig.tight_layout(); fig.savefig(FIG / "talk_riskclass_protocol.png"); plt.close(fig)
 
 # ---- 4. prognostic model comparison (AUC) ------------------------------- #
-mc = pd.read_csv(C.TABDIR / "04C_prognostic_rfecv_model_comparison.csv")
+_mc_path = C.TABDIR / "04C_prognostic_rfecv_model_comparison.csv"
+if not _mc_path.exists():
+    print(f"skip talk_prognostic_model_comparison — run 04_prognostic_ml.py first "
+          f"({_mc_path.name} missing)")
+    sys.exit(0)
+mc = pd.read_csv(_mc_path)
 mc = mc[mc["resampling"] == "class_weight"].copy()
 mc["auc"] = mc["ROC_AUC"].str.split(" ± ").str[0].astype(float)
 mc["sd"] = mc["ROC_AUC"].str.split(" ± ").str[1].astype(float)
