@@ -1,0 +1,66 @@
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
+.inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 10px var(--pad);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.wordmark {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rx {
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+.right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+.pill {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+  border: 1px solid var(--rule-strong);
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+.theme {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  font-size: 0.95rem;
+  background: transparent;
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+  color: var(--ink-2);
+}
+.theme:hover {
+  color: var(--ink);
+  border-color: var(--accent);
+}
+@media (max-width: 520px) {
+  .pill {
+    display: none;
+  }
+}

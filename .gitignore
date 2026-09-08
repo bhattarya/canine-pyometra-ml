@@ -8,3 +8,9 @@ results/*.log
 *.egg-info/
 build/
 dist/
+
+frontend/node_modules/
+frontend/dist/
+frontend/src/data/model.json
+.env
+.dev.vars
