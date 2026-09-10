@@ -58,15 +58,19 @@ works — the predictor is fully deterministic and offline-capable.
 ## Build
 
 ```bash
-npm run build                    # -> dist/  (multi-asset, for GitHub Pages)
-SINGLE_FILE=1 npm run build      # -> one self-contained dist/index.html
+npm run build                       # -> dist/  (base "/", for Vercel / any root host)
+SINGLE_FILE=1 npm run build          # -> one self-contained dist/index.html
+PAGES_BASE=/canine-pyometra-ml/ npm run build   # -> dist/ for GitHub Pages project site
 ```
 
-The Pages build uses base `/canine-pyometra-ml/` (override with `PAGES_BASE`).
-`SINGLE_FILE=1` inlines every asset via `vite-plugin-singlefile` into a single
-`dist/index.html` you can email around, run from `file://`, or publish as an
-artifact. `npm run build` runs `prebuild` → `sync-model` first, so
-`../models/final_model.json` must be present.
+`base` defaults to `/` (Vercel). `SINGLE_FILE=1` inlines every asset via
+`vite-plugin-singlefile` into one `dist/index.html` you can email around, run
+from `file://`, or publish as an artifact. `npm run build` runs `prebuild` →
+`sync-model` first, so `../models/final_model.json` must be present.
+
+**Hosting is Vercel** — see `../DEPLOY.md`. Set Root Directory = `frontend`;
+`vercel.json` pins the build. GitHub Pages is a manual fallback
+(`.github/workflows/deploy-pages.yml`, `workflow_dispatch`).
 
 ## Parity
 

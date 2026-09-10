@@ -58,13 +58,16 @@ under repeated stratified CV) and the workbook's own `ML_Roadmap` sheet.
 3. **Narrative report** (CPV-article style, Word/PDF) — not started.
    `reports/findings.md` is the raw material; needs Intro/Methods/Results/
    Discussion prose for a non-statistician reader.
-4. **User actions to go live:**
-   - GitHub → Settings → Pages → Source **"GitHub Actions"** → next push deploys
-     to `https://bhattarya.github.io/canine-pyometra-ml/`.
-   - **Revoke the Gemini key pasted in the last session** (it's in that transcript).
-     Generate a fresh one.
-   - Deploy the proxy (`proxy/README.md` → Cloudflare) and set repo **variable**
-     `VITE_PROXY_URL` to enable the chat on the deployed site.
+4. **User actions to go live — hosting is Vercel now (see `DEPLOY.md`):**
+   - Import the repo at vercel.com/new, set **Root Directory = `frontend`**
+     (framework auto-detects Vite; `frontend/vercel.json` pins build/output).
+     Every push to `main` redeploys.
+   - **Revoke the Gemini key pasted earlier** (it's in a transcript). Generate a
+     fresh one.
+   - *(optional chat)* deploy `proxy/vercel` as a **separate** Vercel project
+     with `GEMINI_API_KEY` / `GEMINI_MODEL` / `ALLOWED_ORIGIN` env vars, then set
+     `VITE_PROXY_URL` on the app project and redeploy.
+   - GitHub Pages workflow is now **manual-only** (`workflow_dispatch`).
 5. **Housekeeping:** split `notebooks/*.ipynb` into real walkthrough cells (they
    are single-cell mirrors now); move `src/inspect_workbook.py` → `tools/`;
    delete merged remote branches (`feat/ml-pipeline`, `feat/predictor-and-showcase`,
