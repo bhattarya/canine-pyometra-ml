@@ -27,7 +27,7 @@ export async function* streamAiSummary(
   const base = import.meta.env.VITE_PROXY_URL;
   if (!base) throw new Error("AI summary is not configured (VITE_PROXY_URL unset).");
 
-  const res = await fetch(`${base.replace(/\/$/, "")}/chat`, {
+  const res = await fetch(`${base.replace(/\/$/, "")}/api/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ mode: "summary", caseContext }),
