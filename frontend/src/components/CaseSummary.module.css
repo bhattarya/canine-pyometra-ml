@@ -1,0 +1,29 @@
+.wrap {
+  margin-top: 24px;
+  padding: clamp(20px, 3vw, 32px);
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  max-width: 68ch;
+}
+
+.title {
+  margin: 0 0 14px;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.p {
+  margin: 0 0 0.95em;
+  font-size: 0.98rem;
+  line-height: 1.68;
+  color: var(--ink-2);
+}
+.p:last-child {
+  margin-bottom: 0;
+  padding-top: 0.6em;
+  border-top: 1px solid var(--line);
+  font-size: 0.86rem;
+  color: var(--ink-3);
+}
