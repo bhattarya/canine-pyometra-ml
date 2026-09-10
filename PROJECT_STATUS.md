@@ -109,6 +109,21 @@ under repeated stratified CV) and the workbook's own `ML_Roadmap` sheet.
   G4 +1.16**. Bands: <50% "unlikely", 50–85% "uncertain", >85% "likely".
   **G4/surgery** has zero cohort failures → the tool shows the **observed rate
   (~100%)**, not the model value, with a caveat, and hides the driver chart for it.
+- **Model validation** (`14_validate_treatment_model.py`, `results/tables/14_*`):
+  15-algorithm bake-off on the exact deployed design.
+  - Every reasonable model sits in a **narrow band, ROC-AUC ≈ 0.89–0.95 with
+    ±0.06–0.12 SD** — the CV intervals overlap almost entirely; **no algorithm is
+    reliably more accurate** on n=80 / 14 failures (**EPV ≈ 1.2**, far below 10).
+  - Nominal "best" GaussianNB AUC 0.951 but **Brier 0.388** (broken calibration)
+    and raw accuracy 0.58 (< the 0.825 majority baseline) — high ranking, useless
+    probabilities. RF / RBF-SVM: AUC ~0.94, Brier ~0.08, but **specificity ~0.5**
+    (miss ~half the failures). Deployed logistic: AUC 0.906–0.911, **nested CV
+    0.911 ± 0.086 → zero tuning optimism**, Brier ~0.11, best specificity comes
+    from L1-LASSO logistic (0.83).
+  - **Verdict: keep logistic regression.** Within ~0.04 AUC of the best, honest
+    under nested CV, gives odds ratios, and is the only option that runs as ~20
+    lines of browser JS. The weak spot is failure detection (small-sample), which
+    the UI already handles by leading with the band + observed cohort rates.
 - **Recovery regression:** negative R² — admission vars don't predict resolution
   time here (honest null; CPV paper got RMSE ≈ 1.8 d).
 - **Retro 240 cases:** Breed / Age / Open-Closed / OHE-Medical only — **no outcome
