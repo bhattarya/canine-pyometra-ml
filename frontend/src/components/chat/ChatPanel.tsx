@@ -28,6 +28,7 @@ export function ChatPanel({ caseContext }: Props) {
   }, [messages.length, lastContent]);
 
   const pct = Math.round(caseContext.probability * 100);
+  const pctText = pct < 1 ? "<1" : pct > 99 ? ">99" : String(pct);
 
   return (
     <section className={styles.panel} aria-label="Case assistant">
@@ -43,7 +44,7 @@ export function ChatPanel({ caseContext }: Props) {
         <p className={`${styles.meta} mono`}>
           Gemini via your proxy · the assistant is told this case:{" "}
           <span className={styles.badge} data-band={caseContext.band}>
-            {caseContext.band} · {pct < 1 ? "<1" : pct > 99 ? ">99" : pct}% risk
+            {caseContext.groupLabel} · {pctText}% success ({caseContext.band})
           </span>
         </p>
       </header>

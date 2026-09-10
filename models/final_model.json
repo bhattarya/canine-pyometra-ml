@@ -1,143 +1,191 @@
 {
-  "name": "Canine pyometra \u2014 medical-failure risk (day 14)",
-  "generated": "2026-09-08",
-  "outcome": "Probability that medical management fails by day 14 (death, rescue ovariohysterectomy, or non-response).",
-  "cohort": "G1-G3 medical-protocol dogs, n=60, 14 failure events.",
-  "features": [
-    "BUN_mg_dL",
+  "task": "treatment_success",
+  "name": "Canine pyometra - treatment-success predictor (day 14)",
+  "generated": "2026-09-10",
+  "outcome": "Predicted probability that the selected treatment protocol achieves an uncomplicated resolution by day 14.",
+  "cohort": "All 80 dogs, four protocols x 20, followed to day 14 (66 successes / 14 failures).",
+  "numeric_features": [
+    "Age_years",
+    "Illness_Duration_days",
+    "Heart_Rate_bpm",
+    "TLC_per_uL",
     "Creatinine_mg_dL",
     "Albumin_g_dL",
     "ALP_U_L",
-    "Age_years",
-    "Illness_Duration_days"
+    "Uterine_Diameter_mm",
+    "Clinical_VAS_0_10"
   ],
   "labels": {
-    "BUN_mg_dL": "Blood urea nitrogen (mg/dL)",
-    "Creatinine_mg_dL": "Creatinine (mg/dL)",
-    "Albumin_g_dL": "Albumin (g/dL)",
-    "ALP_U_L": "Alkaline phosphatase (U/L)",
-    "Age_years": "Age (years)",
-    "Illness_Duration_days": "Illness duration (days)"
+    "Age_years": "Age",
+    "Illness_Duration_days": "Illness duration",
+    "Heart_Rate_bpm": "Heart rate",
+    "TLC_per_uL": "Total leucocyte count",
+    "Creatinine_mg_dL": "Serum creatinine",
+    "Albumin_g_dL": "Serum albumin",
+    "ALP_U_L": "Alkaline phosphatase (ALP)",
+    "Uterine_Diameter_mm": "Uterine diameter",
+    "Clinical_VAS_0_10": "Clinical severity (VAS 0-10)"
+  },
+  "units": {
+    "Age_years": "years",
+    "Illness_Duration_days": "days",
+    "Heart_Rate_bpm": "bpm",
+    "TLC_per_uL": "x10^3/uL",
+    "Creatinine_mg_dL": "mg/dL",
+    "Albumin_g_dL": "g/dL",
+    "ALP_U_L": "U/L",
+    "Uterine_Diameter_mm": "mm",
+    "Clinical_VAS_0_10": "0-10"
+  },
+  "ref_ranges": {
+    "Age_years": "cohort 3-10",
+    "Illness_Duration_days": "cohort 2-11",
+    "Heart_Rate_bpm": "canine ref ~ 70-120",
+    "TLC_per_uL": "canine ref ~ 6-17",
+    "Creatinine_mg_dL": "canine ref ~ 0.5-1.5",
+    "Albumin_g_dL": "canine ref ~ 2.6-4.0",
+    "ALP_U_L": "canine ref ~ 20-150",
+    "Uterine_Diameter_mm": "cohort 10-25",
+    "Clinical_VAS_0_10": "0 = well, 10 = critical"
+  },
+  "step": {
+    "Age_years": 0.5,
+    "Illness_Duration_days": 1,
+    "Heart_Rate_bpm": 1,
+    "TLC_per_uL": 0.5,
+    "Creatinine_mg_dL": 0.1,
+    "Albumin_g_dL": 0.1,
+    "ALP_U_L": 5,
+    "Uterine_Diameter_mm": 1,
+    "Clinical_VAS_0_10": 0.5
   },
   "standardisation": {
     "mean": [
-      23.856315528934726,
-      1.0255375579062667,
-      2.7032702330223515,
-      318.4213994538488,
-      6.260447745809378,
-      5.281152430670181
+      6.246693230644249,
+      5.542857794822502,
+      123.72324939675063,
+      19.066619503841952,
+      1.0318374986521035,
+      2.6936499389857502,
+      314.87144804705514,
+      17.536563298262458,
+      5.781887376379639
     ],
     "std": [
-      6.202911565785072,
-      0.2803297186129212,
-      0.2568677353322261,
-      88.13877724835483,
-      1.4305037826992701,
-      1.8733110719554007
+      1.4376532584770625,
+      1.8897043611355375,
+      16.475650465273382,
+      4.453763850103286,
+      0.25888691670093283,
+      0.25569039051293324,
+      82.61022224223359,
+      3.949198682605342,
+      1.5249415604440566
     ]
   },
-  "coef": [
-    1.0340515480478678,
-    0.7910822402621791,
-    -0.9198912192147104,
-    1.1372694873624305,
-    0.8645364810590862,
-    0.29230744645413825
+  "numeric_coef": [
+    -0.6474225597984861,
+    -0.1141151497108814,
+    -0.3435321145513114,
+    -0.12988689229236078,
+    -0.772262993139242,
+    0.8831941997909527,
+    -1.0631402993805377,
+    -0.2649155199624996,
+    0.052628923022250744
   ],
-  "intercept": -1.7181208583882188,
+  "groups": [
+    "G1_Supportive",
+    "G2_PGF2a",
+    "G3_Aglepristone_PGF2a",
+    "G4_OHE"
+  ],
+  "group_labels": {
+    "G1_Supportive": "G1 - supportive / antibiotic",
+    "G2_PGF2a": "G2 - cloprostenol (PGF2a)",
+    "G3_Aglepristone_PGF2a": "G3 - aglepristone + cloprostenol",
+    "G4_OHE": "G4 - ovariohysterectomy (surgery)"
+  },
+  "group_reference": "G1_Supportive",
+  "group_coef": {
+    "G1_Supportive": 0.0,
+    "G2_PGF2a": -0.0997046846949813,
+    "G3_Aglepristone_PGF2a": 0.45275921347132775,
+    "G4_OHE": 1.160595606954562
+  },
+  "intercept": 1.1870101761595762,
   "performance": {
-    "roc_auc_cv": 0.948,
-    "roc_auc_cv_sd": 0.066,
-    "roc_auc_apparent": 0.972,
+    "roc_auc_cv": 0.894,
+    "roc_auc_cv_sd": 0.094,
+    "roc_auc_apparent": 0.969,
     "cv": "repeated stratified 5-fold, 20 repeats"
   },
-  "risk_bands": {
+  "success_bands": {
     "cutpoints_prob": [
-      0.1,
-      0.4
+      0.5,
+      0.85
     ],
     "table": {
-      "Low": {
-        "n": 40,
-        "observed_failure_rate": 0.0,
+      "Unlikely": {
+        "n": 21,
+        "observed_success_rate": 0.333
+      },
+      "Uncertain": {
+        "n": 20,
         "observed_success_rate": 1.0
       },
-      "Intermediate": {
-        "n": 13,
-        "observed_failure_rate": 0.0,
+      "Likely": {
+        "n": 39,
         "observed_success_rate": 1.0
-      },
-      "High": {
-        "n": 27,
-        "observed_failure_rate": 0.519,
-        "observed_success_rate": 0.481
       }
     }
   },
-  "protocol_hint": {
-    "Low": {
-      "G1_Supportive": {
-        "n": 9,
-        "success_rate": 1.0
-      },
-      "G2_PGF2a": {
-        "n": 10,
-        "success_rate": 1.0
-      },
-      "G3_Aglepristone_PGF2a": {
-        "n": 12,
-        "success_rate": 1.0
-      },
-      "G4_OHE": {
-        "n": 9,
-        "success_rate": 1.0
-      }
+  "protocol_observed": {
+    "G1_Supportive": {
+      "n": 20,
+      "success_rate": 0.65
     },
-    "Intermediate": {
-      "G1_Supportive": {
-        "n": 3,
-        "success_rate": 1.0
-      },
-      "G2_PGF2a": {
-        "n": 4,
-        "success_rate": 1.0
-      },
-      "G3_Aglepristone_PGF2a": {
-        "n": 2,
-        "success_rate": 1.0
-      },
-      "G4_OHE": {
-        "n": 4,
-        "success_rate": 1.0
-      }
+    "G2_PGF2a": {
+      "n": 20,
+      "success_rate": 0.75
     },
-    "High": {
-      "G1_Supportive": {
-        "n": 8,
-        "success_rate": 0.12
-      },
-      "G2_PGF2a": {
-        "n": 6,
-        "success_rate": 0.17
-      },
-      "G3_Aglepristone_PGF2a": {
-        "n": 6,
-        "success_rate": 0.67
-      },
-      "G4_OHE": {
-        "n": 7,
-        "success_rate": 1.0
-      }
+    "G3_Aglepristone_PGF2a": {
+      "n": 20,
+      "success_rate": 0.9
+    },
+    "G4_OHE": {
+      "n": 20,
+      "success_rate": 1.0
     }
   },
   "input_ranges": {
-    "BUN_mg_dL": {
-      "min": 10.0,
-      "max": 41.13643829792898,
-      "p05": 13.192060637290478,
-      "p95": 34.10757980502157,
-      "median": 23.722273679152345
+    "Age_years": {
+      "min": 3.0,
+      "max": 10.33061432570226,
+      "p05": 4.104392027939464,
+      "p95": 8.71539458987954,
+      "median": 6.150369861083705
+    },
+    "Illness_Duration_days": {
+      "min": 2.0,
+      "max": 11.13726724515236,
+      "p05": 2.2803143309374083,
+      "p95": 8.38516872489302,
+      "median": 5.474245730362762
+    },
+    "Heart_Rate_bpm": {
+      "min": 90.0,
+      "max": 165.0,
+      "p05": 97.11020615541211,
+      "p95": 147.79589602398656,
+      "median": 125.7555297180788
+    },
+    "TLC_per_uL": {
+      "min": 9.226599626063376,
+      "max": 30.73498297153456,
+      "p05": 11.388839286837037,
+      "p95": 25.535825341537937,
+      "median": 19.612839216000353
     },
     "Creatinine_mg_dL": {
       "min": 0.45,
@@ -160,19 +208,19 @@
       "p95": 452.8008421740242,
       "median": 314.742201709544
     },
-    "Age_years": {
-      "min": 3.0,
-      "max": 10.33061432570226,
-      "p05": 4.104392027939464,
-      "p95": 8.71539458987954,
-      "median": 6.150369861083705
+    "Uterine_Diameter_mm": {
+      "min": 10.0,
+      "max": 25.29957225134791,
+      "p05": 10.0,
+      "p95": 24.108854908994044,
+      "median": 17.228973949494147
     },
-    "Illness_Duration_days": {
-      "min": 2.0,
-      "max": 11.13726724515236,
-      "p05": 2.2803143309374083,
-      "p95": 8.38516872489302,
-      "median": 5.474245730362762
+    "Clinical_VAS_0_10": {
+      "min": 2.369058406770399,
+      "max": 9.12436549410615,
+      "p05": 3.03445908834287,
+      "p95": 8.09039554207981,
+      "median": 5.882533387711442
     }
   },
   "display": {
@@ -227,13 +275,8 @@
         "variable": "Age_years",
         "auc": 0.733
       }
-    ],
-    "group_labels": {
-      "G1_Supportive": "G1 \u00b7 supportive",
-      "G2_PGF2a": "G2 \u00b7 PGF2\u03b1",
-      "G3_Aglepristone_PGF2a": "G3 \u00b7 aglepristone + PGF2\u03b1",
-      "G4_OHE": "G4 \u00b7 ovariohysterectomy"
-    }
+    ]
   },
-  "disclaimer": "Decision-support estimate from a small single-centre teaching dataset (n=80). Not a validated clinical tool. The treating clinician's judgement takes precedence."
+  "g4_caveat": "G4 (surgery) was not randomised and every study dog treated surgically resolved (20/20). Its estimate is effectively a fixed ~99% and should be read as 'surgery resolved all cohort cases', not a calibrated probability.",
+  "disclaimer": "Decision-support estimate from a small single-centre teaching dataset (n=80, 14 failures). Not a validated clinical tool. Predictions complement, not replace, clinical judgement."
 }

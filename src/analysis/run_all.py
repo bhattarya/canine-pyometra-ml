@@ -16,8 +16,8 @@ STEPS = [
     "07_recovery_regression.py",
     "08_risk_score.py",
     "10_figures_for_talk.py",
-    "11_finalize_model.py",
-    "12_build_site.py",
+    "11_finalize_model.py",           # prognostic (medical-failure) model — analysis artefact
+    "13_finalize_treatment_model.py", # deployed model: treatment-success by chosen protocol
     "09_build_report.py",
 ]
 

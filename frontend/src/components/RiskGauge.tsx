@@ -2,48 +2,39 @@ import styles from "./RiskGauge.module.css";
 import { MODEL } from "../lib/model";
 import { clamp } from "../lib/format";
 
-/** Horizontal 0->100% risk bar with a needle at the estimated probability. */
-export function RiskGauge({ probability }: { probability: number }) {
-  const [cut0, cut1] = MODEL.risk_bands.cutpoints_prob;
-  const p0 = cut0 * 100;
-  const p1 = cut1 * 100;
-  const needle = clamp(probability * 100, 1.5, 98.5);
-
-  const ticks: { pos: number; label: string }[] = [
-    { pos: 0, label: "0%" },
-    { pos: p0, label: `${Math.round(p0)}%` },
-    { pos: p1, label: `${Math.round(p1)}%` },
-    { pos: 100, label: "100%" },
-  ];
+/** Horizontal 0–100% bar for a SUCCESS probability: red (low) → amber → green. */
+export function SuccessGauge({ probability }: { probability: number }) {
+  const [lo, hi] = MODEL.success_bands.cutpoints_prob;
+  const pin = clamp(probability * 100, 1.5, 98.5);
+  const ticks = [0, lo * 100, hi * 100, 100];
 
   return (
-    <div className={styles.wrap}>
+    <div
+      className={styles.wrap}
+      role="img"
+      aria-label={`Predicted success ${Math.round(probability * 100)} percent`}
+    >
       <div
         className={styles.bar}
         style={{
-          ["--cut0" as string]: `${p0}%`,
-          ["--cut1" as string]: `${p1}%`,
+          ["--lo" as string]: `${lo * 100}%`,
+          ["--hi" as string]: `${hi * 100}%`,
         }}
-        role="img"
-        aria-label={
-          `Risk gauge: ${Math.round(probability * 100)} percent on a 0 to 100 percent scale; ` +
-          `band cutpoints at ${Math.round(p0)} and ${Math.round(p1)} percent.`
-        }
       >
-        <span className={styles.needle} style={{ left: `${needle}%` }} aria-hidden="true" />
+        <span className={styles.needle} style={{ left: `${pin}%` }} />
       </div>
-      <div className={styles.ticks} aria-hidden="true">
-        {ticks.map((t) => (
+      <div className={styles.ticks}>
+        {ticks.map((t, i) => (
           <span
-            key={t.label}
-            className={`${styles.tick} mono`}
+            key={t}
+            className={styles.tick}
             style={{
-              left: `${t.pos}%`,
+              left: `${t}%`,
               transform:
-                t.pos === 0 ? "none" : t.pos === 100 ? "translateX(-100%)" : "translateX(-50%)",
+                i === 0 ? "translateX(0)" : i === ticks.length - 1 ? "translateX(-100%)" : "translateX(-50%)",
             }}
           >
-            {t.label}
+            {t}%
           </span>
         ))}
       </div>
