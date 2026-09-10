@@ -2,10 +2,9 @@ import { useMemo, useRef, useState } from "react";
 import styles from "./App.module.css";
 import { CaseForm } from "./components/CaseForm";
 import { ReportCard } from "./components/ReportCard";
+import { CaseSummary } from "./components/CaseSummary";
 import { Method } from "./components/Method";
-import { ChatPanel } from "./components/chat/ChatPanel";
-import type { CaseContext } from "./lib/geminiClient";
-import { EXAMPLE, MODEL, groupLabel } from "./lib/model";
+import { EXAMPLE, MODEL } from "./lib/model";
 import { predict } from "./lib/predict";
 
 export function App() {
@@ -21,25 +20,6 @@ export function App() {
     () => (complete ? predict(values, group) : null),
     [values, group, complete],
   );
-
-  const caseContext = useMemo<CaseContext | null>(() => {
-    if (!prediction) return null;
-    return {
-      group,
-      groupLabel: groupLabel(group),
-      values,
-      probability: prediction.probability,
-      band: prediction.band,
-      observedOnly: prediction.observedOnly,
-      drivers: prediction.drivers.flatMap((d) =>
-        d.effect === "neutral"
-          ? []
-          : [{ label: d.label, effect: d.effect as "supports" | "against" }],
-      ),
-      modelAuc: MODEL.performance.roc_auc_cv,
-      disclaimer: MODEL.disclaimer,
-    };
-  }, [prediction, group, values]);
 
   const onPredict = () => {
     if (!complete) return;
@@ -86,13 +66,7 @@ export function App() {
           {shown && prediction ? (
             <>
               <ReportCard prediction={prediction} />
-              {caseContext ? (
-                <section className={styles.block}>
-                  <p className="eyebrow">Talk it through</p>
-                  <h2 className={styles.h2}>Ask about this case</h2>
-                  <ChatPanel caseContext={caseContext} />
-                </section>
-              ) : null}
+              <CaseSummary group={group} values={values} prediction={prediction} />
             </>
           ) : null}
         </div>

@@ -31,29 +31,16 @@ python src/analysis/11_finalize_model.py
 
 `App.tsx` composes:
 
-- `TopBar`
-- `CaseForm` (+ `NumberField`) — the six-input admission form
+- `CaseForm` (+ `NumberField`) — protocol `<select>` + 9-field admission form
 - `ReportCard` (+ `RiskGauge`, `DriverChart`, `ProtocolTable`) — the result card
-- `Method` (+ `charts/BarList`, `charts/BandTiles`) — the "how it works" explainer
-- `chat/ChatPanel` (+ `ChatMessage`, `ChatComposer`, `hooks/useChat`,
-  `lib/geminiClient`) — the optional Gemini chat panel
+- `CaseSummary` (+ `lib/summary.ts`) — the auto-generated plain-English write-up
+  that appears under the result
+- `Method` (+ `charts/BarList`) — the "how it works" explainer
 
 Prediction maths is in `lib/predict.ts` (a direct mirror of
 `src/predict_case.py`); the parsed model data is in `lib/model.ts`. Every
-component is a `.tsx` + `.module.css` pair.
-
-## Env
-
-`VITE_PROXY_URL` (optional) enables the Gemini chat by pointing the app at the
-serverless proxy in `../proxy/`, which keeps the API key server-side. Copy the
-template and fill it in:
-
-```bash
-cp .env.example .env
-```
-
-Left blank, the chat panel shows a "not configured" note and everything else
-works — the predictor is fully deterministic and offline-capable.
+component is a `.tsx` + `.module.css` pair. Fully deterministic and
+offline-capable — no backend, no API keys.
 
 ## Build
 

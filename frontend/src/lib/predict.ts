@@ -21,7 +21,7 @@ export interface Prediction {
 }
 
 const sigmoid = (z: number): number => 1 / (1 + Math.exp(-z));
-const NEUTRAL = 0.06; // |log-odds| below this reads as "no meaningful push"
+const NEUTRAL = 0.12; // |log-odds| below this reads as "no meaningful push"
 
 export function bandFor(p: number): SuccessBand {
   const [lo, hi] = MODEL.success_bands.cutpoints_prob;
