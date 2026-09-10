@@ -30,7 +30,7 @@ function textFromEvent(evt) {
 /**
  * @param {object} opts
  * @param {string} opts.apiKey            Gemini API key (never logged).
- * @param {string} opts.model             e.g. "gemini-2.0-flash".
+ * @param {string} opts.model             e.g. "gemini-flash-latest".
  * @param {string} opts.systemPrompt      System instruction text.
  * @param {Array<{role: "user"|"assistant", content: string}>} opts.messages
  * @param {AbortSignal} [opts.signal]     Forwarded to the upstream fetch.
@@ -48,7 +48,14 @@ export function streamGemini({ apiKey, model, systemPrompt, messages, signal }) 
       role: m.role === "assistant" ? "model" : "user",
       parts: [{ text: m.content }],
     })),
-    generationConfig: { temperature: 0.4, maxOutputTokens: 700 },
+    generationConfig: {
+      temperature: 0.35,
+      maxOutputTokens: 1400,
+      // Gemini 3.x "flash" thinks by default; a plain grounded summary doesn't
+      // need it, and disabling it removes a multi-second first-token delay and
+      // stops thinking tokens eating the output budget.
+      thinkingConfig: { thinkingBudget: 0 },
+    },
   });
 
   return new ReadableStream({
@@ -114,16 +121,17 @@ export function streamGemini({ apiKey, model, systemPrompt, messages, signal }) 
         for (;;) {
           const { done, value } = await reader.read();
           if (done) break;
-          buffer += decoder.decode(value, { stream: true });
+          // Gemini's SSE uses CRLF line endings; normalise so the blank-line
+          // event separator is always "\n\n".
+          buffer += decoder.decode(value, { stream: true }).replace(/\r\n/g, "\n");
           let idx;
-          // Events are separated by a blank line.
           while ((idx = buffer.indexOf("\n\n")) !== -1) {
             const block = buffer.slice(0, idx);
             buffer = buffer.slice(idx + 2);
             handleBlock(block);
           }
         }
-        buffer += decoder.decode();
+        buffer += decoder.decode().replace(/\r\n/g, "\n");
         if (buffer.trim()) handleBlock(buffer);
         controller.close();
       } catch (err) {

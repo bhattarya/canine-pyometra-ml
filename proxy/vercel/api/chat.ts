@@ -4,7 +4,7 @@
 //
 // Env vars (Project -> Settings -> Environment Variables):
 //   GEMINI_API_KEY   (required)
-//   GEMINI_MODEL     (optional, default "gemini-2.0-flash")
+//   GEMINI_MODEL     (optional, default "gemini-flash-latest")
 //   ALLOWED_ORIGIN   (optional, default "*")
 //
 // Endpoint: POST https://<project>.vercel.app/api/chat

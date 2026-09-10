@@ -53,7 +53,7 @@ Gemini. No SSE framing on our side, just raw text chunks.
 | Name | Required | Default | Notes |
 | --- | --- | --- | --- |
 | `GEMINI_API_KEY` | yes | — | Never committed. Set as a secret. |
-| `GEMINI_MODEL` | no | `gemini-2.0-flash` | |
+| `GEMINI_MODEL` | no | `gemini-flash-latest` | |
 | `ALLOWED_ORIGIN` | no | `*` | Lock to the Pages origin in production. |
 
 `.env.example` and `.dev.vars.example` show the shape. **The real `.env` and
@@ -215,7 +215,7 @@ curl -i -X OPTIONS "$URL/chat" -H 'origin: https://bhattarya.github.io'
 
 ## Cost & rate-limiting
 
-`gemini-2.0-flash` is cheap but **not free at scale** — a publicly reachable
+`gemini-flash-latest` is cheap but **not free at scale** — a publicly reachable
 endpoint with your key behind it is a spend risk. If you expose this publicly:
 
 - Keep `ALLOWED_ORIGIN` locked to `https://bhattarya.github.io` (this only stops

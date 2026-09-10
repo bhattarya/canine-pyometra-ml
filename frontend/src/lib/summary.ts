@@ -27,6 +27,34 @@ function classify(feature: string, v: number): "low" | "normal" | "high" | "very
   return "normal";
 }
 
+/** Structured, grounded context handed to the AI summary proxy. */
+export function buildAiContext(
+  group: string,
+  values: Record<string, number>,
+  prediction: Prediction,
+) {
+  const labelled: Record<string, { value: number; unit: string; flag: string | null }> = {};
+  for (const f of MODEL.numeric_features) {
+    labelled[MODEL.labels[f]] = {
+      value: values[f],
+      unit: MODEL.units[f] ?? "",
+      flag: classify(f, values[f]),
+    };
+  }
+  return {
+    groupLabel: groupLabel(group),
+    probability: prediction.probability,
+    band: prediction.band,
+    observedOnly: prediction.observedOnly,
+    values: labelled,
+    drivers: prediction.drivers
+      .filter((d) => d.effect !== "neutral")
+      .map((d) => ({ label: d.label, effect: d.effect })),
+    protocolObserved: MODEL.protocol_observed,
+    modelAuc: MODEL.performance.roc_auc_cv,
+  };
+}
+
 export function buildSummary(
   group: string,
   values: Record<string, number>,

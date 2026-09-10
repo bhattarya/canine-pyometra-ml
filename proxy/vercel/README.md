@@ -17,7 +17,7 @@ Gemini streaming live there and are identical to the Cloudflare Worker.
    | Name | Value |
    | --- | --- |
    | `GEMINI_API_KEY` | your key (mark it as a Secret; never commit it) |
-   | `GEMINI_MODEL` | `gemini-2.0-flash` |
+   | `GEMINI_MODEL` | `gemini-flash-latest` |
    | `ALLOWED_ORIGIN` | `https://bhattarya.github.io` |
 5. Deploy. Your endpoint is `https://<project>.vercel.app/api/chat`.
 
