@@ -1,70 +1,46 @@
 .form {
+  display: block;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 28px;
+}
+@media (max-width: 620px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field {
   display: flex;
   flex-direction: column;
-  padding: clamp(20px, 3vw, 32px);
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
+  gap: 6px;
+  min-width: 0;
+}
+.label {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.field select.control {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238a887f' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 34px;
 }
 
-.formHead {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  padding-bottom: 18px;
-  border-bottom: 1px solid var(--line);
-}
-.tag {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  letter-spacing: -0.01em;
-  color: var(--text);
-}
-.tagNote {
-  font-size: 0.78rem;
-  color: var(--text-3);
-}
-
-.fields {
-  display: flex;
-  flex-direction: column;
-}
-
-.examples {
+.actions {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
+  gap: 12px;
+  margin-top: 28px;
 }
-.exLabel {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-3);
-}
-.ex,
-.exOn {
-  font-family: var(--font-ui);
-  font-size: 0.84rem;
-  font-weight: 500;
-  padding: 7px 15px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-pill);
-  background: transparent;
-  color: var(--text-2);
-  transition: border-color 0.16s ease, color 0.16s ease, background 0.16s ease;
-}
-.ex:hover {
-  border-color: var(--line-2);
-  color: var(--text);
-}
-.exOn {
-  border-color: transparent;
-  background: var(--fill-hover);
-  color: var(--text);
+.needAll {
+  font-size: 0.82rem;
+  color: var(--ink-3);
 }

@@ -143,7 +143,9 @@ model = {
                   "clinician's judgement takes precedence.",
 }
 
-out = C.ROOT / "models" / "final_model.json"
+# analysis artefact only — the DEPLOYED model is models/final_model.json,
+# written by 13_finalize_treatment_model.py (treatment success by chosen protocol)
+out = C.ROOT / "models" / "prognostic_model.json"
 out.write_text(json.dumps(model, indent=2))
 print("wrote", out)
 print(f"\nfeatures: {FEATURES}")

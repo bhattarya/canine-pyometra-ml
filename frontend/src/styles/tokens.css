@@ -1,100 +1,43 @@
 /* ------------------------------------------------------------------ *
- *  Design tokens — dark-first, editorial. Reference: lance.live
- *  Pure-black ground, warm-grey secondary text, translucent-white
- *  surfaces, light serif display + Plus Jakarta Sans body, soft radii.
- *  A single warm-paper section breaks the dark for contrast.
+ *  Design tokens — light clinical form (ref: user's screenshot).
+ *  Warm off-white ground, white fields, near-black headings, teal CTA.
+ *  Single-theme by design (a clinical tool, printed and screen-shared).
  * ------------------------------------------------------------------ */
 :root {
-  /* dark is the primary design; :root carries it so the un-stamped
-     (system) viewer gets the intended look, and a light media query
-     below only *softens* it — this product commits to dark. */
-  --bg: #000000;
-  --bg-soft: #0b0b0c;
-  --surface: rgba(255, 255, 255, 0.035);
-  --surface-2: rgba(255, 255, 255, 0.06);
-  --surface-3: rgba(255, 255, 255, 0.09);
+  --bg: #f6f4ef;
+  --surface: #ffffff;
+  --surface-2: #f0ede6;
 
-  --text: #fafafa;
-  --text-2: #bcbbb4; /* warm grey — lance's muted */
-  --text-3: rgba(255, 255, 255, 0.45);
+  --ink: #1b1a17;
+  --ink-2: #4b4a44;
+  --ink-3: #8a887f;
 
-  --line: rgba(255, 255, 255, 0.12);
-  --line-2: rgba(255, 255, 255, 0.2);
+  --line: #ddd8cd;
+  --line-2: #c7c1b3;
 
-  --fill: rgba(255, 255, 255, 0.08);
-  --fill-hover: rgba(255, 255, 255, 0.16);
+  --accent: #2f7d7d; /* teal */
+  --accent-hover: #276b6b;
+  --accent-ink: #1f5a5a;
+  --accent-wash: #e4efee;
 
-  --on-fill: #ffffff;
-  --circle-bg: #ffffff;
-  --circle-fg: #0a0a0a;
+  /* semantic — for a SUCCESS probability, green = good, red = poor */
+  --good: #2f7d4f;
+  --good-wash: #e6f1ea;
+  --warn: #a9761b;
+  --warn-wash: #f6ecda;
+  --poor: #b0453a;
+  --poor-wash: #f6e4e1;
 
-  /* warm-paper break section (Method) — always light, dark ink */
-  --paper: #f7f6f4;
-  --paper-2: #ece9e4;
-  --paper-ink: #14130f;
-  --paper-ink-2: #5c584f;
-  --paper-line: rgba(20, 19, 15, 0.14);
-
-  /* risk ramp — desaturated so it glows on black, not clashes */
-  --low: #83cf9d;
-  --low-dim: rgba(131, 207, 157, 0.16);
-  --mid: #e7b877;
-  --mid-dim: rgba(231, 184, 119, 0.16);
-  --high: #ef8f83;
-  --high-dim: rgba(239, 143, 131, 0.16);
-
-  --radius: 18px;
-  --radius-sm: 12px;
+  --radius: 12px;
+  --radius-sm: 8px;
   --radius-pill: 999px;
 
-  --font-display: "Instrument Serif", Georgia, "Times New Roman", serif;
-  --font-ui: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-num: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-ui: "Archivo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-num: "Archivo", system-ui, sans-serif;
 
-  --measure: 62ch;
-  --gutter: clamp(20px, 4vw, 56px);
-  --section-y: clamp(64px, 9vw, 128px);
+  --measure: 66ch;
+  --gutter: clamp(18px, 4vw, 44px);
+  --section-y: clamp(48px, 7vw, 88px);
 
-  --shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset,
-    0 24px 60px -30px rgba(0, 0, 0, 0.8);
-}
-
-/* The design is dark by intent. If the OS is light AND the viewer hasn't
-   forced dark, lift the ground off pure black a touch for comfort — but
-   keep the same dark-on-light-text world (this is not a light theme). */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    --bg: #0c0c0d;
-    --bg-soft: #141416;
-  }
-}
-
-/* Explicit toggle still forces true black (dark) — there is no light mode
-   for the app chrome; only the Method section is light, by design. */
-:root[data-theme="dark"] {
-  --bg: #000000;
-  --bg-soft: #0b0b0c;
-}
-
-/* ---- legacy aliases so any not-yet-restyled module still resolves ---- */
-:root {
-  --panel: var(--surface);
-  --panel-2: var(--surface-2);
-  --ink: var(--text);
-  --ink-2: var(--text-2);
-  --faint: var(--text-3);
-  --rule: var(--line);
-  --rule-strong: var(--line-2);
-  --accent: #ffffff;
-  --accent-ink: #ffffff;
-  --accent-wash: var(--fill);
-  --font-mono: var(--font-num);
-  --pad: var(--gutter);
-  --grid-line: var(--line);
-  --r-low: var(--low);
-  --r-low-wash: var(--low-dim);
-  --r-mid: var(--mid);
-  --r-mid-wash: var(--mid-dim);
-  --r-high: var(--high);
-  --r-high-wash: var(--high-dim);
+  --shadow: 0 1px 2px rgba(27, 26, 23, 0.05), 0 10px 34px -20px rgba(27, 26, 23, 0.18);
 }

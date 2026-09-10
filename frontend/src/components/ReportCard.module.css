@@ -1,83 +1,83 @@
 .card {
-  padding: clamp(20px, 3vw, 32px);
+  margin-top: 32px;
+  padding: clamp(22px, 3vw, 34px);
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  gap: 26px;
-  font-family: var(--font-ui);
-  color: var(--text);
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
+  gap: 24px;
 }
 
-.rule {
-  width: 100%;
-  border: 0;
-  border-top: 1px solid var(--line);
-  margin: 0;
-}
-
-/* 1. verdict --------------------------------------------------------- */
 .verdict {
   display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: 12px 20px;
 }
-
-.chip {
-  align-self: center;
-  font-size: 0.72rem;
+.forProtocol {
+  font-size: 0.9rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 5px 12px;
+  color: var(--ink-2);
+}
+.big {
+  margin-top: 4px;
+  font-size: clamp(3rem, 2.2rem + 3vw, 4.4rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+.sub {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+.subFaint {
+  color: var(--ink-3);
+}
+.band {
+  align-self: flex-start;
+  padding: 6px 14px;
   border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 700;
   white-space: nowrap;
 }
-.chipLow {
-  color: var(--low);
-  background: var(--low-dim);
+.bandGood {
+  color: var(--good);
+  background: var(--good-wash);
 }
-.chipMid {
-  color: var(--mid);
-  background: var(--mid-dim);
+.bandWarn {
+  color: var(--warn);
+  background: var(--warn-wash);
 }
-.chipHigh {
-  color: var(--high);
-  background: var(--high-dim);
-}
-
-.big {
-  font-family: var(--font-display);
-  font-size: clamp(3.4rem, 2.6rem + 3vw, 5rem);
-  line-height: 0.95;
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  color: var(--text);
+.bandPoor {
+  color: var(--poor);
+  background: var(--poor-wash);
 }
 
-.vcaption {
-  max-width: 32ch;
-  font-size: 0.8rem;
-  line-height: 1.45;
-  color: var(--text-3);
+.caveat {
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--warn-wash);
+  border: 1px solid color-mix(in srgb, var(--warn) 30%, transparent);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--ink-2);
 }
 
-/* 5. read-out sentence -------------------------------------------------- */
 .readout {
-  margin: 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
   max-width: var(--measure);
   font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--text-2);
-}
-.readout strong {
-  color: var(--text);
-  font-weight: 600;
+  line-height: 1.62;
+  color: var(--ink-2);
 }
 
-/* 6. actions --------------------------------------------------------- */
 .actions {
   display: flex;
   align-items: center;
@@ -85,16 +85,14 @@
 }
 .date {
   font-size: 0.78rem;
-  color: var(--text-3);
+  color: var(--ink-3);
 }
 
-/* 7. card note ----------------------------------------------------------- */
 .note {
-  margin: 0;
   padding-top: 18px;
   border-top: 1px solid var(--line);
   max-width: var(--measure);
-  font-size: 0.74rem;
+  font-size: 0.76rem;
   line-height: 1.55;
-  color: var(--text-3);
+  color: var(--ink-3);
 }

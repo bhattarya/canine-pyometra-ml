@@ -1,54 +1,36 @@
 import styles from "./NumberField.module.css";
-import { clamp } from "../lib/format";
 
 interface Props {
   id: string;
   label: string;
   unit: string;
-  hint: string;
-  value: number;
+  hint?: string;
   step: number;
-  min: number;
-  max: number;
+  value: number | undefined;
   onChange: (value: number) => void;
 }
 
-export function NumberField({ id, label, unit, hint, value, step, min, max, onChange }: Props) {
-  const commit = (raw: string, fromSlider: boolean) => {
-    const n = parseFloat(raw);
-    if (Number.isNaN(n)) return;
-    onChange(fromSlider ? n : n);
-  };
-  const trackPos = ((clamp(value, min, max) - min) / (max - min)) * 100;
-
+export function NumberField({ id, label, unit, hint, step, value, onChange }: Props) {
   return (
-    <div className={styles.row}>
-      <div className={styles.head}>
-        <label htmlFor={id} className={styles.label}>
-          {label} <span className={styles.unit}>{unit}</span>
-        </label>
-        <input
-          id={id}
-          className={`${styles.number} mono`}
-          type="number"
-          inputMode="decimal"
-          step={step}
-          value={value}
-          onChange={(e) => commit(e.target.value, false)}
-        />
-      </div>
-      <div className={styles.hint}>{hint}</div>
+    <div className={styles.field}>
+      <label className={styles.label} htmlFor={id}>
+        {label} <span className={styles.unit}>({unit})</span>
+      </label>
       <input
-        className={styles.slider}
-        type="range"
-        aria-label={`${label} slider`}
-        min={min}
-        max={max}
+        id={id}
+        className="control num"
+        type="number"
+        inputMode="decimal"
         step={step}
-        value={clamp(value, min, max)}
-        onChange={(e) => commit(e.target.value, true)}
-        style={{ ["--pos" as string]: `${trackPos}%` }}
+        value={value ?? ""}
+        placeholder="—"
+        onChange={(e) => {
+          const n = parseFloat(e.target.value);
+          if (!Number.isNaN(n)) onChange(n);
+          else if (e.target.value === "") onChange(NaN);
+        }}
       />
+      {hint ? <span className={styles.hint}>{hint}</span> : null}
     </div>
   );
 }

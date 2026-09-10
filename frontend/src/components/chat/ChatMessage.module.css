@@ -18,34 +18,33 @@
   font-size: 0.6rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--text-3);
+  color: var(--ink-3);
   padding: 0 4px;
 }
 
 .bubbleUser,
 .bubbleBot {
-  padding: 11px 15px;
-  border-radius: 16px;
+  padding: 10px 14px;
+  border-radius: 14px;
   font-size: 0.92rem;
   line-height: 1.6;
   overflow-wrap: anywhere;
 }
 .bubbleUser {
-  background: var(--text);
-  color: var(--bg);
-  border-bottom-right-radius: 5px;
+  background: var(--accent);
+  color: #fff;
+  border-bottom-right-radius: 4px;
 }
 .bubbleBot {
   background: var(--surface-2);
-  color: var(--text);
+  color: var(--ink);
   border: 1px solid var(--line);
-  border-bottom-left-radius: 5px;
+  border-bottom-left-radius: 4px;
 }
 
 .para + .para {
   margin-top: 0.65em;
 }
-
 .ul {
   margin: 0.4em 0 0;
   padding-left: 1.2em;
@@ -56,13 +55,12 @@
 .para + .ul {
   margin-top: 0.5em;
 }
-
 .code {
   font-family: var(--font-num);
   font-size: 0.86em;
   padding: 1px 5px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
 }
 
 .dots {
@@ -70,7 +68,7 @@
   gap: 4px;
   font-size: 1.2rem;
   line-height: 1;
-  color: var(--text-3);
+  color: var(--ink-3);
 }
 .dots span {
   animation: pulse 1.2s ease-in-out infinite;
@@ -81,7 +79,6 @@
 .dots span:nth-child(3) {
   animation-delay: 0.36s;
 }
-
 @keyframes pulse {
   0%,
   80%,
@@ -92,7 +89,6 @@
     opacity: 1;
   }
 }
-
 @media (prefers-reduced-motion: reduce) {
   .dots span {
     animation: none;

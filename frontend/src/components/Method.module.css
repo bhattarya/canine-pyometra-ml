@@ -1,63 +1,53 @@
 .wrap {
   max-width: 64ch;
-  font-family: var(--font-ui);
   font-size: 1rem;
-  line-height: 1.68;
-  color: var(--paper-ink-2);
+  line-height: 1.66;
+  color: var(--ink-2);
 }
-
 .wrap p {
-  margin: 0 0 1.15em;
+  margin: 0 0 1.1em;
+}
+.wrap strong {
+  color: var(--ink);
+}
+.wrap em {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--ink);
 }
 
 .lede {
-  font-size: 1.2rem;
-  line-height: 1.55;
-  color: var(--paper-ink);
+  font-size: 1.1rem;
+  color: var(--ink);
 }
 
 .h {
-  margin: 2.2em 0 0.5em;
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: 1.6rem;
-  line-height: 1.15;
-  letter-spacing: -0.015em;
-  color: var(--paper-ink);
+  margin: 2em 0 0.5em;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--ink);
 }
 
 .figure {
-  margin: 1.8em 0;
-  padding: 22px;
-  background: rgba(20, 19, 15, 0.03);
-  border: 1px solid var(--paper-line);
+  margin: 1.6em 0;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: var(--radius-sm);
 }
-
 .figHead {
-  margin-bottom: 1em;
+  margin-bottom: 0.9em;
   font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--paper-ink) 45%, transparent);
+  color: var(--ink-3);
 }
-
 .figNote {
-  margin-top: 1em;
+  margin-top: 0.9em;
   font-size: 0.84rem;
   line-height: 1.55;
-  color: color-mix(in srgb, var(--paper-ink) 55%, transparent);
-}
-
-.tiles {
-  margin: 1.4em 0;
-}
-
-.note {
-  margin-top: 1.2em;
-  font-size: 0.9rem;
-  color: color-mix(in srgb, var(--paper-ink) 55%, transparent);
+  color: var(--ink-3);
 }
 
 .limits {
@@ -65,16 +55,14 @@
   padding: 0;
   list-style: none;
 }
-
 .limits li {
   position: relative;
-  margin: 0 0 0.7em;
+  margin: 0 0 0.65em;
   padding-left: 1.4em;
 }
-
 .limits li::before {
   content: "—";
   position: absolute;
   left: 0;
-  color: color-mix(in srgb, var(--paper-ink) 40%, transparent);
+  color: var(--ink-3);
 }

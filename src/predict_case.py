@@ -1,12 +1,14 @@
-"""Predict medical-failure risk for a single new pyometra case.
+"""Predict treatment-success probability for a single new pyometra case.
 
-Loads models/final_model.json (produced by src/analysis/11_finalize_model.py)
-and applies the exact same maths as the web predictor, so the two always agree.
+Loads models/final_model.json (produced by
+src/analysis/13_finalize_treatment_model.py) and applies the same maths as the
+web predictor, so the two always agree.
 
 Usage:
-  python src/predict_case.py --BUN 34 --Creatinine 1.5 --Albumin 2.1 \
-                             --ALP 393 --Age 5.8 --Illness 11
-  python src/predict_case.py --json '{"BUN_mg_dL":34,"Creatinine_mg_dL":1.5, ...}'
+  python src/predict_case.py --group G3_Aglepristone_PGF2a \
+      --Age 6 --Illness 5 --HeartRate 120 --TLC 19 --Creatinine 1.0 \
+      --Albumin 2.7 --ALP 310 --UterineDiameter 17 --VAS 5
+  python src/predict_case.py --group G4_OHE --json '{"Age_years":6, ...}'
 """
 from __future__ import annotations
 import argparse
@@ -15,9 +17,17 @@ import math
 from pathlib import Path
 
 MODEL_PATH = Path(__file__).resolve().parents[1] / "models" / "final_model.json"
+
 ALIASES = {  # convenient CLI flags -> model feature names
-    "BUN": "BUN_mg_dL", "Creatinine": "Creatinine_mg_dL", "Albumin": "Albumin_g_dL",
-    "ALP": "ALP_U_L", "Age": "Age_years", "Illness": "Illness_Duration_days",
+    "Age": "Age_years",
+    "Illness": "Illness_Duration_days",
+    "HeartRate": "Heart_Rate_bpm",
+    "TLC": "TLC_per_uL",
+    "Creatinine": "Creatinine_mg_dL",
+    "Albumin": "Albumin_g_dL",
+    "ALP": "ALP_U_L",
+    "UterineDiameter": "Uterine_Diameter_mm",
+    "VAS": "Clinical_VAS_0_10",
 }
 
 
@@ -25,70 +35,86 @@ def load_model(path: Path = MODEL_PATH) -> dict:
     return json.loads(path.read_text())
 
 
-def predict(values: dict, model: dict | None = None) -> dict:
-    """values: {feature_name: number} for every model feature. Returns a card."""
+def predict(values: dict, group: str, model: dict | None = None) -> dict:
     m = model or load_model()
-    feats = m["features"]
+    feats = m["numeric_features"]
     mu = m["standardisation"]["mean"]
     sd = m["standardisation"]["std"]
-    coef = m["coef"]
+    coef = m["numeric_coef"]
+    if group not in m["groups"]:
+        raise ValueError(f"group must be one of {m['groups']}")
     missing = [f for f in feats if f not in values or values[f] is None]
     if missing:
         raise ValueError(f"missing values for: {missing}")
 
     z = [(float(values[f]) - mu[i]) / sd[i] for i, f in enumerate(feats)]
-    contribs = [coef[i] * z[i] for i in range(len(feats))]          # log-odds parts
-    logit = m["intercept"] + sum(contribs)
-    p = 1.0 / (1.0 + math.exp(-logit))
+    contribs = [coef[i] * z[i] for i in range(len(feats))]
+    logit = m["intercept"] + sum(contribs) + m["group_coef"][group]
+    p_model = 1.0 / (1.0 + math.exp(-logit))
 
-    lo, hi = m["risk_bands"]["cutpoints_prob"]
-    band = "Low" if p < lo else ("Intermediate" if p < hi else "High")
+    # G4/surgery: no outcome variance in the cohort -> report observed, not model
+    g4_only = group == "G4_OHE"
+    observed = m["protocol_observed"][group]["success_rate"]
+    p = observed if g4_only else p_model
+
+    lo, hi = m["success_bands"]["cutpoints_prob"]
+    band = "Unlikely" if p < lo else ("Uncertain" if p < hi else "Likely")
 
     drivers = sorted(
-        ({"feature": feats[i], "label": m["labels"][feats[i]],
-          "value": float(values[feats[i]]),
-          "direction": "raises" if contribs[i] > 0 else "lowers",
-          "log_odds": round(contribs[i], 3)}
-         for i in range(len(feats))),
-        key=lambda d: abs(d["log_odds"]), reverse=True)
+        (
+            {
+                "feature": feats[i],
+                "label": m["labels"][feats[i]],
+                "value": float(values[feats[i]]),
+                "direction": "supports success" if contribs[i] > 0 else "works against success",
+                "log_odds": round(contribs[i], 3),
+            }
+            for i in range(len(feats))
+        ),
+        key=lambda d: abs(d["log_odds"]),
+        reverse=True,
+    )
 
-    hint = m["protocol_hint"].get(band, {})
     return {
-        "probability_medical_failure": round(p, 3),
-        "probability_success": round(1 - p, 3),
-        "risk_band": band,
-        "band_observed_failure_rate": m["risk_bands"]["table"].get(band, {}).get("observed_failure_rate"),
+        "group": group,
+        "probability_success": round(p, 3),
+        "probability_success_model": round(p_model, 3),
+        "band": band,
+        "g4_observed_only": g4_only,
+        "observed_success_rate_for_group": observed,
         "drivers": drivers,
-        "protocol_context": hint,
         "model_auc_cv": m["performance"]["roc_auc_cv"],
         "disclaimer": m["disclaimer"],
     }
 
 
-def _format_card(values: dict, card: dict) -> str:
-    L = ["=" * 64, " CANINE PYOMETRA — MEDICAL-FAILURE RISK (day 14)", "=" * 64,
-         " Entered values:"]
+def _card(values: dict, group: str, card: dict, m: dict) -> str:
+    L = ["=" * 66, " CANINE PYOMETRA - TREATMENT-SUCCESS PREDICTION (day 14)", "=" * 66,
+         f" Protocol : {m['group_labels'][group]}", " Admission values:"]
     for k, v in values.items():
-        L.append(f"   {k:24s} {v}")
-    p = card["probability_medical_failure"]
-    L += ["", f"  Predicted risk of medical-treatment failure : {p:.0%}",
-          f"  Predicted chance of success                 : {1 - p:.0%}",
-          f"  Risk band                                   : {card['risk_band'].upper()}",
-          "", "  What is driving this estimate:"]
+        L.append(f"   {k:26s} {v}")
+    p = card["probability_success"]
+    L += ["",
+          f"  Predicted chance of treatment success : {p:.0%}   ({card['band']})",
+          f"  (chance of failure                    : {1 - p:.0%})"]
+    if card["g4_observed_only"]:
+        L.append("  NOTE: surgical arm - observed cohort rate shown; " + m["g4_caveat"])
+    L += ["", "  What moves this estimate:"]
     for d in card["drivers"]:
         bar = "#" * min(20, int(abs(d["log_odds"]) * 12))
-        L.append(f"   {d['label']:34s} {d['value']:>7}  {d['direction']:<6} risk  {bar}")
-    L += ["", "  Observed success by protocol in this risk band (training data, n small):"]
-    for grp, s in card["protocol_context"].items():
-        L.append(f"   {grp:24s} {s['success_rate']:.0%}  (n={s['n']})")
-    L += ["", f"  Model discrimination (internal CV ROC-AUC): {card['model_auc_cv']}",
-          "", "  " + card["disclaimer"], "=" * 64]
+        L.append(f"   {d['label']:30s} {d['value']:>7}  {d['direction']:<22} {bar}")
+    L += ["",
+          f"  Observed success for this protocol in the cohort: "
+          f"{card['observed_success_rate_for_group']:.0%}",
+          f"  Model discrimination (internal CV ROC-AUC): {card['model_auc_cv']}",
+          "", "  " + card["disclaimer"], "=" * 66]
     return "\n".join(L)
 
 
 def main() -> None:
     m = load_model()
     ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--group", required=True, choices=m["groups"])
     ap.add_argument("--json", help="JSON object of feature: value")
     for short, full in ALIASES.items():
         ap.add_argument(f"--{short}", type=float, help=full)
@@ -99,8 +125,8 @@ def main() -> None:
     else:
         values = {full: getattr(a, short) for short, full in ALIASES.items()
                   if getattr(a, short) is not None}
-    card = predict(values, m)
-    print(_format_card(values, card))
+    card = predict(values, a.group, m)
+    print(_card(values, a.group, card, m))
 
 
 if __name__ == "__main__":

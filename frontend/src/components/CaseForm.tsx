@@ -1,58 +1,77 @@
 import styles from "./CaseForm.module.css";
 import { NumberField } from "./NumberField";
-import { EXAMPLES, FIELD_UI, MODEL } from "../lib/model";
+import { MODEL, groupLabel } from "../lib/model";
 
 interface Props {
+  group: string;
   values: Record<string, number>;
-  activeExample: "low" | "high" | null;
+  onGroup: (g: string) => void;
   onField: (feature: string, value: number) => void;
-  onExample: (key: "low" | "high") => void;
+  onSubmit: () => void;
+  onExample: () => void;
+  canSubmit: boolean;
 }
 
-export function CaseForm({ values, activeExample, onField, onExample }: Props) {
+export function CaseForm({
+  group,
+  values,
+  onGroup,
+  onField,
+  onSubmit,
+  onExample,
+  canSubmit,
+}: Props) {
   return (
-    <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
-      <div className={styles.formHead}>
-        <span className={styles.tag}>Admission values</span>
-        <span className={styles.tagNote}>day 0, before treatment</span>
-      </div>
-
-      <div className={styles.fields}>
-        {MODEL.features.map((f) => {
-          const ui = FIELD_UI[f];
-          const r = MODEL.input_ranges[f];
-          const lo = Math.floor(Math.min(r.min, values[f]));
-          const hi = Math.ceil(Math.max(r.max, values[f]));
-          const dp = r.min < 10 ? 1 : 0;
-          return (
-            <NumberField
-              key={f}
-              id={`fld-${f}`}
-              label={ui.short}
-              unit={ui.unit}
-              hint={`${ui.ref} · study range ${r.min.toFixed(dp)}–${r.max.toFixed(dp)}`}
-              value={values[f]}
-              step={ui.step}
-              min={lo}
-              max={hi}
-              onChange={(v) => onField(f, v)}
-            />
-          );
-        })}
-      </div>
-
-      <div className={styles.examples}>
-        <span className={styles.exLabel}>Load example</span>
-        {(Object.keys(EXAMPLES) as ("low" | "high")[]).map((k) => (
-          <button
-            key={k}
-            type="button"
-            className={activeExample === k ? styles.exOn : styles.ex}
-            onClick={() => onExample(k)}
+    <form
+      className={styles.form}
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}
+    >
+      <div className={styles.grid}>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="fld-group">
+            Treatment protocol
+          </label>
+          <select
+            id="fld-group"
+            className="control"
+            value={group}
+            onChange={(e) => onGroup(e.target.value)}
           >
-            {EXAMPLES[k].label}
-          </button>
+            {MODEL.groups.map((g) => (
+              <option key={g} value={g}>
+                {groupLabel(g)}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {MODEL.numeric_features.map((f) => (
+          <NumberField
+            key={f}
+            id={`fld-${f}`}
+            label={MODEL.labels[f]}
+            unit={MODEL.units[f]}
+            hint={MODEL.ref_ranges[f]}
+            step={MODEL.step[f] ?? 1}
+            value={values[f]}
+            onChange={(v) => onField(f, v)}
+          />
         ))}
+      </div>
+
+      <div className={styles.actions}>
+        <button type="submit" className="btn-primary" disabled={!canSubmit}>
+          Predict treatment success
+        </button>
+        <button type="button" className="btn-ghost no-print" onClick={onExample}>
+          Fill example values
+        </button>
+        {!canSubmit ? (
+          <span className={styles.needAll}>Enter all fields to run the model.</span>
+        ) : null}
       </div>
     </form>
   );

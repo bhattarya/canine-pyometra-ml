@@ -1,6 +1,8 @@
 # Project status & handoff
 
-_Snapshot for continuing in a new session. Last updated after the dark editorial redesign._
+_Snapshot for continuing in a new session. Last updated after the deployed tool
+was switched to a **treatment-success predictor** with a protocol picker and a
+light form UI (matching the user's screenshot)._
 
 Repo: <https://github.com/bhattarya/canine-pyometra-ml> · local: `~/Documents/GitHub/canine-pyometra-ml`
 Live artifact (predictor): <https://claude.ai/code/artifact/5bc1993f-d109-4bca-b2cd-c62382274965>
@@ -32,13 +34,14 @@ under repeated stratified CV) and the workbook's own `ML_Roadmap` sheet.
 | Missing-data comparison, recovery-time regression, risk score | ✅ `06–08` |
 | Narrative results report | ✅ `reports/findings.md` (built by `09`) |
 | Talk figures | ✅ `results/figures/talk_*.png` (`10`) |
-| Finalised deployable model + JSON export | ✅ `11` → `models/final_model.json` |
-| Zero-build single-file predictor page | ✅ `site/` (`12`; superseded by `frontend/`, kept as offline fallback) |
-| Python CLI predictor (parity reference) | ✅ `src/predict_case.py` |
+| Prognostic (medical-failure) model + JSON | ✅ `11` → `models/prognostic_model.json` (analysis artefact) |
+| **DEPLOYED model: treatment-success by chosen protocol** | ✅ `13_finalize_treatment_model.py` → `models/final_model.json` |
+| Python CLI predictor (parity reference) | ✅ `src/predict_case.py` (rewritten for the treatment model) |
 | **React app** (Vite + React 18 + TS + CSS Modules) | ✅ `frontend/` |
 | **Gemini chat** — serverless proxy (Cloudflare + Vercel + local dev server + real test) | ✅ `proxy/` |
 | Chat UX: case badge, starter prompts, Clear, light markdown | ✅ |
-| **Dark editorial redesign** (ref lance.live) | ✅ `7eccf00` |
+| ~~Dark editorial redesign (lance.live)~~ → **replaced** by a **light clinical form** matching the user's screenshot | ✅ |
+| Old zero-build `site/` single-file page + `12_build_site.py` | ❌ **removed** — schema changed; `frontend/` `SINGLE_FILE=1` build is the offline/one-file deliverable now |
 | GitHub Pages deploy workflow (builds `frontend/`) | ✅ `.github/workflows/deploy-pages.yml` |
 | Python↔JS parity test | ✅ `cd frontend && npm run parity` → PASS |
 
@@ -91,12 +94,18 @@ under repeated stratified CV) and the workbook's own `ML_Roadmap` sheet.
 - **Treatment-outcome model:** ROC-AUC ≈ **0.96–0.97**.
 - **Dominant predictors everywhere:** BUN, creatinine, ALP, ALT, low albumin.
   Azotaemia flag → 50% vs 3.6% failure.
-- **Deployed model** (`models/final_model.json`): L2 logistic regression on
-  **BUN, creatinine, albumin, ALP, age, illness duration** → ROC-AUC
-  **0.948 ± 0.066** (repeated stratified 5-fold CV). Fixed risk bands
-  **Low < 10%, Intermediate 10–40%, High > 40%**. Observed failure by band:
-  Low 0% (n=40), Intermediate 0% (n=13), **High 52% (n=27)**. Within High:
-  G1 12% · G2 17% · **G3 67% · G4 100%**.
+- **Prognostic model** (`models/prognostic_model.json`, analysis only): L2 logit
+  on **BUN, creatinine, albumin, ALP, age, illness duration** → ROC-AUC
+  **0.948 ± 0.066**. Bands Low <10 / Int 10–40 / High >40; observed failure
+  Low 0% (n40) · Int 0% (n13) · High 52% (n27).
+- **DEPLOYED model** (`models/final_model.json`, task `treatment_success`): L2
+  logit on **protocol (G1–G4, G1 reference) + 9 admission vars** (age, illness
+  duration, heart rate, TLC, creatinine, albumin, ALP, uterine diameter,
+  clinical VAS) → P(treatment success by day 14). ROC-AUC **0.894 ± 0.094**
+  (repeated stratified 5-fold CV). Group terms vs G1: G2 −0.10, **G3 +0.45,
+  G4 +1.16**. Bands: <50% "unlikely", 50–85% "uncertain", >85% "likely".
+  **G4/surgery** has zero cohort failures → the tool shows the **observed rate
+  (~100%)**, not the model value, with a caveat, and hides the driver chart for it.
 - **Recovery regression:** negative R² — admission vars don't predict resolution
   time here (honest null; CPV paper got RMSE ≈ 1.8 d).
 - **Retro 240 cases:** Breed / Age / Open-Closed / OHE-Medical only — **no outcome
@@ -130,23 +139,22 @@ proxy/                               serverless Gemini proxy — see §7
 
 Vite + React 18 + **TypeScript** + **CSS Modules** (no Tailwind, no shadcn).
 
-- **Design system:** `src/styles/tokens.css` — **dark-first editorial**, ref
-  lance.live. Pure black ground, warm-grey `#bcbbb4` secondary text,
-  translucent-white surfaces, soft radii (18px cards, pill buttons), signature
-  `.pill` button with a trailing white circle-arrow. Fonts: **Instrument Serif**
-  (display) + **Plus Jakarta Sans** (body/numbers) via Google Fonts. Committed
-  **single-theme dark**; the `Method` section renders on warm paper `#f7f6f4` —
-  `global.css` `.paper-scope` remaps the palette so children need no per-component
-  theming. `tokens.css` also keeps **legacy aliases** (`--ink`, `--rule`, …) so
-  any not-yet-restyled module still resolves.
-- **Component map:** `App.tsx` → `TopBar`, `CaseForm`(+`NumberField`),
-  `ReportCard`(+`RiskGauge`, `DriverChart`, `ProtocolTable`), `ChatPanel`
-  (+`ChatMessage`, `ChatComposer`, `hooks/useChat`, `lib/geminiClient`),
-  `Method`(+`charts/BarList`, `charts/BandTiles`).
-- **Logic:** `lib/predict.ts` mirrors `src/predict_case.py` exactly; `lib/model.ts`
-  reads `src/data/model.json`, synced from `models/final_model.json` by
-  `scripts/sync-model.mjs` (runs on `predev`/`prebuild`). `hooks/useTheme.ts` is
-  now unused (toggle dropped) — safe to delete.
+- **Design system:** `src/styles/tokens.css` — **light clinical form** matching
+  the user's screenshot. Warm off-white `#f6f4ef` ground, white input fields,
+  near-black **Archivo** headings (800 wt), teal CTA `#2f7d7d`, semantic
+  green/amber/red for the success probability. Single-theme (light), by design.
+  Globals: `.control` (inputs/selects), `.btn-primary` (teal), `.btn-ghost`.
+- **Component map:** `App.tsx` → `CaseForm`(protocol `<select>` + `NumberField`
+  grid + "Predict treatment success" button), `ReportCard`(+`SuccessGauge` in
+  `RiskGauge.tsx`, `DriverChart`, `ProtocolTable`), `ChatPanel`(+`ChatMessage`,
+  `ChatComposer`, `hooks/useChat`, `lib/geminiClient`), `Method`(+`charts/BarList`).
+  Prediction is **button-triggered**, then updates live; result card + chat only
+  render after the first submit. Removed: `TopBar`, `hooks/useTheme`,
+  `charts/BandTiles`, the dark tokens/aliases.
+- **Logic:** `lib/predict.ts` mirrors `src/predict_case.py`; `predict(values, group)`
+  → `{probability, band, observedOnly, drivers[]}`. `lib/model.ts` reads
+  `src/data/model.json`, synced from `models/final_model.json` by
+  `scripts/sync-model.mjs` on `predev`/`prebuild`. G4 → observed rate, not model.
 - **Env:** `VITE_PROXY_URL` (optional) enables the chat. `.env.development`
   defaults it to `http://localhost:8787` for local dev; unset in production unless
   the repo variable is set.

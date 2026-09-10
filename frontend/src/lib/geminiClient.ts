@@ -10,10 +10,13 @@ export interface ChatTurn {
 }
 
 export interface CaseContext {
+  group: string;
+  groupLabel: string;
   values: Record<string, number>;
-  probability: number; // 0..1, P(medical failure by day 14)
-  band: "Low" | "Intermediate" | "High";
-  drivers: { label: string; direction: "raises" | "lowers" }[];
+  probability: number; // 0..1, P(treatment success by day 14) for the chosen protocol
+  band: "Unlikely" | "Uncertain" | "Likely";
+  observedOnly: boolean; // true for the surgical arm (observed rate, not a model estimate)
+  drivers: { label: string; effect: "supports" | "against" }[];
   modelAuc: number;
   disclaimer: string;
 }
