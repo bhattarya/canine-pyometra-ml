@@ -18,6 +18,7 @@ STEPS = [
     "10_figures_for_talk.py",
     "11_finalize_model.py",           # prognostic (medical-failure) model — analysis artefact
     "13_finalize_treatment_model.py", # deployed model: treatment-success by chosen protocol
+    "14_validate_treatment_model.py", # 15-algorithm bake-off + nested CV on the deployed design
     "09_build_report.py",
 ]
 
