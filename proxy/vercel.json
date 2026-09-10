@@ -1,0 +1,5 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "_comment": "Vercel project Root Directory = proxy. Vercel auto-detects api/chat.ts as a function; runtime 'edge' is declared in-file via `export const config`. No build or install step — the edge bundler compiles the .ts and follows the relative import into ../shared/*.js, which are inside this root and always bundled.",
+  "framework": null
+}

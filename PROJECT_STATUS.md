@@ -163,11 +163,18 @@ Vite + React 18 + **TypeScript** + **CSS Modules** (no Tailwind, no shadcn).
   Globals: `.control` (inputs/selects), `.btn-primary` (teal), `.btn-ghost`.
 - **Component map:** `App.tsx` → `CaseForm`(protocol `<select>` + `NumberField`
   grid + "Predict treatment success" button), `ReportCard`(+`SuccessGauge` in
-  `RiskGauge.tsx`, `DriverChart`, `ProtocolTable`), `ChatPanel`(+`ChatMessage`,
-  `ChatComposer`, `hooks/useChat`, `lib/geminiClient`), `Method`(+`charts/BarList`).
-  Prediction is **button-triggered**, then updates live; result card + chat only
-  render after the first submit. Removed: `TopBar`, `hooks/useTheme`,
-  `charts/BandTiles`, the dark tokens/aliases.
+  `RiskGauge.tsx`, `DriverChart`, `ProtocolTable`), `CaseSummary`(+`lib/summary.ts`
+  deterministic + `lib/aiSummary.ts` Gemini-via-proxy), `Method`.
+  Prediction is **button-triggered**, then updates live; result card + summary
+  only render after the first submit. Removed: `TopBar`, `hooks/useTheme`,
+  `charts/BandTiles`, chat.
+- **Method section charts** (`frontend/src/components/charts/`, data curated in
+  `frontend/src/data/findings.ts` from `results/tables/14_*`, `05_stage_progression.csv`,
+  `models/*.json`): `AlgorithmLeaderboard` (15-algo ROC-AUC bars, LogReg
+  highlighted), `StageReduction` (20→11→4 predictors vs AUC, CPV-style),
+  `BandCalibration` (observed success per predicted band), `FeatureEffects`
+  (diverging standardised coefficients + protocol effects vs G1), plus the two
+  existing `BarList` figures. All hand-drawn inline SVG.
 - **Logic:** `lib/predict.ts` mirrors `src/predict_case.py`; `predict(values, group)`
   → `{probability, band, observedOnly, drivers[]}`. `lib/model.ts` reads
   `src/data/model.json`, synced from `models/final_model.json` by
@@ -187,25 +194,28 @@ npm run parity                 # asserts JS === Python predictions
 
 ---
 
-## 7. `proxy/` — Gemini chat proxy
+## 7. `proxy/` — Gemini AI-summary proxy
 
-Keeps the API key **server-side** (a key must never ship in a static bundle).
-Runtime-agnostic core in `shared/` (`handler.js` routing+CORS+validation,
-`gemini.js` SSE→plain-text, `systemPrompt.js`), with **Cloudflare Worker**
-(`cloudflare/`) and **Vercel edge** (`vercel/`) entrypoints, plus a zero-dep
-**local dev server** and a **real end-to-end test** you run with your own key.
+Keeps the API key **server-side**. `shared/` holds the runtime-agnostic core:
+`handler.js` (routing + CORS + validation + `mode:"summary"` one-shot),
+`gemini.js` (SSE→plain-text — **CRLF-normalised**, `thinkingBudget:0`,
+`maxOutputTokens:1400`), `systemPrompt.js` (`buildSummaryPrompt` — strict,
+grounded, no invented numbers, no treatment directives). Entrypoints:
+`proxy/api/chat.ts` (**Vercel**, Root Directory = `proxy`, endpoint
+`/api/chat`), `cloudflare/worker.js` (Cloudflare). `dev-server.mjs` + `test.mjs`
+for local. Default model **`gemini-flash-latest`** (`gemini-2.0-flash` is
+retired). Verified end-to-end against the live API.
 
 ```
 cd proxy
 cp .dev.vars.example .dev.vars     # paste a FRESH GEMINI_API_KEY (git-ignored)
 npm run dev                        # http://localhost:8787/chat
-GEMINI_API_KEY=xxx npm test        # one real Gemini call, streamed, PASS/FAIL
+GEMINI_API_KEY=xxx npm test        # real summary-mode call, streamed, PASS/FAIL
 ```
 
-Deploy: `proxy/README.md` (Cloudflare `wrangler deploy` + `wrangler secret put
-GEMINI_API_KEY`, or Vercel env vars). Then set repo variable `VITE_PROXY_URL`.
-System prompt tells the model the study facts + limits and forbids definitive
-treatment directives.
+Deploy: `DEPLOY.md` §2 (Vercel: import repo, Root Directory `proxy`, set
+`GEMINI_API_KEY` + `ALLOWED_ORIGIN`; then set `VITE_PROXY_URL` on the app
+project). No AI without this — the app falls back to the deterministic summary.
 
 ---
 

@@ -1,22 +1,48 @@
 # canine-pyometra Gemini proxy
 
 A tiny serverless proxy that holds the Google Gemini API key **server-side** and
-streams chat completions back to the static React app on GitHub Pages.
+streams the "Plain-English summary" back to the static Vite app on Vercel.
 
 ## Why this exists
 
-**An API key embedded in a static site is public.** GitHub Pages serves only
-pre-built files — anything the browser needs, anyone can read. A Gemini key in the
-JS bundle (or in a `VITE_` variable baked in at build time) can be extracted in
-seconds from the deployed `assets/*.js` and used to spend your quota or run up a
-bill against your project.
+**An API key embedded in a static site is public.** Vercel (like GitHub Pages)
+serves only pre-built files — anything the browser needs, anyone can read. A
+Gemini key in the JS bundle (or in a `VITE_` variable baked in at build time) can
+be extracted in seconds from the deployed `assets/*.js` and used to spend your
+quota or run up a bill against your project.
 
 So the key never goes near the frontend. The browser calls this proxy; the proxy
 adds the key and talks to Gemini. The frontend only ever knows the proxy URL.
 
+The app sends **one shot** per prediction (`mode: "summary"`) and renders the
+streamed text as the summary card — there is no interactive chat panel.
+
 ## Contract
 
-`POST {VITE_PROXY_URL}/chat` with JSON:
+`POST` to any path ending in `/chat` — on Vercel that is
+`{VITE_PROXY_URL}/api/chat`, on Cloudflare `{VITE_PROXY_URL}/chat`. The frontend
+appends `/chat`; on Vercel the `api/` folder adds the `/api` prefix, and the
+handler matches "any path ending in `/chat`", so both work.
+
+**Summary mode** — what the app actually sends, one shot per prediction:
+
+```json
+{
+  "mode": "summary",
+  "caseContext": {
+    "groupLabel": "G3 - aglepristone + cloprostenol",
+    "probability": 0.9,
+    "band": "Likely",
+    "observedOnly": false,
+    "values": { "Serum creatinine": { "value": 1.0, "unit": "mg/dL", "flag": null } },
+    "drivers": [{ "label": "Alkaline phosphatase", "effect": "supports" }],
+    "protocolObserved": { "G3_Aglepristone_PGF2a": { "n": 20, "success_rate": 0.9 } },
+    "modelAuc": 0.894
+  }
+}
+```
+
+**Chat mode (legacy)** — a message list instead of `mode`:
 
 ```json
 {
@@ -31,6 +57,8 @@ adds the key and talks to Gemini. The frontend only ever knows the proxy URL.
   }
 }
 ```
+
+`caseContext` with a numeric `probability` is required in both modes.
 
 Response: a **plain text stream** — `Content-Type: text/plain; charset=utf-8`,
 chunked, the assistant's answer streamed token-by-token as it arrives from
@@ -54,7 +82,7 @@ Gemini. No SSE framing on our side, just raw text chunks.
 | --- | --- | --- | --- |
 | `GEMINI_API_KEY` | yes | — | Never committed. Set as a secret. |
 | `GEMINI_MODEL` | no | `gemini-flash-latest` | |
-| `ALLOWED_ORIGIN` | no | `*` | Lock to the Pages origin in production. |
+| `ALLOWED_ORIGIN` | no | `*` | Lock to the app's Vercel origin in production. |
 
 `.env.example` and `.dev.vars.example` show the shape. **The real `.env` and
 `.dev.vars` are gitignored — no API key belongs in this repo.**
@@ -62,23 +90,28 @@ Gemini. No SSE framing on our side, just raw text chunks.
 ## Repo layout
 
 ```
-proxy/
+proxy/                 <- Vercel project Root Directory
+  api/
+    chat.ts           edge function; imports ../shared/handler.js (sibling — always bundled)
   shared/
-    systemPrompt.js   buildSystemPrompt(caseContext) + MODEL_FACTS
+    systemPrompt.js   buildSummaryPrompt / buildSystemPrompt(caseContext) + MODEL_FACTS
     gemini.js         streamGemini(...) -> ReadableStream<Uint8Array> of text
     handler.js        runtime-agnostic: CORS, routing, validation, wiring
   cloudflare/
     worker.js         export default { fetch(request, env) }
     wrangler.toml
-  vercel/
-    api/chat.ts       edge function; delegates to shared/handler.js
-    README.md
+  vercel.json         minimal marker; Vercel auto-detects api/chat.ts
   dev-server.mjs      plain Node http server wrapping shared/handler.js
   test.mjs            one-shot real Gemini call -> streamed answer + PASS/FAIL
   .env.example
   .dev.vars.example
   package.json         type: module, zero dependencies
 ```
+
+`api/` is a sibling of `shared/`, both inside the project root, so the edge
+bundler always follows `../shared/handler.js` into the function. (The old
+`proxy/vercel/` layout put `shared/` *outside* a `proxy/vercel` root, which broke
+at runtime with module-not-found — that folder is gone.)
 
 Zero runtime dependencies — native `fetch`, `ReadableStream`, `TextEncoder`,
 `TextDecoder` only. `wrangler` is optional (Cloudflare deploy only); the local
@@ -94,7 +127,7 @@ npm run dev                         # -> http://localhost:8787/chat
 
 `.dev.vars` is git-ignored. In another terminal, `cd frontend && npm run dev` —
 `frontend/.env.development` already points `VITE_PROXY_URL` at
-`http://localhost:8787`, so the chat panel is live.
+`http://localhost:8787`, so the live AI summary is wired up.
 
 One-shot end-to-end check against the real API (you run it, with your key):
 
@@ -155,13 +188,33 @@ wrangler dev cloudflare/worker.js   # or: npm run dev:cf
 
 ## Deploy option 2 — Vercel
 
-See [`vercel/README.md`](vercel/README.md) for the step-by-step. In short: deploy
-the `proxy/vercel` folder as a project (Root Directory `proxy/vercel`), or copy
-`api/chat.ts` **and** `shared/` into an existing project. Set `GEMINI_API_KEY`,
-`GEMINI_MODEL`, `ALLOWED_ORIGIN` in **Project -> Settings -> Environment
-Variables**.
+This is the primary host for the app; the proxy rides along as a second Vercel
+project. Full non-developer checklist in [`../DEPLOY.md`](../DEPLOY.md) §2.
+
+1. <https://vercel.com/new> → import the repo → **Root Directory** → `proxy`
+   (**not** `proxy/vercel` — that folder no longer exists, and choosing it would
+   leave `shared/` outside the root and break the function at runtime).
+2. Framework preset: **Other**. No build command, no install step — the edge
+   bundler compiles `api/chat.ts` and follows `import "../shared/handler.js"`
+   into the sibling `shared/` folder (same git checkout, always present).
+3. **Settings → Environment Variables:**
+   | Name | Value |
+   | --- | --- |
+   | `GEMINI_API_KEY` | your key (mark it Secret; never commit it) |
+   | `ALLOWED_ORIGIN` | the app's Vercel URL, e.g. `https://canine-pyometra-ml.vercel.app` |
+   | `GEMINI_MODEL` | *(optional)* leave unset for the default `gemini-flash-latest` |
+4. Deploy.
 
 Endpoint: `https://<project>.vercel.app/api/chat`.
+
+`runtime: "edge"` is declared in `api/chat.ts` via `export const config` and is
+required — the handler streams a `ReadableStream` and threads the abort signal
+through. The response is streamed `text/plain; charset=utf-8`, no SSE framing.
+`OPTIONS` → `204` + CORS; non-`POST` → `405`; other paths → `404`.
+
+To fold this into an **existing** Vercel project instead, copy `api/chat.ts` and
+`shared/` into it (keeping `chat.ts` a sibling folder of `shared/`, or fix the
+relative import to match) and add the same env vars.
 
 ---
 
@@ -174,30 +227,29 @@ Local dev:
 VITE_PROXY_URL=https://<name>.<your-subdomain>.workers.dev
 ```
 
-GitHub Pages build: add a repository **variable** (Settings -> Secrets and
-variables -> Actions -> Variables tab), **not** a secret:
+Vercel app build (primary): on the **app** Vercel project → Settings →
+Environment Variables → add `VITE_PROXY_URL` = the proxy origin, then redeploy.
+GitHub Pages fallback build: add a repository **variable** (Settings → Secrets
+and variables → Actions → Variables tab), **not** a secret, with the same value.
 
-```
-VITE_PROXY_URL = https://<name>.<your-subdomain>.workers.dev
-```
+Either way `vite build` inlines it. That is fine — the proxy URL is not
+sensitive; only the Gemini key is, and that stays on the proxy.
 
-The Pages workflow passes it to `vite build`, which inlines it. That is fine —
-the proxy URL is not sensitive; only the Gemini key is, and that stays on the
-proxy.
-
-The frontend appends `/chat`, so set `VITE_PROXY_URL` to the origin **without** a
-trailing slash and without `/chat`.
+The frontend appends `/chat` (which Vercel serves at `/api/chat`), so set
+`VITE_PROXY_URL` to the origin **without** a trailing slash and without a path.
 
 ---
 
 ## curl smoke test
 
 ```bash
-URL=https://<name>.<your-subdomain>.workers.dev
+# Vercel:     PATH=/api/chat     Cloudflare: PATH=/chat
+URL=https://<proxy>.vercel.app
+PATH_=/api/chat
 
-curl -N -X POST "$URL/chat" \
+curl -N -X POST "$URL$PATH_" \
   -H 'content-type: application/json' \
-  -d '{"messages":[{"role":"user","content":"Why is this case high risk?"}],"caseContext":{"values":{},"probability":0.9,"band":"High","drivers":[],"modelAuc":0.95,"disclaimer":"x"}}'
+  -d '{"mode":"summary","caseContext":{"groupLabel":"G3 - aglepristone + cloprostenol","probability":0.9,"band":"Likely","observedOnly":false,"values":{"Serum creatinine":{"value":1.0,"unit":"mg/dL","flag":null}},"drivers":[{"label":"Alkaline phosphatase","effect":"supports"}],"protocolObserved":{"G3_Aglepristone_PGF2a":{"n":20,"success_rate":0.9}},"modelAuc":0.894}}'
 ```
 
 `-N` disables curl's buffering so you see the text stream in real time. A bad
@@ -207,7 +259,7 @@ single plain-text apology line (never the key or the upstream error).
 CORS preflight check:
 
 ```bash
-curl -i -X OPTIONS "$URL/chat" -H 'origin: https://bhattarya.github.io'
+curl -i -X OPTIONS "$URL$PATH_" -H 'origin: https://canine-pyometra-ml.vercel.app'
 # -> 204, with Access-Control-Allow-Origin / -Methods / -Headers
 ```
 
@@ -223,7 +275,7 @@ endpoint with your key behind it is a spend risk. If you expose this publicly:
   scripted clients).
 - Add a **Cloudflare Rate Limiting rule** on the Worker route (e.g. N requests
   per minute per IP), or a simple per-IP counter in a Workers KV / Durable
-  Object, or Cloudflare Turnstile in front of the chat UI.
+  Object, or Cloudflare Turnstile in front of the app.
 - On Vercel, put the function behind Vercel's WAF / rate-limit rules or a KV
   counter.
 - Cap `maxOutputTokens` (already set to 700) and consider lowering it.

@@ -1,0 +1,10 @@
+.scroll {
+  overflow-x: auto;
+}
+.svg {
+  display: block;
+  width: 100%;
+  min-width: 500px;
+  height: auto;
+  font-family: var(--font-ui);
+}
