@@ -1,11 +1,12 @@
 # Project status & handoff
 
-_Snapshot for continuing in a new session. Last updated after the deployed tool
-was switched to a **treatment-success predictor** with a protocol picker and a
-light form UI (matching the user's screenshot)._
+_Snapshot for continuing in a new session. Last updated after the app + Gemini
+proxy went live on **Vercel** and the AI-generated summary was confirmed working
+end-to-end._
 
 Repo: <https://github.com/bhattarya/canine-pyometra-ml> · local: `~/Documents/GitHub/canine-pyometra-ml`
-Live artifact (predictor): <https://claude.ai/code/artifact/5bc1993f-d109-4bca-b2cd-c62382274965>
+**Live app:** <https://canine-pyometra-ml.vercel.app/> (Vercel project, Root Directory `frontend`, redeploys on push to `main`)
+**Live proxy:** <https://canine-pyometra-ml-proxy.vercel.app/api/chat> (separate Vercel project, Root Directory `proxy`)
 
 ---
 
@@ -57,15 +58,20 @@ under repeated stratified CV) and the workbook's own `ML_Roadmap` sheet.
 3. **Narrative report** (CPV-article style, Word/PDF) — not started.
    `reports/findings.md` is the raw material; needs Intro/Methods/Results/
    Discussion prose for a non-statistician reader.
-4. **User actions to go live — hosting is Vercel now (see `DEPLOY.md`):**
-   - Import the repo at vercel.com/new, set **Root Directory = `frontend`**
-     (framework auto-detects Vite; `frontend/vercel.json` pins build/output).
-     Every push to `main` redeploys.
-   - **Revoke the Gemini key pasted earlier** (it's in a transcript). Generate a
-     fresh one.
-   - *(optional chat)* deploy `proxy/vercel` as a **separate** Vercel project
-     with `GEMINI_API_KEY` / `GEMINI_MODEL` / `ALLOWED_ORIGIN` env vars, then set
-     `VITE_PROXY_URL` on the app project and redeploy.
+4. **Deployment — DONE (both Vercel projects live, AI summary confirmed):**
+   - App project: Root Directory `frontend`, live at
+     <https://canine-pyometra-ml.vercel.app/>, redeploys on push to `main`.
+   - Proxy project: Root Directory `proxy`, endpoint `/api/chat`, env
+     `GEMINI_API_KEY` set. Live at
+     <https://canine-pyometra-ml-proxy.vercel.app/api/chat>.
+   - App env `VITE_PROXY_URL = https://canine-pyometra-ml-proxy.vercel.app`
+     (Config type, not Secret — `VITE_*` is inlined into the browser bundle).
+   - `0c9957c` fixed the last bug: frontend was posting to `/chat`, the Vercel
+     function is at `/api/chat`. Verified live — summary tag reads "AI-GENERATED".
+   - **Still to do by the user:** (a) **revoke the Gemini key pasted in chat**,
+     generate a fresh one, update `GEMINI_API_KEY` on the proxy project only;
+     (b) delete the stray `GEMINI_API_KEY` env var on the **app** project (it does
+     nothing there — the key must never be in the frontend).
    - GitHub Pages workflow is now **manual-only** (`workflow_dispatch`).
 5. **Housekeeping:** split `notebooks/*.ipynb` into real walkthrough cells (they
    are single-cell mirrors now); move `src/inspect_workbook.py` → `tools/`;
