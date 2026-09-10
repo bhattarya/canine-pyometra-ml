@@ -38,7 +38,7 @@ under repeated stratified CV) and the workbook's own `ML_Roadmap` sheet.
 | **DEPLOYED model: treatment-success by chosen protocol** | ✅ `13_finalize_treatment_model.py` → `models/final_model.json` |
 | Python CLI predictor (parity reference) | ✅ `src/predict_case.py` (rewritten for the treatment model) |
 | **React app** (Vite + React 18 + TS + CSS Modules) | ✅ `frontend/` |
-| ~~Gemini chat panel~~ → **removed from the frontend** (user didn't want a chatbot). Replaced by `CaseSummary` + `lib/summary.ts`: a deterministic plain-English write-up that appears under the result. `proxy/` kept in the repo, unused. | ✅ `8b6ddbb` |
+| **Plain-English summary under the result** — `CaseSummary` + `lib/summary.ts` (deterministic template) is the built-in / fallback. If `VITE_PROXY_URL` is set, `lib/aiSummary.ts` streams a **Gemini-written** summary instead (`proxy/` one-shot `mode:"summary"`). Chat panel removed. | ✅ `8b6ddbb`, AI wiring `feat/ai-summary` |
 | ~~Dark editorial redesign (lance.live)~~ → **replaced** by a **light clinical form** matching the user's screenshot | ✅ |
 | Old zero-build `site/` single-file page + `12_build_site.py` | ❌ **removed** — schema changed; `frontend/` `SINGLE_FILE=1` build is the offline/one-file deliverable now |
 | GitHub Pages deploy workflow (builds `frontend/`) | ✅ `.github/workflows/deploy-pages.yml` |

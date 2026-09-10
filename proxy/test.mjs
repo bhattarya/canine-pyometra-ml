@@ -30,27 +30,34 @@ if (!process.env.GEMINI_API_KEY) {
 process.env.ALLOWED_ORIGIN ||= "*";
 
 const body = {
-  messages: [
-    { role: "user", content: "In two sentences, why is this dog's case high risk, and what does the band mean?" },
-  ],
+  mode: "summary",
   caseContext: {
+    groupLabel: "G3 - aglepristone + cloprostenol",
+    probability: 0.9,
+    band: "Likely",
+    observedOnly: false,
     values: {
-      BUN_mg_dL: 33,
-      Creatinine_mg_dL: 1.5,
-      Albumin_g_dL: 2.2,
-      ALP_U_L: 430,
-      Age_years: 8.5,
-      Illness_Duration_days: 9,
+      Age: { value: 6, unit: "years", flag: null },
+      "Illness duration": { value: 5, unit: "days", flag: null },
+      "Heart rate": { value: 118, unit: "bpm", flag: null },
+      "Total leucocyte count": { value: 19, unit: "x10^3/uL", flag: "high" },
+      "Serum creatinine": { value: 1.0, unit: "mg/dL", flag: null },
+      "Serum albumin": { value: 2.7, unit: "g/dL", flag: null },
+      "Alkaline phosphatase (ALP)": { value: 300, unit: "U/L", flag: "very high" },
+      "Uterine diameter": { value: 17, unit: "mm", flag: null },
+      "Clinical severity (VAS 0-10)": { value: 5, unit: "0-10", flag: null },
     },
-    probability: 0.98,
-    band: "High",
     drivers: [
-      { label: "Albumin", direction: "raises" },
-      { label: "Blood urea nitrogen", direction: "raises" },
-      { label: "Age", direction: "lowers" },
+      { label: "Alkaline phosphatase", effect: "supports" },
+      { label: "Serum creatinine", effect: "supports" },
     ],
-    modelAuc: 0.948,
-    disclaimer: "Research preview — not a validated clinical tool.",
+    protocolObserved: {
+      G1_Supportive: { n: 20, success_rate: 0.65 },
+      G2_PGF2a: { n: 20, success_rate: 0.75 },
+      G3_Aglepristone_PGF2a: { n: 20, success_rate: 0.9 },
+      G4_OHE: { n: 20, success_rate: 1.0 },
+    },
+    modelAuc: 0.894,
   },
 };
 
@@ -77,7 +84,7 @@ for await (const chunk of res.body) {
 
 console.log("\n");
 if (text.trim().length > 20) {
-  console.log(`PASS — streamed ${text.length} chars from ${process.env.GEMINI_MODEL || "gemini-2.0-flash"}`);
+  console.log(`PASS — streamed ${text.length} chars from ${process.env.GEMINI_MODEL || "gemini-flash-latest"}`);
 } else {
   console.error("FAIL — response was empty or too short");
   process.exit(1);

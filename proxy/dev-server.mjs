@@ -72,7 +72,7 @@ const server = createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`\n  Gemini proxy (dev)  ->  http://localhost:${PORT}/chat`);
-  console.log(`  model: ${process.env.GEMINI_MODEL || "gemini-2.0-flash"}`);
+  console.log(`  model: ${process.env.GEMINI_MODEL || "gemini-flash-latest"}`);
   console.log(`  allowed origin: ${process.env.ALLOWED_ORIGIN}`);
   console.log(`  point the frontend at it:  VITE_PROXY_URL=http://localhost:${PORT}\n`);
 });

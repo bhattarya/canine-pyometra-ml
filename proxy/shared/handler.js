@@ -1,11 +1,15 @@
 // ESM module — no dependencies. Runtime-agnostic request handler shared by the
 // Cloudflare Worker and the Vercel edge function. Both runtimes give it a
 // standard `Request` and a plain `env` object; it returns a standard `Response`.
+//
+// POST /chat body:
+//   { mode: "summary", caseContext }        -> one-shot plain-English summary
+//   { messages: [...], caseContext }         -> chat follow-up (legacy)
 
-import { buildSystemPrompt } from "./systemPrompt.js";
+import { buildSummaryPrompt, buildSystemPrompt } from "./systemPrompt.js";
 import { streamGemini } from "./gemini.js";
 
-const DEFAULT_MODEL = "gemini-2.0-flash";
+const DEFAULT_MODEL = "gemini-flash-latest";
 const MAX_MESSAGES = 40;
 const MAX_CONTENT_CHARS = 4000;
 const VALID_ROLES = new Set(["user", "assistant"]);
@@ -38,48 +42,47 @@ function jsonError(message, status, allowedOrigin) {
   });
 }
 
-/**
- * @param {unknown} body
- * @returns {{ ok: true, messages: any[], caseContext: any } | { ok: false, error: string }}
- */
+function validCaseContext(cc) {
+  return (
+    cc &&
+    typeof cc === "object" &&
+    typeof cc.probability === "number" &&
+    Number.isFinite(cc.probability)
+  );
+}
+
+/** @returns {{ok:true, kind:"summary"|"chat", messages:any[], caseContext:any} | {ok:false, error:string}} */
 function validateBody(body) {
   if (!body || typeof body !== "object") {
     return { ok: false, error: "Body must be a JSON object." };
   }
-  const { messages, caseContext } = body;
+  const { mode, messages, caseContext } = body;
 
+  if (!validCaseContext(caseContext)) {
+    return { ok: false, error: "`caseContext` with a numeric `probability` is required." };
+  }
+
+  // summary mode: no messages needed
+  if (mode === "summary" || messages === undefined) {
+    return { ok: true, kind: "summary", messages: [], caseContext };
+  }
+
+  // chat mode: validate the message list
   if (!Array.isArray(messages) || messages.length === 0) {
-    return { ok: false, error: "`messages` must be a non-empty array." };
+    return { ok: false, error: "`messages` must be a non-empty array (or use mode:'summary')." };
   }
   if (messages.length > MAX_MESSAGES) {
     return { ok: false, error: `Too many messages (max ${MAX_MESSAGES}).` };
   }
   for (const m of messages) {
-    if (!m || typeof m !== "object") {
-      return { ok: false, error: "Each message must be an object." };
-    }
-    if (!VALID_ROLES.has(m.role)) {
-      return { ok: false, error: "Each message role must be 'user' or 'assistant'." };
-    }
-    if (typeof m.content !== "string") {
-      return { ok: false, error: "Each message content must be a string." };
+    if (!m || typeof m !== "object" || !VALID_ROLES.has(m.role) || typeof m.content !== "string") {
+      return { ok: false, error: "Each message needs a valid role and string content." };
     }
     if (m.content.length > MAX_CONTENT_CHARS) {
-      return {
-        ok: false,
-        error: `Message content exceeds ${MAX_CONTENT_CHARS} characters.`,
-      };
+      return { ok: false, error: `Message content exceeds ${MAX_CONTENT_CHARS} characters.` };
     }
   }
-
-  if (!caseContext || typeof caseContext !== "object") {
-    return { ok: false, error: "`caseContext` is required." };
-  }
-  if (typeof caseContext.probability !== "number" || !Number.isFinite(caseContext.probability)) {
-    return { ok: false, error: "`caseContext.probability` must be a number." };
-  }
-
-  return { ok: true, messages, caseContext };
+  return { ok: true, kind: "chat", messages, caseContext };
 }
 
 /**
@@ -102,9 +105,7 @@ export async function handleRequest(request, env) {
   if (request.method !== "POST") {
     return jsonError("Method not allowed.", 405, allowedOrigin);
   }
-
   if (!apiKey) {
-    // Misconfiguration — do not hint at the key name in a way that leaks its value (there is none).
     return jsonError("Server is not configured.", 500, allowedOrigin);
   }
 
@@ -120,12 +121,21 @@ export async function handleRequest(request, env) {
     return jsonError(check.error, 400, allowedOrigin);
   }
 
-  const systemPrompt = buildSystemPrompt(check.caseContext);
+  let systemPrompt;
+  let messages;
+  if (check.kind === "summary") {
+    systemPrompt = buildSummaryPrompt(check.caseContext);
+    messages = [{ role: "user", content: "Write the summary for this case now." }];
+  } else {
+    systemPrompt = buildSystemPrompt(check.caseContext);
+    messages = check.messages;
+  }
+
   const stream = streamGemini({
     apiKey,
     model,
     systemPrompt,
-    messages: check.messages,
+    messages,
     signal: request.signal,
   });
 
