@@ -1,9 +1,20 @@
 import styles from "./Method.module.css";
-import { MODEL, groupLabel, NICE_NAME } from "../lib/model";
 import { BarList } from "./charts/BarList";
+import { AlgorithmLeaderboard } from "./charts/AlgorithmLeaderboard";
+import { StageReduction } from "./charts/StageReduction";
+import { BandCalibration } from "./charts/BandCalibration";
+import { FeatureEffects } from "./charts/FeatureEffects";
+import {
+  BAND_CUTPOINTS,
+  COHORT,
+  PROGNOSTIC_PERF,
+  SUCCESS_BY_PROTOCOL,
+  TOP_PREDICTORS,
+  TREATMENT_PERF,
+} from "../data/findings";
 
 export function Method() {
-  const [lo, hi] = MODEL.success_bands.cutpoints_prob;
+  const [lo, hi] = BAND_CUTPOINTS;
 
   return (
     <div className={styles.wrap}>
@@ -15,9 +26,9 @@ export function Method() {
 
       <h3 className={styles.h}>The data</h3>
       <p>
-        {MODEL.cohort} Admission demographics, vital signs, haematology, serum biochemistry
-        and ultrasonographic uterine diameter were recorded. Baseline data were complete and
-        the cohort was balanced across the four arms on every measured variable.
+        {COHORT} Admission demographics, vital signs, haematology, serum biochemistry and
+        ultrasonographic uterine diameter were recorded. Baseline data were complete and the
+        cohort was balanced across the four arms on every measured variable.
       </p>
 
       <h3 className={styles.h}>The model</h3>
@@ -26,31 +37,62 @@ export function Method() {
         fitted on all 80 dogs. Inputs: the intended protocol (G1&ndash;G4) plus nine routine
         admission values &mdash; age, illness duration, heart rate, total leucocyte count,
         creatinine, albumin, ALP, uterine diameter and a clinical severity score. Held-out
-        discrimination is <span className="mono">ROC-AUC {MODEL.performance.roc_auc_cv} &plusmn;{" "}
-        {MODEL.performance.roc_auc_cv_sd}</span> (repeated stratified 5-fold cross-validation).
+        discrimination is <span className="mono">ROC-AUC {TREATMENT_PERF.rocAucCv} &plusmn;{" "}
+        {TREATMENT_PERF.rocAucCvSd}</span> (repeated stratified 5-fold cross-validation).
       </p>
+
+      <figure className={styles.figure}>
+        <figcaption className={styles.figHead}>Algorithm bake-off &mdash; ROC-AUC</figcaption>
+        <AlgorithmLeaderboard />
+        <figcaption className={styles.figNote}>
+          Fifteen algorithms compared under repeated stratified 5-fold cross-validation on the
+          deployed design. The intervals overlap heavily &mdash; no model is reliably more
+          accurate on 80 dogs with 14 failures. Logistic regression (highlighted) was chosen
+          because it is interpretable and runs entirely in the browser.
+        </figcaption>
+      </figure>
+
+      <figure className={styles.figure}>
+        <figcaption className={styles.figHead}>Feature reduction &mdash; predictors vs AUC</figcaption>
+        <StageReduction />
+        <figcaption className={styles.figNote}>
+          Feature selection mirrors the canine-parvovirus prognosis study (Nafe Monfared et al.,
+          2025): start with every admission variable, drop weak ones by univariate screen, then
+          reduce further by recursive feature elimination. Discrimination barely changes &mdash;
+          the shorter model is preferred for parsimony.
+        </figcaption>
+      </figure>
 
       <h3 className={styles.h}>Reading the number</h3>
       <p>
-        Estimates below <span className="mono">{lo * 100}%</span> read as <em>unlikely to
-        succeed</em>; <span className="mono">{lo * 100}&ndash;{hi * 100}%</span> as
-        <em> uncertain</em>; above <span className="mono">{hi * 100}%</span> as <em>likely</em>.
+        Estimates below <span className="mono">{Math.round(lo * 100)}%</span> read as <em>unlikely
+        to succeed</em>; <span className="mono">{Math.round(lo * 100)}&ndash;{Math.round(hi * 100)}%</span>{" "}
+        as <em>uncertain</em>; above <span className="mono">{Math.round(hi * 100)}%</span> as{" "}
+        <em>likely</em>.
         On this clean, separable dataset the model is over-confident at the extremes &mdash;
         treat the output as a band, not a precise percentage, and read it alongside the observed
         cohort rates below.
       </p>
 
       <figure className={styles.figure}>
+        <figcaption className={styles.figHead}>Observed success within each band</figcaption>
+        <BandCalibration />
+        <figcaption className={styles.figNote}>
+          How the predicted bands played out in the cohort: of the cases the model rated
+          &lsquo;likely&rsquo;, 100% resolved; of those it rated &lsquo;unlikely&rsquo;, 33%. On
+          this clean dataset the model is over-confident at the extremes, so the band is more
+          trustworthy than the exact percentage.
+        </figcaption>
+      </figure>
+
+      <figure className={styles.figure}>
         <figcaption className={styles.figHead}>Observed success by protocol</figcaption>
         <BarList
-          items={MODEL.display.success_by_protocol.map((r) => ({
-            label: groupLabel(r.group),
-            value: r.success_rate,
-          }))}
+          items={SUCCESS_BY_PROTOCOL.map((r) => ({ label: r.label, value: r.value }))}
         />
         <figcaption className={styles.figNote}>
-          Raw day-14 resolution, all 80 dogs. The surgical arm (G4) was not randomised for
-          severity &mdash; interpret the gradient, not the exact figures.
+          Raw day-14 resolution, all 80 dogs (n&nbsp;=&nbsp;20 per arm). The surgical arm (G4)
+          was not randomised for severity &mdash; interpret the gradient, not the exact figures.
         </figcaption>
       </figure>
 
@@ -59,16 +101,32 @@ export function Method() {
           Strongest single admission predictors
         </figcaption>
         <BarList
-          items={MODEL.display.top_predictors.map((r) => ({
-            label: NICE_NAME[r.variable] ?? r.variable,
-            value: r.auc,
-          }))}
+          items={TOP_PREDICTORS.map((r) => ({ label: r.label, value: r.auc }))}
           domain={[0.5, 1]}
           format={(v) => v.toFixed(2)}
         />
         <figcaption className={styles.figNote}>
-          Single-variable discrimination (AUC) for the day-14 outcome. Renal and hepatic
-          markers and low albumin carry most of the signal.
+          Single-variable discrimination (AUC) for the day-14 outcome. Renal and hepatic markers
+          and low albumin carry most of the signal.
+        </figcaption>
+      </figure>
+
+      <h3 className={styles.h}>What the model weights</h3>
+      <p>
+        The logistic fit is fully inspectable: each admission value and each protocol contributes
+        a fixed weight to the log-odds of success. A companion model for <em>medical failure</em>
+        {" "}on the G1&ndash;G3 arms scores <span className="mono">ROC-AUC{" "}
+        {PROGNOSTIC_PERF.rocAucCv} &plusmn; {PROGNOSTIC_PERF.rocAucCvSd}</span>.
+      </p>
+
+      <figure className={styles.figure}>
+        <figcaption className={styles.figHead}>Standardised coefficients</figcaption>
+        <FeatureEffects />
+        <figcaption className={styles.figNote}>
+          Standardised logistic-regression coefficients &mdash; the direction and relative size
+          of each admission value&rsquo;s and each protocol&rsquo;s effect on the predicted
+          probability of success, holding everything else fixed (log-odds per 1&nbsp;SD;
+          protocols relative to G1 supportive care).
         </figcaption>
       </figure>
 
