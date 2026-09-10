@@ -1,17 +1,12 @@
 name: Deploy predictor to GitHub Pages
 
-# Builds the React app in frontend/ and publishes it to GitHub Pages.
+# Primary hosting is Vercel (see frontend/vercel.json + DEPLOY.md). This workflow
+# is kept as a manual fallback only — run it from the Actions tab if you want a
+# GitHub Pages copy. It builds frontend/ with base=/canine-pyometra-ml/.
 # `npm run build` runs the `prebuild` hook -> `sync-model`, which copies
-# ../models/final_model.json into the bundle, so that file must be committed
-# (it is).
+# ../models/final_model.json into the bundle, so that file must be committed.
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "frontend/**"
-      - "models/final_model.json"
-      - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
 
 permissions:

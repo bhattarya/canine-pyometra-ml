@@ -3,7 +3,10 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "React frontend for the canine pyometra medical-failure risk model",
+  "description": "React frontend for the canine pyometra treatment-success predictor",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "sync-model": "node scripts/sync-model.mjs",
     "predev": "npm run sync-model",

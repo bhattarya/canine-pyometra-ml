@@ -95,11 +95,11 @@ cd frontend && npm install && npm run dev    # predev syncs the model JSON
 npm run parity                                # web app vs Python agree?
 ```
 
-Pushing to `main` builds `frontend/` and publishes it to GitHub Pages via
-`.github/workflows/deploy-pages.yml` — enable Pages → "GitHub Actions" once in
-the repo settings, and optionally set the repo variable `VITE_PROXY_URL` to turn
-on the chat. `site/` is the earlier zero-build single-file version, superseded by
-`frontend/` but kept as an offline fallback.
+**Hosting: Vercel** (see [`DEPLOY.md`](DEPLOY.md)). Import the repo, set
+**Root Directory = `frontend`**; `frontend/vercel.json` pins the build and every
+push to `main` redeploys. Optionally add `VITE_PROXY_URL` (pointing at a deployed
+`proxy/`) to turn on the chat. GitHub Pages
+(`.github/workflows/deploy-pages.yml`) is a manual fallback only.
 
 Notebook mirrors of each script live in `notebooks/` (kept in sync with
 `jupytext`); the `.py` files under `src/analysis/` are the source of truth.
