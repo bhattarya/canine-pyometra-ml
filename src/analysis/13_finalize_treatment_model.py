@@ -6,8 +6,8 @@ for that protocol.
 
 Model: L2-penalised logistic regression on all 80 dogs.
   target   = Treatment_Success_D14 (1 = success)
-  numeric  = age, illness duration, heart rate, TLC, creatinine, albumin, ALP,
-             uterine diameter, clinical VAS   (9, standardised)
+  numeric  = age, illness duration, heart rate, TLC, neutrophil count,
+             creatinine, albumin, ALP, ALT   (9, standardised)
   protocol = Group, one-hot with G1_Supportive as the reference level
 
 Note: G4 (OHE) is perfectly separated in the cohort (20/20 success). The L2
@@ -25,7 +25,7 @@ from pathlib import Path
 import numpy as np
 from sklearn.base import clone
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import roc_auc_score
+from sklearn.metrics import accuracy_score, f1_score, recall_score, roc_auc_score, roc_curve
 from sklearn.model_selection import RepeatedStratifiedKFold
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -34,8 +34,8 @@ from pyo import data as D
 
 NUMERIC = [
     "Age_years", "Illness_Duration_days", "Heart_Rate_bpm", "TLC_per_uL",
-    "Creatinine_mg_dL", "Albumin_g_dL", "ALP_U_L", "Uterine_Diameter_mm",
-    "Clinical_VAS_0_10",
+    "Neutrophils_per_uL", "Creatinine_mg_dL", "Albumin_g_dL", "ALP_U_L",
+    "ALT_U_L",
 ]
 GROUPS = ["G1_Supportive", "G2_PGF2a", "G3_Aglepristone_PGF2a", "G4_OHE"]
 REF = "G1_Supportive"
@@ -46,23 +46,24 @@ LABELS = {
     "Illness_Duration_days": "Illness duration",
     "Heart_Rate_bpm": "Heart rate",
     "TLC_per_uL": "Total leucocyte count",
+    "Neutrophils_per_uL": "Neutrophil count",
     "Creatinine_mg_dL": "Serum creatinine",
     "Albumin_g_dL": "Serum albumin",
     "ALP_U_L": "Alkaline phosphatase (ALP)",
-    "Uterine_Diameter_mm": "Uterine diameter",
-    "Clinical_VAS_0_10": "Clinical severity (VAS 0-10)",
+    "ALT_U_L": "Alanine aminotransferase (ALT)",
 }
 UNITS = {
     "Age_years": "years", "Illness_Duration_days": "days", "Heart_Rate_bpm": "bpm",
-    "TLC_per_uL": "x10^3/uL", "Creatinine_mg_dL": "mg/dL", "Albumin_g_dL": "g/dL",
-    "ALP_U_L": "U/L", "Uterine_Diameter_mm": "mm", "Clinical_VAS_0_10": "0-10",
+    "TLC_per_uL": "x10^3/uL", "Neutrophils_per_uL": "x10^3/uL",
+    "Creatinine_mg_dL": "mg/dL", "Albumin_g_dL": "g/dL",
+    "ALP_U_L": "U/L", "ALT_U_L": "U/L",
 }
 REF_RANGES = {
     "Age_years": "cohort 3-10", "Illness_Duration_days": "cohort 2-11",
     "Heart_Rate_bpm": "canine ref ~ 70-120", "TLC_per_uL": "canine ref ~ 6-17",
+    "Neutrophils_per_uL": "canine ref ~ 3-11.5",
     "Creatinine_mg_dL": "canine ref ~ 0.5-1.5", "Albumin_g_dL": "canine ref ~ 2.6-4.0",
-    "ALP_U_L": "canine ref ~ 20-150", "Uterine_Diameter_mm": "cohort 10-25",
-    "Clinical_VAS_0_10": "0 = well, 10 = critical",
+    "ALP_U_L": "canine ref ~ 20-150", "ALT_U_L": "canine ref ~ 10-125",
 }
 GROUP_LABELS = {
     "G1_Supportive": "G1 - supportive / antibiotic",
@@ -72,8 +73,9 @@ GROUP_LABELS = {
 }
 STEP = {
     "Age_years": 0.5, "Illness_Duration_days": 1, "Heart_Rate_bpm": 1,
-    "TLC_per_uL": 0.5, "Creatinine_mg_dL": 0.1, "Albumin_g_dL": 0.1,
-    "ALP_U_L": 5, "Uterine_Diameter_mm": 1, "Clinical_VAS_0_10": 0.5,
+    "TLC_per_uL": 0.5, "Neutrophils_per_uL": 0.5,
+    "Creatinine_mg_dL": 0.1, "Albumin_g_dL": 0.1,
+    "ALP_U_L": 5, "ALT_U_L": 5,
 }
 
 df = D.primary_frame().copy()
@@ -89,14 +91,38 @@ cols = NUMERIC + DUMMIES
 clf = LogisticRegression(C=0.5, class_weight="balanced", max_iter=5000)
 clf.fit(X, y)
 
-# honest internal performance
-cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=20, random_state=C.SEED)
-fold_auc = []
-for tr, te in cv.split(X, y):
+# honest internal performance: AUC plus threshold-0.5 classification metrics,
+# averaged over repeated stratified 5-fold CV.
+N_SPLITS, N_REPEATS = 5, 20
+cv = RepeatedStratifiedKFold(n_splits=N_SPLITS, n_repeats=N_REPEATS, random_state=C.SEED)
+fold_auc, fold_acc, fold_sens, fold_spec, fold_f1 = [], [], [], [], []
+oof_repeat1 = np.full(len(y), np.nan)  # complete out-of-fold vector, repeat 1 only -> ROC curve
+for i, (tr, te) in enumerate(cv.split(X, y)):
     p = clone(clf).fit(X[tr], y[tr]).predict_proba(X[te])[:, 1]
+    pred = (p >= 0.5).astype(int)
     fold_auc.append(roc_auc_score(y[te], p))
+    fold_acc.append(accuracy_score(y[te], pred))
+    fold_sens.append(recall_score(y[te], pred, pos_label=1, zero_division=0))
+    fold_spec.append(recall_score(y[te], pred, pos_label=0, zero_division=0))
+    fold_f1.append(f1_score(y[te], pred, pos_label=1, zero_division=0))
+    if i < N_SPLITS:  # the first repeat's folds cover every dog exactly once
+        oof_repeat1[te] = p
 auc_cv, auc_sd = float(np.mean(fold_auc)), float(np.std(fold_auc))
+acc_cv, acc_sd = float(np.mean(fold_acc)), float(np.std(fold_acc))
+sens_cv, sens_sd = float(np.mean(fold_sens)), float(np.std(fold_sens))
+spec_cv, spec_sd = float(np.mean(fold_spec)), float(np.std(fold_spec))
+f1_cv, f1_sd = float(np.mean(fold_f1)), float(np.std(fold_f1))
 auc_app = roc_auc_score(y, clf.predict_proba(X)[:, 1])
+
+# ROC curve from the pooled out-of-fold predictions of one clean 5-fold split
+# (every dog predicted by a model that never saw it) — for the Method chart.
+roc_fpr, roc_tpr, _ = roc_curve(y, oof_repeat1)
+# thin to <=40 points for a light JSON payload while keeping the curve's shape
+_idx = np.unique(np.linspace(0, len(roc_fpr) - 1, min(40, len(roc_fpr))).astype(int))
+roc_curve_pts = {
+    "fpr": [round(float(v), 4) for v in roc_fpr[_idx]],
+    "tpr": [round(float(v), 4) for v in roc_tpr[_idx]],
+}
 
 coef = clf.coef_.ravel()
 numeric_coef = coef[: len(NUMERIC)].tolist()
@@ -171,7 +197,16 @@ model = {
         "roc_auc_cv": round(auc_cv, 3),
         "roc_auc_cv_sd": round(auc_sd, 3),
         "roc_auc_apparent": round(float(auc_app), 3),
-        "cv": "repeated stratified 5-fold, 20 repeats",
+        "accuracy_cv": round(acc_cv, 3),
+        "accuracy_cv_sd": round(acc_sd, 3),
+        "sensitivity_cv": round(sens_cv, 3),
+        "sensitivity_cv_sd": round(sens_sd, 3),
+        "specificity_cv": round(spec_cv, 3),
+        "specificity_cv_sd": round(spec_sd, 3),
+        "f1_cv": round(f1_cv, 3),
+        "f1_cv_sd": round(f1_sd, 3),
+        "roc_curve": roc_curve_pts,
+        "cv": "repeated stratified 5-fold, 20 repeats (classification metrics at threshold 0.5)",
     },
     "success_bands": {"cutpoints_prob": [LO, HI], "table": band_tbl},
     "protocol_observed": protocol_observed,
@@ -223,7 +258,7 @@ print("\nExample (median dog):")
 for g in GROUPS:
     print(f"  {g:26s} P(success) = {predict(med, g):.2f}")
 sick = {**med, "Creatinine_mg_dL": 1.6, "Albumin_g_dL": 2.2, "ALP_U_L": 460,
-        "Illness_Duration_days": 9, "Age_years": 9, "Clinical_VAS_0_10": 8}
+        "ALT_U_L": 130, "Illness_Duration_days": 9, "Age_years": 9}
 print("Example (sicker dog):")
 for g in GROUPS:
     print(f"  {g:26s} P(success) = {predict(sick, g):.2f}")

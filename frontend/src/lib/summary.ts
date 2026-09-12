@@ -9,7 +9,9 @@ const REF: Record<string, { lo?: number; hi?: number; unit: string }> = {
   Creatinine_mg_dL: { lo: 0.5, hi: 1.5, unit: "mg/dL" },
   Albumin_g_dL: { lo: 2.6, hi: 4.0, unit: "g/dL" },
   ALP_U_L: { hi: 150, unit: "U/L" },
+  ALT_U_L: { lo: 10, hi: 125, unit: "U/L" },
   TLC_per_uL: { lo: 6, hi: 17, unit: "×10³/µL" },
+  Neutrophils_per_uL: { lo: 3, hi: 11.5, unit: "×10³/µL" },
   Heart_Rate_bpm: { lo: 70, hi: 120, unit: "bpm" },
 };
 
@@ -22,6 +24,7 @@ function classify(feature: string, v: number): "low" | "normal" | "high" | "very
   if (r.hi !== undefined && v > r.hi) {
     if (feature === "ALP_U_L" && v > 400) return "very high";
     if (feature === "Creatinine_mg_dL" && v > 2.0) return "very high";
+    if (feature === "ALT_U_L" && v > 250) return "very high";
     return "high";
   }
   return "normal";
@@ -78,7 +81,9 @@ export function buildSummary(
   const cr = classify("Creatinine_mg_dL", v.Creatinine_mg_dL);
   const alb = classify("Albumin_g_dL", v.Albumin_g_dL);
   const alp = classify("ALP_U_L", v.ALP_U_L);
+  const alt = classify("ALT_U_L", v.ALT_U_L);
   const tlc = classify("TLC_per_uL", v.TLC_per_uL);
+  const neut = classify("Neutrophils_per_uL", v.Neutrophils_per_uL);
   const hr = classify("Heart_Rate_bpm", v.Heart_Rate_bpm);
 
   const renal =
@@ -97,18 +102,29 @@ export function buildSummary(
       : alp === "high"
         ? `a raised ALP (${g1(v.ALP_U_L)} U/L)`
         : `an ALP of ${g1(v.ALP_U_L)} U/L`;
+  const altText =
+    alt === "very high"
+      ? `a markedly raised ALT (${g1(v.ALT_U_L)} U/L)`
+      : alt === "high"
+        ? `a raised ALT (${g1(v.ALT_U_L)} U/L)`
+        : `an ALT of ${g1(v.ALT_U_L)} U/L`;
   const tlcText =
     tlc === "high"
       ? `leucocytosis (${g1(v.TLC_per_uL)} ×10³/µL)`
       : tlc === "low"
         ? `leucopenia (${g1(v.TLC_per_uL)} ×10³/µL)`
         : `a leucocyte count of ${g1(v.TLC_per_uL)} ×10³/µL`;
+  const neutText =
+    neut === "high"
+      ? `neutrophilia (${g1(v.Neutrophils_per_uL)} ×10³/µL)`
+      : neut === "low"
+        ? `neutropenia (${g1(v.Neutrophils_per_uL)} ×10³/µL)`
+        : `a neutrophil count of ${g1(v.Neutrophils_per_uL)} ×10³/µL`;
   const hrText = hr === "high" ? "tachycardic" : "not tachycardic";
 
   paras.push(
-    `On admission the dog has ${renal} and ${albText}, with ${alpText} and ${tlcText}. ` +
-      `She is ${hrText} (heart rate ${g1(v.Heart_Rate_bpm)} bpm), the clinical severity score is ` +
-      `${g1(v.Clinical_VAS_0_10)}/10, and the uterus measures ${g1(v.Uterine_Diameter_mm)} mm on ultrasound.`,
+    `On admission the dog has ${renal} and ${albText}, with ${alpText} and ${altText} on liver ` +
+      `enzymes, and ${tlcText} with ${neutText}. She is ${hrText} (heart rate ${g1(v.Heart_Rate_bpm)} bpm).`,
   );
 
   // 3 — the estimate

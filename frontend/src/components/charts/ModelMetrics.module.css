@@ -1,0 +1,65 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 8px;
+}
+
+.tile {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 10px 8px;
+  text-align: center;
+}
+
+.tileLabel {
+  font-size: 10.5px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tileValue {
+  font-family: var(--font-num);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.tileSd {
+  font-size: 10px;
+  color: var(--ink-3);
+  margin-top: 1px;
+  font-variant-numeric: tabular-nums;
+}
+
+.rocRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.roc {
+  display: block;
+  width: 180px;
+  height: 180px;
+  flex: 0 0 auto;
+  font-family: var(--font-ui);
+}
+
+.rocNote {
+  flex: 1 1 220px;
+  min-width: 200px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  margin: 0;
+}

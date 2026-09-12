@@ -49,21 +49,22 @@ const baseline = {
   Illness_Duration_days: 5,
   Heart_Rate_bpm: 120,
   TLC_per_uL: 19,
+  Neutrophils_per_uL: 15,
   Creatinine_mg_dL: 1.0,
   Albumin_g_dL: 2.7,
   ALP_U_L: 310,
-  Uterine_Diameter_mm: 17,
-  Clinical_VAS_0_10: 5,
+  ALT_U_L: 85,
 };
 const sick = {
   ...baseline,
   Age_years: 9,
   Illness_Duration_days: 9,
   Heart_Rate_bpm: 145,
+  Neutrophils_per_uL: 22,
   Creatinine_mg_dL: 1.6,
   Albumin_g_dL: 2.2,
   ALP_U_L: 470,
-  Clinical_VAS_0_10: 8,
+  ALT_U_L: 130,
 };
 
 const cases = [

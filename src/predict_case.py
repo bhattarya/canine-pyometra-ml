@@ -6,8 +6,8 @@ web predictor, so the two always agree.
 
 Usage:
   python src/predict_case.py --group G3_Aglepristone_PGF2a \
-      --Age 6 --Illness 5 --HeartRate 120 --TLC 19 --Creatinine 1.0 \
-      --Albumin 2.7 --ALP 310 --UterineDiameter 17 --VAS 5
+      --Age 6 --Illness 5 --HeartRate 120 --TLC 19 --Neutrophils 15 \
+      --Creatinine 1.0 --Albumin 2.7 --ALP 310 --ALT 85
   python src/predict_case.py --group G4_OHE --json '{"Age_years":6, ...}'
 """
 from __future__ import annotations
@@ -23,11 +23,11 @@ ALIASES = {  # convenient CLI flags -> model feature names
     "Illness": "Illness_Duration_days",
     "HeartRate": "Heart_Rate_bpm",
     "TLC": "TLC_per_uL",
+    "Neutrophils": "Neutrophils_per_uL",
     "Creatinine": "Creatinine_mg_dL",
     "Albumin": "Albumin_g_dL",
     "ALP": "ALP_U_L",
-    "UterineDiameter": "Uterine_Diameter_mm",
-    "VAS": "Clinical_VAS_0_10",
+    "ALT": "ALT_U_L",
 }
 
 

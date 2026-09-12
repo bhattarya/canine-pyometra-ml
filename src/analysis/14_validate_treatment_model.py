@@ -7,7 +7,7 @@ stratified CV, and checks whether logistic regression is a defensible choice:
   1. leaderboard: every algorithm, class-weight and SMOTE, all roadmap metrics
   2. raw accuracy vs the majority-class baseline
   3. calibration (out-of-fold Brier + reliability plot)
-  4. nested CV for the deployed logistic  (is ROC-AUC 0.894 optimistic?)
+  4. nested CV for the deployed logistic  (is the CV ROC-AUC optimistic?)
   5. G1-G3-only sensitivity (drop the perfectly-separated surgical arm)
 
 Outputs: results/tables/14_*.csv, results/figures/14_calibration.png, a verdict.
@@ -32,8 +32,8 @@ from pyo.evaluate import cv_classification, oof_proba, plot_calibration, save_ta
 
 NUMERIC = [
     "Age_years", "Illness_Duration_days", "Heart_Rate_bpm", "TLC_per_uL",
-    "Creatinine_mg_dL", "Albumin_g_dL", "ALP_U_L", "Uterine_Diameter_mm",
-    "Clinical_VAS_0_10",
+    "Neutrophils_per_uL", "Creatinine_mg_dL", "Albumin_g_dL", "ALP_U_L",
+    "ALT_U_L",
 ]
 CAT = ["Group"]
 TARGET = "Treatment_Success_D14"

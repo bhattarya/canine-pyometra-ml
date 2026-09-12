@@ -4,6 +4,7 @@ import { AlgorithmLeaderboard } from "./charts/AlgorithmLeaderboard";
 import { StageReduction } from "./charts/StageReduction";
 import { BandCalibration } from "./charts/BandCalibration";
 import { FeatureEffects } from "./charts/FeatureEffects";
+import { ModelMetrics } from "./charts/ModelMetrics";
 import {
   BAND_CUTPOINTS,
   COHORT,
@@ -36,10 +37,21 @@ export function Method() {
         An L2-penalised logistic regression for <strong>treatment success by day&nbsp;14</strong>,
         fitted on all 80 dogs. Inputs: the intended protocol (G1&ndash;G4) plus nine routine
         admission values &mdash; age, illness duration, heart rate, total leucocyte count,
-        creatinine, albumin, ALP, uterine diameter and a clinical severity score. Held-out
-        discrimination is <span className="mono">ROC-AUC {TREATMENT_PERF.rocAucCv} &plusmn;{" "}
+        neutrophil count, creatinine, albumin, ALP and ALT. Held-out discrimination is{" "}
+        <span className="mono">ROC-AUC {TREATMENT_PERF.rocAucCv} &plusmn;{" "}
         {TREATMENT_PERF.rocAucCvSd}</span> (repeated stratified 5-fold cross-validation).
       </p>
+
+      <figure className={styles.figure}>
+        <figcaption className={styles.figHead}>Model performance</figcaption>
+        <ModelMetrics />
+        <figcaption className={styles.figNote}>
+          Accuracy, sensitivity, specificity and F1 use the standard 0.5 probability threshold;
+          ROC-AUC and the curve are threshold-free. All five are averaged over repeated
+          stratified 5-fold cross-validation (20 repeats) &mdash; the same protocol as every
+          other number on this page.
+        </figcaption>
+      </figure>
 
       <figure className={styles.figure}>
         <figcaption className={styles.figHead}>Algorithm bake-off &mdash; ROC-AUC</figcaption>

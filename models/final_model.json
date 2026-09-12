@@ -1,7 +1,7 @@
 {
   "task": "treatment_success",
   "name": "Canine pyometra - treatment-success predictor (day 14)",
-  "generated": "2026-09-10",
+  "generated": "2026-09-12",
   "outcome": "Predicted probability that the selected treatment protocol achieves an uncomplicated resolution by day 14.",
   "cohort": "All 80 dogs, four protocols x 20, followed to day 14 (66 successes / 14 failures).",
   "numeric_features": [
@@ -9,55 +9,55 @@
     "Illness_Duration_days",
     "Heart_Rate_bpm",
     "TLC_per_uL",
+    "Neutrophils_per_uL",
     "Creatinine_mg_dL",
     "Albumin_g_dL",
     "ALP_U_L",
-    "Uterine_Diameter_mm",
-    "Clinical_VAS_0_10"
+    "ALT_U_L"
   ],
   "labels": {
     "Age_years": "Age",
     "Illness_Duration_days": "Illness duration",
     "Heart_Rate_bpm": "Heart rate",
     "TLC_per_uL": "Total leucocyte count",
+    "Neutrophils_per_uL": "Neutrophil count",
     "Creatinine_mg_dL": "Serum creatinine",
     "Albumin_g_dL": "Serum albumin",
     "ALP_U_L": "Alkaline phosphatase (ALP)",
-    "Uterine_Diameter_mm": "Uterine diameter",
-    "Clinical_VAS_0_10": "Clinical severity (VAS 0-10)"
+    "ALT_U_L": "Alanine aminotransferase (ALT)"
   },
   "units": {
     "Age_years": "years",
     "Illness_Duration_days": "days",
     "Heart_Rate_bpm": "bpm",
     "TLC_per_uL": "x10^3/uL",
+    "Neutrophils_per_uL": "x10^3/uL",
     "Creatinine_mg_dL": "mg/dL",
     "Albumin_g_dL": "g/dL",
     "ALP_U_L": "U/L",
-    "Uterine_Diameter_mm": "mm",
-    "Clinical_VAS_0_10": "0-10"
+    "ALT_U_L": "U/L"
   },
   "ref_ranges": {
     "Age_years": "cohort 3-10",
     "Illness_Duration_days": "cohort 2-11",
     "Heart_Rate_bpm": "canine ref ~ 70-120",
     "TLC_per_uL": "canine ref ~ 6-17",
+    "Neutrophils_per_uL": "canine ref ~ 3-11.5",
     "Creatinine_mg_dL": "canine ref ~ 0.5-1.5",
     "Albumin_g_dL": "canine ref ~ 2.6-4.0",
     "ALP_U_L": "canine ref ~ 20-150",
-    "Uterine_Diameter_mm": "cohort 10-25",
-    "Clinical_VAS_0_10": "0 = well, 10 = critical"
+    "ALT_U_L": "canine ref ~ 10-125"
   },
   "step": {
     "Age_years": 0.5,
     "Illness_Duration_days": 1,
     "Heart_Rate_bpm": 1,
     "TLC_per_uL": 0.5,
+    "Neutrophils_per_uL": 0.5,
     "Creatinine_mg_dL": 0.1,
     "Albumin_g_dL": 0.1,
     "ALP_U_L": 5,
-    "Uterine_Diameter_mm": 1,
-    "Clinical_VAS_0_10": 0.5
+    "ALT_U_L": 5
   },
   "standardisation": {
     "mean": [
@@ -65,34 +65,34 @@
       5.542857794822502,
       123.72324939675063,
       19.066619503841952,
+      15.312089055690285,
       1.0318374986521035,
       2.6936499389857502,
       314.87144804705514,
-      17.536563298262458,
-      5.781887376379639
+      82.25378732535629
     ],
     "std": [
       1.4376532584770625,
       1.8897043611355375,
       16.475650465273382,
       4.453763850103286,
+      4.40049486620805,
       0.25888691670093283,
       0.25569039051293324,
       82.61022224223359,
-      3.949198682605342,
-      1.5249415604440566
+      20.73219193923418
     ]
   },
   "numeric_coef": [
-    -0.6474225597984861,
-    -0.1141151497108814,
-    -0.3435321145513114,
-    -0.12988689229236078,
-    -0.772262993139242,
-    0.8831941997909527,
-    -1.0631402993805377,
-    -0.2649155199624996,
-    0.052628923022250744
+    -0.6402351833325557,
+    -0.1898452925750418,
+    -0.2094886435302184,
+    0.011471682641551687,
+    -0.15460889301499814,
+    -0.7022713102049559,
+    0.8266986222111312,
+    -1.010462638116599,
+    -0.303566046135232
   ],
   "groups": [
     "G1_Supportive",
@@ -109,16 +109,70 @@
   "group_reference": "G1_Supportive",
   "group_coef": {
     "G1_Supportive": 0.0,
-    "G2_PGF2a": -0.0997046846949813,
-    "G3_Aglepristone_PGF2a": 0.45275921347132775,
-    "G4_OHE": 1.160595606954562
+    "G2_PGF2a": -0.12594680462899704,
+    "G3_Aglepristone_PGF2a": 0.5747545972455287,
+    "G4_OHE": 1.2333760233530364
   },
-  "intercept": 1.1870101761595762,
+  "intercept": 1.1281458929888981,
   "performance": {
-    "roc_auc_cv": 0.894,
-    "roc_auc_cv_sd": 0.094,
-    "roc_auc_apparent": 0.969,
-    "cv": "repeated stratified 5-fold, 20 repeats"
+    "roc_auc_cv": 0.905,
+    "roc_auc_cv_sd": 0.079,
+    "roc_auc_apparent": 0.97,
+    "accuracy_cv": 0.846,
+    "accuracy_cv_sd": 0.076,
+    "sensitivity_cv": 0.871,
+    "sensitivity_cv_sd": 0.08,
+    "specificity_cv": 0.722,
+    "specificity_cv_sd": 0.285,
+    "f1_cv": 0.902,
+    "f1_cv_sd": 0.05,
+    "roc_curve": {
+      "fpr": [
+        0.0,
+        0.0,
+        0.0,
+        0.0714,
+        0.0714,
+        0.1429,
+        0.1429,
+        0.2143,
+        0.2143,
+        0.3571,
+        0.3571,
+        0.4286,
+        0.4286,
+        0.5,
+        0.5,
+        0.7857,
+        0.7857,
+        0.8571,
+        0.8571,
+        1.0
+      ],
+      "tpr": [
+        0.0,
+        0.0152,
+        0.6364,
+        0.6364,
+        0.7424,
+        0.7424,
+        0.8485,
+        0.8485,
+        0.9091,
+        0.9091,
+        0.9242,
+        0.9242,
+        0.9394,
+        0.9394,
+        0.9697,
+        0.9697,
+        0.9848,
+        0.9848,
+        1.0,
+        1.0
+      ]
+    },
+    "cv": "repeated stratified 5-fold, 20 repeats (classification metrics at threshold 0.5)"
   },
   "success_bands": {
     "cutpoints_prob": [
@@ -131,11 +185,11 @@
         "observed_success_rate": 0.333
       },
       "Uncertain": {
-        "n": 20,
+        "n": 18,
         "observed_success_rate": 1.0
       },
       "Likely": {
-        "n": 39,
+        "n": 41,
         "observed_success_rate": 1.0
       }
     }
@@ -187,6 +241,13 @@
       "p95": 25.535825341537937,
       "median": 19.612839216000353
     },
+    "Neutrophils_per_uL": {
+      "min": 6.115306970696086,
+      "max": 25.95809813079692,
+      "p05": 8.274044434870905,
+      "p95": 23.255776918551593,
+      "median": 15.0434205339595
+    },
     "Creatinine_mg_dL": {
       "min": 0.45,
       "max": 1.845660767885065,
@@ -208,19 +269,12 @@
       "p95": 452.8008421740242,
       "median": 314.742201709544
     },
-    "Uterine_Diameter_mm": {
-      "min": 10.0,
-      "max": 25.29957225134791,
-      "p05": 10.0,
-      "p95": 24.108854908994044,
-      "median": 17.228973949494147
-    },
-    "Clinical_VAS_0_10": {
-      "min": 2.369058406770399,
-      "max": 9.12436549410615,
-      "p05": 3.03445908834287,
-      "p95": 8.09039554207981,
-      "median": 5.882533387711442
+    "ALT_U_L": {
+      "min": 30.0,
+      "max": 133.2836343342526,
+      "p05": 48.718477472362565,
+      "p95": 119.44219018814553,
+      "median": 80.59511472315987
     }
   },
   "display": {

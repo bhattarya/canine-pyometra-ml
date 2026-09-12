@@ -23,6 +23,15 @@ export interface TreatmentModel {
     roc_auc_cv: number;
     roc_auc_cv_sd: number;
     roc_auc_apparent: number;
+    accuracy_cv: number;
+    accuracy_cv_sd: number;
+    sensitivity_cv: number;
+    sensitivity_cv_sd: number;
+    specificity_cv: number;
+    specificity_cv_sd: number;
+    f1_cv: number;
+    f1_cv_sd: number;
+    roc_curve: { fpr: number[]; tpr: number[] };
     cv: string;
   };
   success_bands: {
@@ -56,11 +65,10 @@ export const NICE_NAME: Record<string, string> = {
   Illness_Duration_days: "Illness duration",
   Heart_Rate_bpm: "Heart rate",
   TLC_per_uL: "Total leucocyte count",
+  Neutrophils_per_uL: "Neutrophil count",
   Creatinine_mg_dL: "Serum creatinine",
   Albumin_g_dL: "Serum albumin",
   ALP_U_L: "Alkaline phosphatase",
-  Uterine_Diameter_mm: "Uterine diameter",
-  Clinical_VAS_0_10: "Clinical severity (VAS)",
   BUN_mg_dL: "Blood urea nitrogen",
   ALT_U_L: "Alanine aminotransferase",
 };
@@ -73,10 +81,10 @@ export const EXAMPLE: { group: string; values: Record<string, number> } = {
     Illness_Duration_days: 5,
     Heart_Rate_bpm: 118,
     TLC_per_uL: 19,
+    Neutrophils_per_uL: 15,
     Creatinine_mg_dL: 1.0,
     Albumin_g_dL: 2.7,
     ALP_U_L: 300,
-    Uterine_Diameter_mm: 17,
-    Clinical_VAS_0_10: 5,
+    ALT_U_L: 85,
   },
 };

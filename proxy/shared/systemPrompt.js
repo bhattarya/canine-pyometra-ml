@@ -12,7 +12,7 @@ export const MODEL_FACTS = [
   "G4 ovariohysterectomy (surgery).",
   "It was fitted on a single-centre teaching dataset of 80 dogs (66 successes, 14 failures),",
   "using the protocol plus nine admission values: age, illness duration, heart rate, total leucocyte",
-  "count, creatinine, albumin, ALP, uterine diameter, and a 0-10 clinical severity score.",
+  "count, neutrophil count, creatinine, albumin, ALP, and ALT.",
   "Internal cross-validated discrimination is ROC-AUC about 0.89. It has NOT been prospectively or",
   "externally validated.",
   "Probability bands: below 50% reads as 'unlikely to succeed', 50-85% 'uncertain', above 85% 'likely'.",

@@ -108,24 +108,30 @@ under repeated stratified CV) and the workbook's own `ML_Roadmap` sheet.
   Low 0% (n40) · Int 0% (n13) · High 52% (n27).
 - **DEPLOYED model** (`models/final_model.json`, task `treatment_success`): L2
   logit on **protocol (G1–G4, G1 reference) + 9 admission vars** (age, illness
-  duration, heart rate, TLC, creatinine, albumin, ALP, uterine diameter,
-  clinical VAS) → P(treatment success by day 14). ROC-AUC **0.894 ± 0.094**
-  (repeated stratified 5-fold CV). Group terms vs G1: G2 −0.10, **G3 +0.45,
-  G4 +1.16**. Bands: <50% "unlikely", 50–85% "uncertain", >85% "likely".
-  **G4/surgery** has zero cohort failures → the tool shows the **observed rate
-  (~100%)**, not the model value, with a caveat, and hides the driver chart for it.
+  duration, heart rate, TLC, **neutrophil count**, creatinine, albumin, ALP,
+  **ALT**) → P(treatment success by day 14). Clinical-severity VAS and uterine
+  diameter were **dropped** and neutrophils + ALT **added** per the user's
+  request (2026-09-12); refit in `13_finalize_treatment_model.py`. ROC-AUC
+  **0.905 ± 0.079** (repeated stratified 5-fold CV, 20 repeats). Also reports
+  **accuracy 84.6% ± 7.6pp, sensitivity 87.1% ± 8.0pp, specificity 72.2% ±
+  28.5pp, F1 0.902 ± 0.050** at the 0.5 threshold, plus a pooled out-of-fold
+  ROC curve — all shown in a new "Model performance" figure in `Method.tsx`
+  (`ModelMetrics.tsx`). Group terms vs G1: G2 −0.13, **G3 +0.57, G4 +1.23**.
+  Bands: <50% "unlikely", 50–85% "uncertain", >85% "likely". **G4/surgery**
+  has zero cohort failures → the tool shows the **observed rate (~100%)**, not
+  the model value, with a caveat, and hides the driver chart for it.
 - **Model validation** (`14_validate_treatment_model.py`, `results/tables/14_*`):
-  15-algorithm bake-off on the exact deployed design.
+  15-algorithm bake-off on the exact deployed design (re-run 2026-09-12 on the
+  neutrophils/ALT feature set).
   - Every reasonable model sits in a **narrow band, ROC-AUC ≈ 0.89–0.95 with
-    ±0.06–0.12 SD** — the CV intervals overlap almost entirely; **no algorithm is
+    ±0.05–0.10 SD** — the CV intervals overlap almost entirely; **no algorithm is
     reliably more accurate** on n=80 / 14 failures (**EPV ≈ 1.2**, far below 10).
-  - Nominal "best" GaussianNB AUC 0.951 but **Brier 0.388** (broken calibration)
-    and raw accuracy 0.58 (< the 0.825 majority baseline) — high ranking, useless
-    probabilities. RF / RBF-SVM: AUC ~0.94, Brier ~0.08, but **specificity ~0.5**
-    (miss ~half the failures). Deployed logistic: AUC 0.906–0.911, **nested CV
-    0.911 ± 0.086 → zero tuning optimism**, Brier ~0.11, best specificity comes
-    from L1-LASSO logistic (0.83).
-  - **Verdict: keep logistic regression.** Within ~0.04 AUC of the best, honest
+  - Nominal "best" GaussianNB AUC 0.953 but **Brier 0.292** (broken calibration)
+    and raw accuracy 0.657 (< the 0.825 majority baseline) — high ranking, useless
+    probabilities. Deployed logistic (class-weighted L2): AUC 0.925, **nested CV
+    0.922 ± 0.073 → zero tuning optimism** (plain CV 0.921 ± 0.072), Brier 0.102,
+    best specificity among the logistic family comes from L1-LASSO (0.863).
+  - **Verdict: keep logistic regression.** Within ~0.03 AUC of the best, honest
     under nested CV, gives odds ratios, and is the only option that runs as ~20
     lines of browser JS. The weak spot is failure detection (small-sample), which
     the UI already handles by leading with the band + observed cohort rates.
@@ -179,8 +185,10 @@ Vite + React 18 + **TypeScript** + **CSS Modules** (no Tailwind, no shadcn).
   `models/*.json`): `AlgorithmLeaderboard` (15-algo ROC-AUC bars, LogReg
   highlighted), `StageReduction` (20→11→4 predictors vs AUC, CPV-style),
   `BandCalibration` (observed success per predicted band), `FeatureEffects`
-  (diverging standardised coefficients + protocol effects vs G1), plus the two
-  existing `BarList` figures. All hand-drawn inline SVG.
+  (diverging standardised coefficients + protocol effects vs G1),
+  `ModelMetrics` (accuracy / ROC-AUC / sensitivity / specificity / F1 stat
+  tiles + pooled out-of-fold ROC curve), plus the two existing `BarList`
+  figures. All hand-drawn inline SVG.
 - **Logic:** `lib/predict.ts` mirrors `src/predict_case.py`; `predict(values, group)`
   → `{probability, band, observedOnly, drivers[]}`. `lib/model.ts` reads
   `src/data/model.json`, synced from `models/final_model.json` by
