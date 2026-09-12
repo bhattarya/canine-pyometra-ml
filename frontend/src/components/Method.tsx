@@ -5,6 +5,7 @@ import { StageReduction } from "./charts/StageReduction";
 import { BandCalibration } from "./charts/BandCalibration";
 import { FeatureEffects } from "./charts/FeatureEffects";
 import { ModelMetrics } from "./charts/ModelMetrics";
+import { AlgorithmMetricsTable } from "./charts/AlgorithmMetricsTable";
 import {
   BAND_CUTPOINTS,
   COHORT,
@@ -61,6 +62,17 @@ export function Method() {
           deployed design. The intervals overlap heavily &mdash; no model is reliably more
           accurate on 80 dogs with 14 failures. Logistic regression (highlighted) was chosen
           because it is interpretable and runs entirely in the browser.
+        </figcaption>
+      </figure>
+
+      <figure className={styles.figure}>
+        <figcaption className={styles.figHead}>Algorithm bake-off &mdash; every metric</figcaption>
+        <AlgorithmMetricsTable />
+        <figcaption className={styles.figNote}>
+          Same 12 algorithms and the same cross-validation, broken out by metric. Accuracy,
+          sensitivity, specificity and F1 use the 0.5 probability threshold; ROC-AUC does not.
+          Rows with wide specificity intervals are unreliable at catching failures &mdash; only
+          14 of 80 dogs failed treatment, so that estimate rests on very few events.
         </figcaption>
       </figure>
 

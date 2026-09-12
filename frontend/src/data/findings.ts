@@ -48,6 +48,76 @@ export const LEADERBOARD: LeaderboardRow[] = [
 export const LEADERBOARD_DOMAIN: [number, number] = [0.75, 1.0];
 
 /* ==================================================================
+ * 1b. Same bake-off, every metric per algorithm
+ *     Source: results/tables/14_full_leaderboard.csv (class_weight
+ *     rows, same 12 as LEADERBOARD above). Accuracy = Raw_Acc column
+ *     (fraction of the 80 dogs correctly classified at the 0.5
+ *     threshold, out-of-fold). Same repeated stratified 5-fold CV,
+ *     20 repeats, as everywhere else on this page.
+ * ================================================================== */
+export interface FullMetricRow {
+  model: string;
+  key: string;
+  deployed: boolean;
+  auc: { mean: number; sd: number };
+  accuracy: { mean: number; sd: number };
+  sensitivity: { mean: number; sd: number };
+  specificity: { mean: number; sd: number };
+  f1: { mean: number; sd: number };
+}
+
+export const LEADERBOARD_FULL: FullMetricRow[] = [
+  { model: "Gaussian NB", key: "GaussianNB", deployed: false,
+    auc: { mean: 0.953, sd: 0.09 }, accuracy: { mean: 0.657, sd: 0.102 },
+    sensitivity: { mean: 0.591, sd: 0.122 }, specificity: { mean: 0.973, sd: 0.131 },
+    f1: { mean: 0.732, sd: 0.103 } },
+  { model: "LDA", key: "LDA", deployed: false,
+    auc: { mean: 0.933, sd: 0.067 }, accuracy: { mean: 0.869, sd: 0.059 },
+    sensitivity: { mean: 0.942, sd: 0.062 }, specificity: { mean: 0.52, sd: 0.278 },
+    f1: { mean: 0.922, sd: 0.037 } },
+  { model: "Random forest", key: "RandomForest", deployed: false,
+    auc: { mean: 0.931, sd: 0.053 }, accuracy: { mean: 0.874, sd: 0.064 },
+    sensitivity: { mean: 0.941, sd: 0.053 }, specificity: { mean: 0.557, sd: 0.282 },
+    f1: { mean: 0.925, sd: 0.039 } },
+  { model: "LogReg (L2)", key: "LogReg_L2", deployed: true,
+    auc: { mean: 0.925, sd: 0.075 }, accuracy: { mean: 0.855, sd: 0.067 },
+    sensitivity: { mean: 0.892, sd: 0.061 }, specificity: { mean: 0.687, sd: 0.323 },
+    f1: { mean: 0.91, sd: 0.042 } },
+  { model: "LogReg (elastic net)", key: "LogReg_ElasticNet", deployed: true,
+    auc: { mean: 0.919, sd: 0.077 }, accuracy: { mean: 0.849, sd: 0.071 },
+    sensitivity: { mean: 0.874, sd: 0.076 }, specificity: { mean: 0.74, sd: 0.283 },
+    f1: { mean: 0.904, sd: 0.046 } },
+  { model: "AdaBoost", key: "AdaBoost", deployed: false,
+    auc: { mean: 0.918, sd: 0.074 }, accuracy: { mean: 0.873, sd: 0.078 },
+    sensitivity: { mean: 0.935, sd: 0.064 }, specificity: { mean: 0.577, sd: 0.3 },
+    f1: { mean: 0.923, sd: 0.048 } },
+  { model: "RBF SVM", key: "RBF_SVM", deployed: false,
+    auc: { mean: 0.917, sd: 0.068 }, accuracy: { mean: 0.853, sd: 0.065 },
+    sensitivity: { mean: 0.959, sd: 0.055 }, specificity: { mean: 0.363, sd: 0.242 },
+    f1: { mean: 0.916, sd: 0.036 } },
+  { model: "LogReg (L1 / LASSO)", key: "LogReg_L1_LASSO", deployed: true,
+    auc: { mean: 0.913, sd: 0.087 }, accuracy: { mean: 0.835, sd: 0.091 },
+    sensitivity: { mean: 0.83, sd: 0.101 }, specificity: { mean: 0.863, sd: 0.235 },
+    f1: { mean: 0.89, sd: 0.065 } },
+  { model: "Linear SVM", key: "LinearSVM", deployed: false,
+    auc: { mean: 0.91, sd: 0.081 }, accuracy: { mean: 0.84, sd: 0.069 },
+    sensitivity: { mean: 0.961, sd: 0.051 }, specificity: { mean: 0.333, sd: 0.26 },
+    f1: { mean: 0.913, sd: 0.033 } },
+  { model: "Hist gradient boosting", key: "HistGradientBoosting", deployed: false,
+    auc: { mean: 0.906, sd: 0.082 }, accuracy: { mean: 0.859, sd: 0.067 },
+    sensitivity: { mean: 0.932, sd: 0.064 }, specificity: { mean: 0.527, sd: 0.312 },
+    f1: { mean: 0.915, sd: 0.042 } },
+  { model: "KNN", key: "KNN", deployed: false,
+    auc: { mean: 0.901, sd: 0.092 }, accuracy: { mean: 0.856, sd: 0.053 },
+    sensitivity: { mean: 0.985, sd: 0.034 }, specificity: { mean: 0.25, sd: 0.248 },
+    f1: { mean: 0.919, sd: 0.031 } },
+  { model: "Gradient boosting", key: "GradientBoosting", deployed: false,
+    auc: { mean: 0.894, sd: 0.077 }, accuracy: { mean: 0.845, sd: 0.065 },
+    sensitivity: { mean: 0.935, sd: 0.07 }, specificity: { mean: 0.427, sd: 0.261 },
+    f1: { mean: 0.908, sd: 0.043 } },
+];
+
+/* ==================================================================
  * 2. CPV-style feature reduction (treatment task)
  *    Source: results/tables/05_stage_progression.csv
  *
