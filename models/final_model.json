@@ -1,7 +1,7 @@
 {
   "task": "treatment_success",
   "name": "Canine pyometra - treatment-success predictor (day 14)",
-  "generated": "2026-09-12",
+  "generated": "2026-09-14",
   "outcome": "Predicted probability that the selected treatment protocol achieves an uncomplicated resolution by day 14.",
   "cohort": "All 80 dogs, four protocols x 20, followed to day 14 (66 successes / 14 failures).",
   "numeric_features": [
@@ -332,5 +332,5 @@
     ]
   },
   "g4_caveat": "G4 (surgery) was not randomised and every study dog treated surgically resolved (20/20). Its estimate is effectively a fixed ~99% and should be read as 'surgery resolved all cohort cases', not a calibrated probability.",
-  "disclaimer": "Decision-support estimate from a small single-centre teaching dataset (n=80, 14 failures). Not a validated clinical tool. Predictions complement, not replace, clinical judgement."
+  "disclaimer": "Decision-support estimate from a small retrospective case series (n=80, 14 failures). Not a validated clinical tool. Predictions complement, not replace, clinical judgement."
 }

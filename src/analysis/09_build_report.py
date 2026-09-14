@@ -35,10 +35,11 @@ parts = [f"""# Canine Pyometra — Machine-Learning Findings
 
 _Generated {date.today().isoformat()} from `results/` by `src/analysis/09_build_report.py`._
 
-> Methodology-demonstration analysis on a clean, randomised, balanced 80-animal
-> teaching dataset (no missing baseline data). Hypothesis-generating, not a
-> validated clinical tool. Workflow mirrors Nafe Monfared et al. (Front. Vet.
-> Sci. 2025) canine-parvovirus prognosis pipeline and the workbook's ML_Roadmap.
+> Retrospective case series (80 dogs, no missing baseline data); no published
+> report or ethics-approval record exists for the original case collection.
+> Hypothesis-generating, not a validated clinical tool. Workflow mirrors
+> Sanaei, Zamani-Ahmadmahmudi & Nassiri (Front. Vet. Sci. 2025) canine-parvovirus
+> prognosis pipeline and the workbook's ML_Roadmap.
 
 ---
 
@@ -205,7 +206,8 @@ Risk class x protocol x outcome:
 
 ## Limitations
 
-1. Single synthetic/simulated-looking cohort, n = 80, 14 failure events — wide
+1. Single retrospective case series with no documented enrolment or
+   protocol-allocation procedure, n = 80, 14 failure events — wide
    confidence intervals; external validity unknown.
 2. G4 non-randomised w.r.t. severity and perfectly separated on outcome.
 3. The 240-case retrospective sheet has no outcome column — usable only for

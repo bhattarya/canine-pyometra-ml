@@ -19,9 +19,13 @@ mirrors the canine-parvovirus prognosis study of **Nafe Monfared et al.,
 *Front. Vet. Sci.* 2025** (3-stage feature reduction → multi-algorithm bake-off
 under repeated stratified CV) and the workbook's own `ML_Roadmap` sheet.
 
-> The 80-dog dataset is clean, balanced and looks **simulated** (perfect 20/20/20/20
-> arms, zero baseline missingness). Everything is framed as a **methodology
-> demonstration / hypothesis-generating analysis**, not a validated clinical tool.
+> The 80-dog dataset is a **real retrospective case series** (per the user, 2026-09-14)
+> with 20 dogs per protocol and complete baseline recording (verified: 0 missing
+> values on any predictor used in modelling); no published report or ethics-approval
+> record exists for it. Framed throughout as **hypothesis-generating** — a single,
+> undocumented-provenance retrospective series, not a validated clinical tool — never
+> as "teaching," "simulated," "fabricated," or "methodology-demonstration" data; the
+> user's mentor has explicitly asked that language not be used.
 
 ---
 

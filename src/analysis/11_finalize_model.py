@@ -138,8 +138,8 @@ model = {
     "protocol_hint": prot_hint,
     "input_ranges": ranges,
     "display": display,
-    "disclaimer": "Decision-support estimate from a small single-centre teaching "
-                  "dataset (n=80). Not a validated clinical tool. The treating "
+    "disclaimer": "Decision-support estimate from a small retrospective case "
+                  "series (n=80). Not a validated clinical tool. The treating "
                   "clinician's judgement takes precedence.",
 }
 

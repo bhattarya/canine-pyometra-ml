@@ -195,7 +195,7 @@ export function buildSummary(
 
   // 6 — how much to trust it
   paras.push(
-    `This is a decision-support estimate from a small single-centre teaching dataset ` +
+    `This is a decision-support estimate from a small, single-source retrospective case series ` +
       `(80 dogs, 14 failures; internal ROC-AUC ≈ ${MODEL.performance.roc_auc_cv}). It is better at ` +
       `confirming likely successes than at flagging likely failures, and on this clean dataset it is ` +
       `over-confident near 0% and 100% — so weigh the band, not the exact percentage, against the ` +

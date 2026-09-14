@@ -1,6 +1,6 @@
 {
   "name": "Canine pyometra \u2014 medical-failure risk (day 14)",
-  "generated": "2026-09-10",
+  "generated": "2026-09-14",
   "outcome": "Probability that medical management fails by day 14 (death, rescue ovariohysterectomy, or non-response).",
   "cohort": "G1-G3 medical-protocol dogs, n=60, 14 failure events.",
   "features": [
@@ -235,5 +235,5 @@
       "G4_OHE": "G4 \u00b7 ovariohysterectomy"
     }
   },
-  "disclaimer": "Decision-support estimate from a small single-centre teaching dataset (n=80). Not a validated clinical tool. The treating clinician's judgement takes precedence."
+  "disclaimer": "Decision-support estimate from a small retrospective case series (n=80). Not a validated clinical tool. The treating clinician's judgement takes precedence."
 }

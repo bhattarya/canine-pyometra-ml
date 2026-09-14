@@ -6,15 +6,16 @@ clinical, haematological and biochemical parameters and the assigned treatment
 protocol (G1–G4).
 
 Methodology mirrors the workflow of the canine parvovirus prognosis study
-(Nafe Monfared *et al.*, *Front. Vet. Sci.* 2025) — a staged pipeline of
-univariate screening → recursive feature elimination → a multi-algorithm model
-comparison under stratified cross-validation — adapted to the pyometra cohort
-and the workbook's own `ML_Roadmap`.
+(Sanaei, Zamani-Ahmadmahmudi & Nassiri, *Front. Vet. Sci.* 2025) — a staged
+pipeline of univariate screening → recursive feature elimination → a
+multi-algorithm model comparison under stratified cross-validation — adapted
+to the pyometra cohort and the workbook's own `ML_Roadmap`.
 
-> **Scope note.** The 80-animal workbook is a *clean, randomised, balanced*
-> teaching/analysis dataset with no missingness. Results here are a
-> **methodology demonstration and hypothesis-generating analysis**, not a
-> validated clinical decision tool.
+> **Scope note.** The 80-dog workbook is a retrospective case series (20 dogs
+> per protocol, no missing baseline data); no published report or
+> ethics-approval record exists for the original case collection. Results
+> here are a **hypothesis-generating analysis**, not a validated clinical
+> decision tool.
 
 ---
 

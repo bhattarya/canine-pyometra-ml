@@ -168,7 +168,7 @@ export function Method() {
           The model is over-confident at the extremes on this clean dataset &mdash; read the
           band, not the exact percentage.
         </li>
-        <li>No prospective or multi-centre validation &mdash; this is a methodology demonstration.</li>
+        <li>No prospective or multi-centre validation &mdash; this is a single retrospective case series.</li>
       </ul>
     </div>
   );

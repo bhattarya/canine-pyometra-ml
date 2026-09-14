@@ -1,11 +1,12 @@
 # Canine Pyometra — Machine-Learning Findings
 
-_Generated 2026-09-08 from `results/` by `src/analysis/09_build_report.py`._
+_Generated 2026-09-14 from `results/` by `src/analysis/09_build_report.py`._
 
-> Methodology-demonstration analysis on a clean, randomised, balanced 80-animal
-> teaching dataset (no missing baseline data). Hypothesis-generating, not a
-> validated clinical tool. Workflow mirrors Nafe Monfared et al. (Front. Vet.
-> Sci. 2025) canine-parvovirus prognosis pipeline and the workbook's ML_Roadmap.
+> Retrospective case series (80 dogs, no missing baseline data); no published
+> report or ethics-approval record exists for the original case collection.
+> Hypothesis-generating, not a validated clinical tool. Workflow mirrors
+> Sanaei, Zamani-Ahmadmahmudi & Nassiri (Front. Vet. Sci. 2025) canine-parvovirus
+> prognosis pipeline and the workbook's ML_Roadmap.
 
 ---
 
@@ -388,12 +389,12 @@ Score weights (per 1 SD of admission value):
 
 | variable              |   beta_per_SD |   OR_per_SD |   points_per_SD |
 |:----------------------|--------------:|------------:|----------------:|
-| BUN_mg_dL             |         0.915 |        2.5  |               3 |
-| Creatinine_mg_dL      |         0.382 |        1.47 |               1 |
-| Albumin_g_dL          |        -0.716 |        0.49 |              -2 |
-| ALP_U_L               |         0.936 |        2.55 |               3 |
-| Age_years             |         0.477 |        1.61 |               1 |
-| Illness_Duration_days |         0.342 |        1.41 |               1 |
+| BUN_mg_dL             |         1.034 |        2.81 |               4 |
+| Creatinine_mg_dL      |         0.791 |        2.21 |               3 |
+| Albumin_g_dL          |        -0.92  |        0.4  |              -3 |
+| ALP_U_L               |         1.137 |        3.12 |               4 |
+| Age_years             |         0.865 |        2.37 |               3 |
+| Illness_Duration_days |         0.292 |        1.34 |               1 |
 
 
 Success rate by risk class:
@@ -401,23 +402,23 @@ Success rate by risk class:
 | risk_class   |   n |   success_rate |   med_failure_rate |
 |:-------------|----:|---------------:|-------------------:|
 | Low          |  27 |          1     |              0     |
-| Medium       |  26 |          0.962 |              0.038 |
-| High         |  27 |          0.519 |              0.481 |
+| Medium       |  26 |          1     |              0     |
+| High         |  27 |          0.481 |              0.519 |
 
 
 Risk class x protocol x outcome:
 
 | risk_class   | Group                 |   n |   success |   med_failure |   rescue_OHE |   success_rate |
 |:-------------|:----------------------|----:|----------:|--------------:|-------------:|---------------:|
-| Low          | G1_Supportive         |   7 |         7 |             0 |            0 |           1    |
+| Low          | G1_Supportive         |   6 |         6 |             0 |            0 |           1    |
 | Low          | G2_PGF2a              |   7 |         7 |             0 |            0 |           1    |
 | Low          | G3_Aglepristone_PGF2a |   7 |         7 |             0 |            0 |           1    |
-| Low          | G4_OHE                |   6 |         6 |             0 |            0 |           1    |
-| Medium       | G1_Supportive         |   5 |         4 |             1 |            0 |           0.8  |
+| Low          | G4_OHE                |   7 |         7 |             0 |            0 |           1    |
+| Medium       | G1_Supportive         |   6 |         6 |             0 |            0 |           1    |
 | Medium       | G2_PGF2a              |   7 |         7 |             0 |            0 |           1    |
 | Medium       | G3_Aglepristone_PGF2a |   7 |         7 |             0 |            0 |           1    |
-| Medium       | G4_OHE                |   7 |         7 |             0 |            0 |           1    |
-| High         | G1_Supportive         |   8 |         2 |             6 |            4 |           0.25 |
+| Medium       | G4_OHE                |   6 |         6 |             0 |            0 |           1    |
+| High         | G1_Supportive         |   8 |         1 |             7 |            4 |           0.12 |
 | High         | G2_PGF2a              |   6 |         1 |             5 |            3 |           0.17 |
 | High         | G3_Aglepristone_PGF2a |   6 |         4 |             2 |            1 |           0.67 |
 | High         | G4_OHE                |   7 |         7 |             0 |            0 |           1    |
@@ -436,7 +437,8 @@ Risk class x protocol x outcome:
 
 ## Limitations
 
-1. Single synthetic/simulated-looking cohort, n = 80, 14 failure events — wide
+1. Single retrospective case series with no documented enrolment or
+   protocol-allocation procedure, n = 80, 14 failure events — wide
    confidence intervals; external validity unknown.
 2. G4 non-randomised w.r.t. severity and perfectly separated on outcome.
 3. The 240-case retrospective sheet has no outcome column — usable only for

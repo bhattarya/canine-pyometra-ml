@@ -223,8 +223,8 @@ model = {
                  "surgically resolved (20/20). Its estimate is effectively a fixed "
                  "~99% and should be read as 'surgery resolved all cohort cases', "
                  "not a calibrated probability.",
-    "disclaimer": "Decision-support estimate from a small single-centre teaching "
-                  "dataset (n=80, 14 failures). Not a validated clinical tool. "
+    "disclaimer": "Decision-support estimate from a small retrospective case "
+                  "series (n=80, 14 failures). Not a validated clinical tool. "
                   "Predictions complement, not replace, clinical judgement.",
 }
 

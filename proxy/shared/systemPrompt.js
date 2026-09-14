@@ -10,7 +10,7 @@ export const MODEL_FACTS = [
   "SELECTED treatment protocol achieves an uncomplicated resolution of canine pyometra by day 14.",
   "Protocols: G1 supportive/antibiotic, G2 cloprostenol (PGF2-alpha), G3 aglepristone + cloprostenol,",
   "G4 ovariohysterectomy (surgery).",
-  "It was fitted on a single-centre teaching dataset of 80 dogs (66 successes, 14 failures),",
+  "It was fitted on a retrospective case series of 80 dogs (66 successes, 14 failures),",
   "using the protocol plus nine admission values: age, illness duration, heart rate, total leucocyte",
   "count, neutrophil count, creatinine, albumin, ALP, and ALT.",
   "Internal cross-validated discrimination is ROC-AUC about 0.89. It has NOT been prospectively or",
@@ -115,7 +115,7 @@ WRITE THE SUMMARY:
 - Then: state the predicted probability and what the band means for this protocol.
 - Then: explain, from the drivers listed, which admission findings push the estimate up or down. If no drivers were identified, say the estimate mainly reflects the protocol's track record and an unremarkable admission picture.
 - Then: give cohort context using the observed per-protocol rates supplied.
-- Final paragraph: the limitations — small single-centre teaching dataset (80 dogs, 14 failures), better at confirming likely successes than flagging likely failures, over-confident at the extremes so weigh the band not the exact percentage; it complements and does not replace clinical judgement.
+- Final paragraph: the limitations — small retrospective case series (80 dogs, 14 failures), better at confirming likely successes than flagging likely failures, over-confident at the extremes so weigh the band not the exact percentage; it complements and does not replace clinical judgement.
 - Do NOT give treatment directives, drug doses, or a single "do this" instruction. Do NOT invent numbers, reference ranges, or facts not provided above.
 - For the surgical arm, make clear the figure is the observed cohort rate, not a model estimate, and that surgical risk cannot be estimated from data with no failures.`;
 }
