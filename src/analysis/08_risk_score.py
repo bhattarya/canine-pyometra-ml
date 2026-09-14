@@ -1,22 +1,23 @@
 """Risk stratification + protocol-recommendation table.
 
-1. Fit a compact penalised logistic model for FAILURE on the G1-G3 cohort
-   using admission variables only (no Group).
-2. Convert coefficients to an integer points score (Sullivan-style).
+1. Reuse the LOCKED, deployed medical-failure model (models/prognostic_model.json
+   — six admission variables, L2-penalised logistic regression fitted on the
+   G1-G3 cohort) rather than re-fitting a separate model here, so the risk
+   score's weights are numerically identical to the model's own reported
+   coefficients (no second, independently-fit model with its own numbers).
+2. Convert those coefficients to an integer points score (Sullivan-style).
 3. Apply the score to all 80 dogs; bin into Low / Medium / High risk.
 4. Cross-tabulate risk class x protocol x observed success rate  ->  the
    practical "which protocol for which dog" table.
 """
 from __future__ import annotations
+import json
 import sys
-import warnings
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
-import statsmodels.api as sm
 from sklearn.metrics import roc_auc_score
-from sklearn.preprocessing import StandardScaler
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from pyo import config as C
@@ -25,22 +26,17 @@ from pyo.evaluate import save_table
 
 pd.set_option("display.width", 200)
 
-# compact, clinically-motivated, low-collinearity predictor set
-SCORE_VARS = ["BUN_mg_dL", "Creatinine_mg_dL", "Albumin_g_dL", "ALP_U_L",
-              "Age_years", "Illness_Duration_days"]
-
-prog = D.prognostic_frame()
 alld = D.baseline_with_outcomes()
 
-scaler = StandardScaler().fit(prog[SCORE_VARS])
-Xz = scaler.transform(prog[SCORE_VARS])
-y = prog[C.TARGET_PROGNOSTIC].astype(int).values
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
-    fit = sm.Logit(y, sm.add_constant(Xz)).fit_regularized(alpha=1.0, L1_wt=0.0, disp=0)
-beta = fit.params[1:]                      # per-SD log-odds
+# --- reuse the locked, deployed model's own coefficients (not a refit) -----
+locked = json.loads((C.ROOT / "models" / "prognostic_model.json").read_text())
+SCORE_VARS = locked["features"]                       # same 6 vars, same order
+mean = np.array(locked["standardisation"]["mean"])
+std = np.array(locked["standardisation"]["std"])
+beta = np.array(locked["coef"])                       # per-SD log-odds, L2-penalised
 points = np.round(beta / np.abs(beta[np.argmin(np.abs(beta[beta != 0]))])).astype(int)
+
+scaler_mean, scaler_std = mean, std  # for score()
 
 coef_tbl = pd.DataFrame({
     "variable": SCORE_VARS, "beta_per_SD": beta.round(3),
@@ -52,7 +48,7 @@ print(coef_tbl.to_string(index=False))
 
 
 def score(frame):
-    z = scaler.transform(frame[SCORE_VARS])
+    z = (frame[SCORE_VARS].values - scaler_mean) / scaler_std
     return (z * points).sum(axis=1)
 
 
